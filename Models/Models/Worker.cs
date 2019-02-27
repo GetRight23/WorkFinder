@@ -3,8 +3,8 @@ using System.Collections.Generic;
 
 namespace Models
 {
-    public partial class Worker
-    {
+    public partial class Worker : DBObject
+	{
         public Worker()
         {
             Feedback = new HashSet<Feedback>();
@@ -19,7 +19,9 @@ namespace Models
         public string Name { get; set; }
         public string LastName { get; set; }
 
-        public virtual Address IdAddressNavigation { get; set; }
+		public override int getId() { return Id; }
+
+		public virtual Address IdAddressNavigation { get; set; }
         public virtual ICollection<Feedback> Feedback { get; set; }
         public virtual ICollection<Orderslist> Orderslist { get; set; }
         public virtual ICollection<Profession> Profession { get; set; }
