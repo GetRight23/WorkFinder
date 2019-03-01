@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Models", "Models\Models.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestApplication", "TestApplication\TestApplication.csproj", "{4E893D5E-4222-443B-9A44-490BE9AC4BD9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatabaseDao", "DatabaseDao\DatabaseDao.csproj", "{D4C0E615-70D4-4DF1-930E-36E9F1F4BC73}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DatabaseDao", "DatabaseDao\DatabaseDao.csproj", "{D4C0E615-70D4-4DF1-930E-36E9F1F4BC73}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
