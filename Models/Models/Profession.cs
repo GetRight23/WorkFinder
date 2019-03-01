@@ -11,7 +11,6 @@ namespace Models
         }
 
         public int Id { get; set; }
-        public string CategoryName { get; set; }
         public string Name { get; set; }
         public int IdWorker { get; set; }
         public int IdProfCategory { get; set; }

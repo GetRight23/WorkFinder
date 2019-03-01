@@ -13,9 +13,10 @@ namespace TestApplication
 		static void Main(string[] args)
 		{
 			Console.OutputEncoding = Encoding.UTF8;
-
+			
 			ApplicationContext ctx = new ApplicationContext();
 
+			OrderToServiceDao orderToServiceDao = new OrderToServiceDao(ctx, ctx.OrderToService);
 			DatabaseDao<Address> addressDao = new DatabaseDao<Address>(ctx, ctx.Address);
 			DatabaseDao<City> cityDao = new DatabaseDao<City>(ctx, ctx.City);
 			DatabaseDao<CityDistricts> cityDistrictsDao = new DatabaseDao<CityDistricts>(ctx, ctx.CityDistricts);
@@ -26,7 +27,7 @@ namespace TestApplication
 			DatabaseDao<Profession> profesionDao = new DatabaseDao<Profession>(ctx, ctx.Profession);
 			DatabaseDao<Service> serviceDao = new DatabaseDao<Service>(ctx, ctx.Service);
 			DatabaseDao<Worker> workerDao = new DatabaseDao<Worker>(ctx, ctx.Worker);
-
+			Console.WriteLine("Done");
 			Console.ReadKey();
 			ctx.Database.CloseConnection();
 		}

@@ -46,15 +46,15 @@ namespace DatabaseDao
 			return false;
 		}
 
-		public bool insertEntity(Type entity)
+		public int insertEntity(Type entity)
 		{
 			if (entity != null)
 			{
-				m_daoSet.Add(entity);
+				int id = m_daoSet.Add(entity).Entity.getId();
 				m_appContext.SaveChanges();
-				return true;
+				return id;
 			}
-			return false;
+			return 0;
 		}
 	}
 }

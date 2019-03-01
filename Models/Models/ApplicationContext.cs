@@ -220,11 +220,6 @@ namespace Models
 
                 entity.Property(e => e.Id).HasColumnName("id");
 
-                entity.Property(e => e.CategoryName)
-                    .IsRequired()
-                    .HasColumnName("category_name")
-                    .HasMaxLength(45);
-
                 entity.Property(e => e.IdProfCategory).HasColumnName("id_prof_category");
 
                 entity.Property(e => e.IdWorker).HasColumnName("id_worker");
