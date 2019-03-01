@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestApplication", "TestAppl
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DatabaseDao", "DatabaseDao\DatabaseDao.csproj", "{D4C0E615-70D4-4DF1-930E-36E9F1F4BC73}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JSONConvertor", "JSONConvertor\JSONConvertor.csproj", "{9AE7AA4D-31ED-4D68-BDF1-4D2BC0E1DE82}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{D4C0E615-70D4-4DF1-930E-36E9F1F4BC73}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D4C0E615-70D4-4DF1-930E-36E9F1F4BC73}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D4C0E615-70D4-4DF1-930E-36E9F1F4BC73}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9AE7AA4D-31ED-4D68-BDF1-4D2BC0E1DE82}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9AE7AA4D-31ED-4D68-BDF1-4D2BC0E1DE82}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9AE7AA4D-31ED-4D68-BDF1-4D2BC0E1DE82}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9AE7AA4D-31ED-4D68-BDF1-4D2BC0E1DE82}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,0 +1,12 @@
+E:\Projects\WorkFinder\WorkFinder\JSONConvertor\bin\Debug\netcoreapp2.1\JSONConvertor.deps.json
+E:\Projects\WorkFinder\WorkFinder\JSONConvertor\bin\Debug\netcoreapp2.1\JSONConvertor.dll
+E:\Projects\WorkFinder\WorkFinder\JSONConvertor\obj\Debug\netcoreapp2.1\JSONConvertor.csprojAssemblyReference.cache
+E:\Projects\WorkFinder\WorkFinder\JSONConvertor\obj\Debug\netcoreapp2.1\JSONConvertor.csproj.CoreCompileInputs.cache
+E:\Projects\WorkFinder\WorkFinder\JSONConvertor\obj\Debug\netcoreapp2.1\JSONConvertor.AssemblyInfoInputs.cache
+E:\Projects\WorkFinder\WorkFinder\JSONConvertor\obj\Debug\netcoreapp2.1\JSONConvertor.AssemblyInfo.cs
+E:\Projects\WorkFinder\WorkFinder\JSONConvertor\bin\Debug\netcoreapp2.1\Models.dll
+E:\Projects\WorkFinder\WorkFinder\JSONConvertor\bin\Debug\netcoreapp2.1\Models.pdb
+E:\Projects\WorkFinder\WorkFinder\JSONConvertor\obj\Debug\netcoreapp2.1\JSONConvertor.csproj.CopyComplete
+E:\Projects\WorkFinder\WorkFinder\JSONConvertor\bin\Debug\netcoreapp2.1\JSONConvertor.pdb
+E:\Projects\WorkFinder\WorkFinder\JSONConvertor\obj\Debug\netcoreapp2.1\JSONConvertor.dll
+E:\Projects\WorkFinder\WorkFinder\JSONConvertor\obj\Debug\netcoreapp2.1\JSONConvertor.pdb
