@@ -50,9 +50,9 @@ namespace DatabaseDao
 		{
 			if (entity != null)
 			{
-				int id = m_daoSet.Add(entity).Entity.getId();
+                m_daoSet.Add(entity);
 				m_appContext.SaveChanges();
-				return id;
+				return 0;
 			}
 			return 0;
 		}

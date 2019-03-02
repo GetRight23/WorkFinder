@@ -31,7 +31,7 @@ namespace Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseNpgsql("Host=138.197.176.34;Port=5432;Database=test1;Username=oleg;Password=oleg");
+                optionsBuilder.UseNpgsql("Host=138.197.176.34;Port=5432;Database=test2;Username=oleg;Password=oleg");
             }
         }
 

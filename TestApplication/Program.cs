@@ -14,15 +14,11 @@ namespace TestApplication
 		static void Main(string[] args)
 		{
 			Console.OutputEncoding = Encoding.UTF8;
-            Storage storage = Storage.getInstance();
+            Storage storage = PostgreStorage.getInstance();
+            City city = new City() { Name = "Kiev" };
+            storage.CityDao.insertEntity(city);
 
-
-            var temp = storage.CityDao.selectEntities();
-            JsonConvertor jsonConvertor = new JsonConvertor();
-            foreach (var item in temp)
-            {
-                Console.WriteLine(jsonConvertor.toJson(item).ToString());
-            }
+            //City city = storage.CityDao.selectEntityById(1);
 
 
             Console.WriteLine("Done");

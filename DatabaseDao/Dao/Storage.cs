@@ -1,19 +1,31 @@
-﻿using Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Text;
-using System.Data.SqlClient;
+using Models;
 
 namespace DatabaseDao
 {
-    public class Storage
+    public abstract class Storage
     {
         private static ApplicationContext ctx = new ApplicationContext();
-        private static Storage instance = null;
-
-        private Storage()
+        public Storage(DbConnection connection)
         {
-			AddressDao = new DatabaseDao<Address>(ctx, ctx.Address);
+            connection.Open();
+            createCityTable(connection);
+            createCityDistrictsTable(connection);
+            createAddressTable(connection);
+            createWorkerTable(connection);
+            createFeedbackTable(connection);
+            createOrderListTable(connection);
+            createOrderTable(connection);
+            createProfCategoryTable(connection);
+            createProfessionTable(connection);
+            createServiceTable(connection);
+            createOrderToService(connection);
+            connection.Close();
+
+            AddressDao = new DatabaseDao<Address>(ctx, ctx.Address);
             CityDao = new DatabaseDao<City>(ctx, ctx.City);
             CityDistrictsDao = new DatabaseDao<CityDistricts>(ctx, ctx.CityDistricts);
             FeedbackDao = new DatabaseDao<Feedback>(ctx, ctx.Feedback);
@@ -25,14 +37,19 @@ namespace DatabaseDao
             WorkerDao = new DatabaseDao<Worker>(ctx, ctx.Worker);
             OrderToServiceDao = new OrderToServiceDao(ctx, ctx.OrderToService);
         }
+        public abstract void createCityTable(DbConnection connection);
+        public abstract void createCityDistrictsTable(DbConnection connection);
+        public abstract void createAddressTable(DbConnection connection);
+        public abstract void createWorkerTable(DbConnection connection);
+        public abstract void createFeedbackTable(DbConnection connection);
+        public abstract void createOrderListTable(DbConnection connection);
+        public abstract void createOrderTable(DbConnection connection);
+        public abstract void createProfCategoryTable(DbConnection connection);
+        public abstract void createProfessionTable(DbConnection connection);
+        public abstract void createServiceTable(DbConnection connection);
+        public abstract void createOrderToService(DbConnection connection);
 
-        public static Storage getInstance()
-        {
-            if (instance == null)
-                instance = new Storage();
-            return instance;
-        }
-
+        
         public DatabaseDao<Address> AddressDao { get; private set; }
         public DatabaseDao<City> CityDao { get; private set; }
         public DatabaseDao<CityDistricts> CityDistrictsDao { get; private set; }
@@ -44,5 +61,7 @@ namespace DatabaseDao
         public DatabaseDao<Service> ServiceDao { get; private set; }
         public DatabaseDao<Worker> WorkerDao { get; private set; }
         public OrderToServiceDao OrderToServiceDao { get; set; }
+
+
     }
 }
