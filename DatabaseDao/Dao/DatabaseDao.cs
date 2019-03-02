@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Models;
 using Microsoft.EntityFrameworkCore;
+using NLog;
 
 namespace DatabaseDao
 {
@@ -10,9 +11,11 @@ namespace DatabaseDao
 	{
 		private ApplicationContext m_appContext = null;
 		private DbSet<Type> m_daoSet = null;
+		private Logger logger = null;
 
 		public DatabaseDao(ApplicationContext appContext, DbSet<Type> daoSet)
 		{
+			logger = LogManager.GetCurrentClassLogger();
 			m_appContext = appContext;
 			m_daoSet = daoSet;
 		}
@@ -20,6 +23,7 @@ namespace DatabaseDao
 		public List<Type> selectEntities()
 		{
 			List<Type> selectedEntities = m_daoSet.ToList();
+			logger.Trace($"{typeof(Type).Name} selection is done correctly!");
 			return selectedEntities;
 		}
 
@@ -28,8 +32,9 @@ namespace DatabaseDao
 			Type entity = null;
 			try {
 				entity = m_daoSet.Where(e => e.getId() == id).Single();
+				logger.Trace($"Selection {typeof(Type).Name} by id = {id} is done correctly!");
 			} catch (System.InvalidOperationException) {
-				Console.WriteLine($"Cannot find {typeof(Type).Name} by id = {id}");
+				logger.Error($"Cannot find {typeof(Type).Name} by id = {id}");
 			}
 			return entity;
 		}
@@ -41,8 +46,10 @@ namespace DatabaseDao
 			{
 				m_daoSet.Remove(entity);
 				m_appContext.SaveChanges();
+				logger.Trace($"{typeof(Type).Name} with id {id} is deleted!");
 				return true;
 			}
+			logger.Error($"Cannot delete {typeof(Type).Name} by id = {id}");
 			return false;
 		}
 
@@ -50,10 +57,12 @@ namespace DatabaseDao
 		{
 			if (entity != null)
 			{
-                m_daoSet.Add(entity);
+				m_daoSet.Add(entity);
 				m_appContext.SaveChanges();
-				return 0;
+				logger.Trace($"{typeof(Type).Name} with id = {entity.getId()} is added!");
+				return entity.getId();
 			}
+			logger.Error($"Cannot insert {typeof(Type).Name}");
 			return 0;
 		}
 	}

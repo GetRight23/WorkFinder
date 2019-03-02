@@ -13,7 +13,7 @@ namespace DatabaseDao
         private static PostgreStorage instance = null;
 
         private PostgreStorage() 
-            : base(new NpgsqlConnection(@"Host=138.197.176.34;Port=5432;Database=test2;Username=oleg;Password=oleg")) {}
+            : base(new NpgsqlConnection(@"Host=138.197.176.34;Port=5432;Database=test1;Username=oleg;Password=oleg")) {}
 
         public static PostgreStorage getInstance()
         {
