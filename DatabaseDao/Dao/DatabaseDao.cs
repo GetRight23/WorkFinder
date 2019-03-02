@@ -22,9 +22,18 @@ namespace DatabaseDao
 
 		public List<Type> selectEntities()
 		{
-			List<Type> selectedEntities = m_daoSet.ToList();
-			logger.Trace($"{typeof(Type).Name} selection is done correctly!");
-			return selectedEntities;
+			try
+			{
+				List<Type> selectedEntities = m_daoSet.ToList();
+				logger.Trace($"{typeof(Type).Name} selection is done correctly!");
+				return selectedEntities;
+			}
+			catch (Exception ex)
+			{
+				logger.Error(ex.Message);
+				logger.Error($"Cannot select {typeof(Type).Name} entities");
+			}
+			return null;
 		}
 
 		public Type selectEntityById(int id)
@@ -41,28 +50,42 @@ namespace DatabaseDao
 
 		public bool deleteEntityById(int id)
 		{
-			Type entity = selectEntityById(id);
-			if (entity != null)
+			try
 			{
-				m_daoSet.Remove(entity);
-				m_appContext.SaveChanges();
-				logger.Trace($"{typeof(Type).Name} with id {id} is deleted!");
-				return true;
+				Type entity = selectEntityById(id);
+				if (entity != null)
+				{
+					m_daoSet.Remove(entity);
+					m_appContext.SaveChanges();
+					logger.Trace($"{typeof(Type).Name} with id {id} is deleted!");
+					return true;
+				}
 			}
-			logger.Error($"Cannot delete {typeof(Type).Name} by id = {id}");
+			catch (Exception ex)
+			{
+				logger.Error(ex.Message);
+				logger.Error($"Cannot delete {typeof(Type).Name} by id = {id}");
+			}
 			return false;
 		}
 
 		public int insertEntity(Type entity)
 		{
-			if (entity != null)
+			try
 			{
-				m_daoSet.Add(entity);
-				m_appContext.SaveChanges();
-				logger.Trace($"{typeof(Type).Name} with id = {entity.getId()} is added!");
-				return entity.getId();
+				if (entity != null)
+				{
+					m_daoSet.Add(entity);
+					m_appContext.SaveChanges();
+					logger.Trace($"{typeof(Type).Name} with id = {entity.getId()} is added!");
+					return entity.getId();
+				}
 			}
-			logger.Error($"Cannot insert {typeof(Type).Name}");
+			catch (Exception ex)
+			{
+				logger.Error(ex.Message);
+				logger.Error($"Cannot insert {typeof(Type).Name}");
+			}
 			return 0;
 		}
 	}
