@@ -9,25 +9,25 @@ using NLog;
 
 namespace DatabaseDao
 {
-    public class PostgreStorage : Storage 
-    {        
-        private static PostgreStorage instance = null;
+	public class PostgreStorage : Storage
+	{
+		private static PostgreStorage instance = null;
 		private Logger logger = null;
 
-		private PostgreStorage() 
-            : base(new NpgsqlConnection(@"Host=138.197.176.34;Port=5432;Database=test1;Username=oleg;Password=oleg"))
+		private PostgreStorage()
+			: base(new NpgsqlConnection(@"Host=138.197.176.34;Port=5432;Database=test1;Username=oleg;Password=oleg"))
 		{
 			logger = LogManager.GetCurrentClassLogger();
 		}
 
-        public static PostgreStorage getInstance()
-        {
-            if (instance == null)
-                instance = new PostgreStorage();
-            return instance;
-        }
-        public override void createCityTable(DbConnection connection)
-        {
+		public static PostgreStorage getInstance()
+		{
+			if (instance == null)
+				instance = new PostgreStorage();
+			return instance;
+		}
+		public override void createCityTable(DbConnection connection)
+		{
 			try
 			{
 				var command = connection.CreateCommand();
@@ -44,9 +44,9 @@ namespace DatabaseDao
 				logger.Error(ex.Message);
 				logger.Error("Cannot create city table");
 			}
-        }
-        public override void createCityDistrictsTable(DbConnection connection)
-        {
+		}
+		public override void createCityDistrictsTable(DbConnection connection)
+		{
 			try
 			{
 				var command = connection.CreateCommand();
@@ -63,9 +63,9 @@ namespace DatabaseDao
 				logger.Error(ex.Message);
 				logger.Error("Cannot create city_districts table");
 			}
-        }
-        public override void createAddressTable(DbConnection connection)
-        {
+		}
+		public override void createAddressTable(DbConnection connection)
+		{
 			try
 			{
 				var command = connection.CreateCommand();
@@ -85,9 +85,9 @@ namespace DatabaseDao
 				logger.Error(ex.Message);
 				logger.Error("Cannot create address table");
 			}
-        }
-        public override void createWorkerTable(DbConnection connection)
-        {
+		}
+		public override void createWorkerTable(DbConnection connection)
+		{
 			try
 			{
 				var command = connection.CreateCommand();
@@ -107,9 +107,9 @@ namespace DatabaseDao
 				logger.Error(ex.Message);
 				logger.Error("Cannot create worker table");
 			}
-        }
-        public override void createFeedbackTable(DbConnection connection)
-        {
+		}
+		public override void createFeedbackTable(DbConnection connection)
+		{
 			try
 			{
 				var command = connection.CreateCommand();
@@ -131,9 +131,9 @@ namespace DatabaseDao
 				logger.Error(ex.Message);
 				logger.Error("Cannot create Feedback table");
 			}
-        }
-        public override void createOrderListTable(DbConnection connection)
-        {
+		}
+		public override void createOrderListTable(DbConnection connection)
+		{
 			try
 			{
 				var command = connection.CreateCommand();
@@ -150,9 +150,9 @@ namespace DatabaseDao
 				logger.Error(ex.Message);
 				logger.Error("Cannot create OrderList table");
 			}
-        }
-        public override void createOrderTable(DbConnection connection)
-        {
+		}
+		public override void createOrderTable(DbConnection connection)
+		{
 			try
 			{
 				var command = connection.CreateCommand();
@@ -170,9 +170,9 @@ namespace DatabaseDao
 				logger.Error(ex.Message);
 				logger.Error("Cannot create Order table");
 			}
-        }
-        public override void createProfCategoryTable(DbConnection connection)
-        {
+		}
+		public override void createProfCategoryTable(DbConnection connection)
+		{
 			try
 			{
 				var command = connection.CreateCommand();
@@ -189,9 +189,9 @@ namespace DatabaseDao
 				logger.Error(ex.Message);
 				logger.Error("Cannot create Prof_category table");
 			}
-        }
-        public override void createProfessionTable(DbConnection connection)
-        {
+		}
+		public override void createProfessionTable(DbConnection connection)
+		{
 			try
 			{
 				var command = connection.CreateCommand();
@@ -211,9 +211,9 @@ namespace DatabaseDao
 				logger.Error(ex.Message);
 				logger.Error("Cannot create Profession table");
 			}
-        }
-        public override void createServiceTable(DbConnection connection)
-        {
+		}
+		public override void createServiceTable(DbConnection connection)
+		{
 			try
 			{
 				var command = connection.CreateCommand();
@@ -232,9 +232,9 @@ namespace DatabaseDao
 				logger.Error(ex.Message);
 				logger.Error("Cannot create Service table");
 			}
-        }
-        public override void createOrderToService(DbConnection connection)
-        {
+		}
+		public override void createOrderToService(DbConnection connection)
+		{
 			try
 			{
 				var command = connection.CreateCommand();
@@ -252,6 +252,6 @@ namespace DatabaseDao
 				logger.Error(ex.Message);
 				logger.Error("Cannot create Order_to_service table");
 			}
-        }
-    }
+		}
+	}
 }
