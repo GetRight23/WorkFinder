@@ -11,7 +11,7 @@ namespace JSONConvertor
         {
             if (address == null)
             {
-                return new JObject();
+                return null;
             }
             JObject jsonObject = new JObject();
             jsonObject["Id"] = address.Id;
@@ -25,8 +25,8 @@ namespace JSONConvertor
         {
             if (cities == null)
             {
-                return new JObject();
-            }
+				return null;
+			}
             JObject jsonObject = new JObject();
             jsonObject["Id"] = cities.Id;
             jsonObject["Name"] = cities.Name;
@@ -36,8 +36,8 @@ namespace JSONConvertor
         {
             if (cityDistricts == null)
             {
-                return new JObject();
-            }
+				return null;
+			}
             JObject jsonObject = new JObject();
             jsonObject["Id"] = cityDistricts.Id;
             jsonObject["Name"] = cityDistricts.Name;
@@ -48,8 +48,8 @@ namespace JSONConvertor
         {
             if (feedback == null)
             {
-                return new JObject();
-            }
+				return null;
+			}
             JObject jsonObject = new JObject();
             jsonObject["Id"] = feedback.Id;
             jsonObject["Name"] = feedback.Name;
@@ -64,8 +64,8 @@ namespace JSONConvertor
         {
             if (orderslist == null)
             {
-                return new JObject();
-            }
+				return null;
+			}
             JObject jsonObject = new JObject();
             jsonObject["Id"] = orderslist.Id;
             jsonObject["IdWorker"] = orderslist.IdWorker;
@@ -75,8 +75,8 @@ namespace JSONConvertor
         {
             if (orderTable == null)
             {
-                return new JObject();
-            }
+				return null;
+			}
             JObject jsonObject = new JObject();
             jsonObject["Id"] = orderTable.Id;
             jsonObject["Info"] = orderTable.Info;
@@ -87,8 +87,8 @@ namespace JSONConvertor
         {
             if (orderToService == null)
             {
-                return new JObject();
-            }
+				return null;
+			}
             JObject jsonObject = new JObject();
             jsonObject["Id"] = orderToService.Id;
             jsonObject["IdOrder"] = orderToService.IdOrder;
@@ -99,8 +99,8 @@ namespace JSONConvertor
         {
             if (profCategory == null)
             {
-                return new JObject();
-            }
+				return null;
+			}
             JObject jsonObject = new JObject();
             jsonObject["Id"] = profCategory.Id;
             jsonObject["Name"] = profCategory.Name;
@@ -110,8 +110,8 @@ namespace JSONConvertor
         {
             if (profession == null)
             {
-                return new JObject();
-            }
+				return null;
+			}
             JObject jsonObject = new JObject();
             jsonObject["Id"] = profession.Id;
             jsonObject["Name"] = profession.Name;
@@ -123,8 +123,8 @@ namespace JSONConvertor
         {
             if (service == null)
             {
-                return new JObject();
-            }
+				return null;
+			}
             JObject jsonObject = new JObject();
             jsonObject["Id"] = service.Id;
             jsonObject["Price"] = service.Price;
@@ -136,8 +136,8 @@ namespace JSONConvertor
         {
             if (worker == null)
             {
-                return new JObject();
-            }
+				return null;
+			}
             JObject jsonObject = new JObject();
             jsonObject["Id"] = worker.Id;
             jsonObject["PhoneNumber"] = worker.PhoneNumber;
