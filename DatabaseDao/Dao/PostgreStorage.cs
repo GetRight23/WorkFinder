@@ -12,12 +12,11 @@ namespace DatabaseDao
 	public class PostgreStorage : Storage
 	{
 		private static PostgreStorage instance = null;
-		private Logger logger = null;
+		private Logger logger = LogManager.GetCurrentClassLogger();
 
 		private PostgreStorage()
 			: base(new NpgsqlConnection(@"Host=138.197.176.34;Port=5432;Database=test1;Username=oleg;Password=oleg"))
 		{
-			logger = LogManager.GetCurrentClassLogger();
 		}
 
 		public static PostgreStorage getInstance()
