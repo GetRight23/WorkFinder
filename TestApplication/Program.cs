@@ -16,11 +16,9 @@ namespace TestApplication
 		{
 			Console.OutputEncoding = Encoding.UTF8;
 			Storage storage = PostgreStorage.getInstance();
-			JsonConvertor jsonConvertor = new JsonConvertor(); 
-			
-			Worker worker = storage.WorkerDao.selectEntityById(20);
-			JObject jObject = jsonConvertor.toJson(worker);
-			Console.WriteLine($"{jsonConvertor.fromJsonToWorker(jObject).getId()}");
+			JsonConvertor jsonConvertor = new JsonConvertor();
+			storage.UserDao.insertEntity(new User { Login = "OlegiDauni", Password = "asfasfasf", IdWorker = 20 });
+			storage.PhotoDao.insertEntity(new Photo { IdUser = 1, Link = "fdafgagsdg" });
 			Console.WriteLine("Done");
 			Console.ReadKey();
 		}

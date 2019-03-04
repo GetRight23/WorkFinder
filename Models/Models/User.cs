@@ -13,9 +13,11 @@ namespace Models
 		public int Id { get; set; }
 		public string Login { get; set; }
 		public string Password { get; set; }
-		public int IdWorker { get; set; }
-
-		public override int getId() { return Id; }
+		public int? IdWorker { get; set; }
+		public override int getId()
+		{
+			return Id;
+		}
 
 		public virtual Worker IdWorkerNavigation { get; set; }
 		public virtual ICollection<Photo> Photo { get; set; }

@@ -26,6 +26,8 @@ namespace Models
 		public virtual DbSet<Profession> Profession { get; set; }
 		public virtual DbSet<Service> Service { get; set; }
 		public virtual DbSet<Worker> Worker { get; set; }
+		public virtual DbSet<User> User { get; set; }
+		public virtual DbSet<Photo> Photo { get; set; }
 
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
@@ -202,6 +204,25 @@ namespace Models
 					.HasConstraintName("orderslist_id_worker_fkey");
 			});
 
+			modelBuilder.Entity<Photo>(entity =>
+			{
+				entity.ToTable("photo");
+
+				entity.Property(e => e.Id).HasColumnName("id");
+
+				entity.Property(e => e.IdUser).HasColumnName("id_user");
+
+				entity.Property(e => e.Link)
+					.IsRequired()
+					.HasColumnName("link")
+					.HasMaxLength(256);
+
+				entity.HasOne(d => d.IdUserNavigation)
+					.WithMany(p => p.Photo)
+					.HasForeignKey(d => d.IdUser)
+					.HasConstraintName("photo_id_user_fkey");
+			});
+
 			modelBuilder.Entity<ProfCategory>(entity =>
 			{
 				entity.ToTable("prof_category");
@@ -266,6 +287,36 @@ namespace Models
 					.HasConstraintName("service_id_proffesion_fkey");
 			});
 
+			modelBuilder.Entity<User>(entity =>
+			{
+				entity.ToTable("user_table");
+
+				entity.HasIndex(e => e.IdWorker)
+					.HasName("user_id_worker_key")
+					.IsUnique();
+
+				entity.Property(e => e.Id)
+					.HasColumnName("id")
+					.HasDefaultValueSql("nextval('user_id_seq'::regclass)");
+
+				entity.Property(e => e.IdWorker).HasColumnName("id_worker");
+
+				entity.Property(e => e.Login)
+					.IsRequired()
+					.HasColumnName("login")
+					.HasMaxLength(256);
+
+				entity.Property(e => e.Password)
+					.IsRequired()
+					.HasColumnName("password")
+					.HasMaxLength(256);
+
+				entity.HasOne(d => d.IdWorkerNavigation)
+					.WithOne(p => p.User)
+					.HasForeignKey<User>(d => d.IdWorker)
+					.HasConstraintName("user_id_worker_fkey");
+			});
+
 			modelBuilder.Entity<Worker>(entity =>
 			{
 				entity.ToTable("worker");
@@ -292,13 +343,18 @@ namespace Models
 					.HasColumnName("name")
 					.HasColumnType("character(30)");
 
-				entity.Property(e => e.PhoneNumber).HasColumnName("phone_number");
+				entity.Property(e => e.PhoneNumber)
+					.IsRequired()
+					.HasColumnName("phone_number")
+					.HasMaxLength(15);
 
 				entity.HasOne(d => d.IdAddressNavigation)
 					.WithMany(p => p.Worker)
 					.HasForeignKey(d => d.IdAddress)
 					.HasConstraintName("worker_address_fkey");
 			});
+
+			modelBuilder.HasSequence<int>("users_id_seq");
 		}
 	}
 }

@@ -148,6 +148,33 @@ namespace JSONConvertor
 			return jsonObject;
 		}
 
+		public JObject toJson(User user)
+		{
+			if (user == null)
+			{
+				return null;
+			}
+			JObject jsonObject = new JObject();
+			jsonObject["Id"] = user.Id;
+			jsonObject["Login"] = user.Login;
+			jsonObject["Password"] = user.Password;
+			jsonObject["IdWorker"] = user.IdWorker;
+			return jsonObject;
+		}
+
+		public JObject toJson(Photo photo)
+		{
+			if (photo == null)
+			{
+				return null;
+			}
+			JObject jsonObject = new JObject();
+			jsonObject["Id"] = photo.Id;
+			jsonObject["Link"] = photo.Link;
+			jsonObject["IdUser"] = photo.IdUser;
+			return jsonObject;
+		}
+
 		public Worker fromJsonToWorker(JObject jsonObject)
 		{
 			if (jsonObject == null)
@@ -157,7 +184,7 @@ namespace JSONConvertor
 			Worker worker = new Worker()
 			{
 				Id = Convert.ToInt32(jsonObject["Id"]),
-				PhoneNumber = Convert.ToDouble(jsonObject["PhoneNumber"]),
+				PhoneNumber = Convert.ToString(jsonObject["PhoneNumber"]),
 				Info = Convert.ToString(jsonObject["Info"]),
 				IdAddress = Convert.ToInt32(jsonObject["IdAddress"]),
 				Name = Convert.ToString(jsonObject["Name"]),
@@ -319,6 +346,37 @@ namespace JSONConvertor
 				StreetName = Convert.ToString(jsonObject["StreetName"]),
 			};
 			return address;
+		}
+
+		public User fromJsonToUser(JObject jsonObject)
+		{
+			if (jsonObject == null)
+			{
+				return null;
+			}
+			User user = new User()
+			{
+				Id = Convert.ToInt32(jsonObject["Id"]),
+				IdWorker = Convert.ToInt32(jsonObject["IdWorker"]),
+				Login = Convert.ToString(jsonObject["Login"]),
+				Password = Convert.ToString(jsonObject["Password"])
+			};
+			return user;
+		}
+
+		public Photo fromJsonToPhoto(JObject jsonObject)
+		{
+			if (jsonObject == null)
+			{
+				return null;
+			}
+			Photo photo = new Photo()
+			{
+				Id = Convert.ToInt32(jsonObject["Id"]),
+				IdUser = Convert.ToInt32(jsonObject["IdUser"]),
+				Link = Convert.ToString(jsonObject["Link"])
+			};
+			return photo;
 		}
 	}
 }

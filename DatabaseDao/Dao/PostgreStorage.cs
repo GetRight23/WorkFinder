@@ -93,7 +93,7 @@ namespace DatabaseDao
 				command.CommandText =
 					"create table if not exists worker (" +
 					"id serial primary key, " +
-					"phone_number float not null, " +
+					"phone_number character varying(15) not null, " +
 					"address integer references city_districts(id) not null, " +
 					"info character varying(500) not null, " +
 					"id_address integer references address(id) not null" +
@@ -252,18 +252,47 @@ namespace DatabaseDao
 				logger.Error("Cannot create Order_to_service table");
 			}
 		}
+
+		public override void createUserTable(DbConnection connection)
+		{
+			try
+			{
+				var command = connection.CreateCommand();
+				command.CommandText =
+					"create table if not exists user_table (" +
+						"id serial primary key, " +
+						"login character varying(256) not null, " +
+						"password character varying(256) not null, " +
+						"id_worker integer references worker(id) unique" +
+					")";
+				command.ExecuteNonQuery();
+				logger.Trace("User table is created");
+			}
+			catch (Exception ex)
+			{
+				logger.Error(ex.Message);
+				logger.Error("Cannot create User table");
+			}
+		}
+		public override void createPhotoTable(DbConnection connection)
+		{
+			try
+			{
+				var command = connection.CreateCommand();
+				command.CommandText =
+					"create table if not exists photo (" +
+						"id serial primary key, " +
+						"link character varying(256) not null, " +
+						"id_user integer references user_table(id)" +
+					")";
+				command.ExecuteNonQuery();
+				logger.Trace("Photo table is created");
+			}
+			catch (Exception ex)
+			{
+				logger.Error(ex.Message);
+				logger.Error("Cannot create Photo table");
+			}
+		}
 	}
 }
-
-//create table users(
-//					id serial primary key,
-//					login character varying(256) not null,
-//					password character varying(256) not null,
-//					id_worker integer references worker(id) unique
-//					)
-
-//create table photo(
-//				id serial primary key,
-//				link character varying(256) not null,
-//				id_user integer references users(id)
-//				)

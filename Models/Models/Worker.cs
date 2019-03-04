@@ -13,7 +13,7 @@ namespace Models
 		}
 
 		public int Id { get; set; }
-		public double PhoneNumber { get; set; }
+		public string PhoneNumber { get; set; }
 		public string Info { get; set; }
 		public int IdAddress { get; set; }
 		public string Name { get; set; }
@@ -22,6 +22,7 @@ namespace Models
 		public override int getId() { return Id; }
 
 		public virtual Address IdAddressNavigation { get; set; }
+		public virtual User User { get; set; }
 		public virtual ICollection<Feedback> Feedback { get; set; }
 		public virtual ICollection<Orderslist> Orderslist { get; set; }
 		public virtual ICollection<Profession> Profession { get; set; }

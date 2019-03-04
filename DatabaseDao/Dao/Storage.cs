@@ -23,6 +23,8 @@ namespace DatabaseDao
 			createProfessionTable(connection);
 			createServiceTable(connection);
 			createOrderToService(connection);
+			createUserTable(connection);
+			createPhotoTable(connection);
 			connection.Close();
 
 			AddressDao = new DatabaseDao<Address>(ctx, ctx.Address);
@@ -36,6 +38,8 @@ namespace DatabaseDao
 			ServiceDao = new DatabaseDao<Service>(ctx, ctx.Service);
 			WorkerDao = new DatabaseDao<Worker>(ctx, ctx.Worker);
 			OrderToServiceDao = new OrderToServiceDao(ctx, ctx.OrderToService);
+			UserDao = new DatabaseDao<User>(ctx, ctx.User);
+			PhotoDao = new DatabaseDao<Photo>(ctx, ctx.Photo);
 		}
 		public abstract void createCityTable(DbConnection connection);
 		public abstract void createCityDistrictsTable(DbConnection connection);
@@ -48,6 +52,8 @@ namespace DatabaseDao
 		public abstract void createProfessionTable(DbConnection connection);
 		public abstract void createServiceTable(DbConnection connection);
 		public abstract void createOrderToService(DbConnection connection);
+		public abstract void createUserTable(DbConnection connection);
+		public abstract void createPhotoTable(DbConnection connection);
 
 
 		public DatabaseDao<Address> AddressDao { get; private set; }
@@ -60,6 +66,8 @@ namespace DatabaseDao
 		public DatabaseDao<Profession> ProfesionDao { get; private set; }
 		public DatabaseDao<Service> ServiceDao { get; private set; }
 		public DatabaseDao<Worker> WorkerDao { get; private set; }
+		public DatabaseDao<User> UserDao { get; private set; }
+		public DatabaseDao<Photo> PhotoDao { get; private set; }
 		public OrderToServiceDao OrderToServiceDao { get; set; }
 
 
