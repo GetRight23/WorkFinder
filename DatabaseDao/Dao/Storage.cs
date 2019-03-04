@@ -48,8 +48,7 @@ namespace DatabaseDao
         public abstract void createProfessionTable(DbConnection connection);
         public abstract void createServiceTable(DbConnection connection);
         public abstract void createOrderToService(DbConnection connection);
-
-        
+     
         public DatabaseDao<Address> AddressDao { get; private set; }
         public DatabaseDao<City> CityDao { get; private set; }
         public DatabaseDao<CityDistricts> CityDistrictsDao { get; private set; }
@@ -61,7 +60,5 @@ namespace DatabaseDao
         public DatabaseDao<Service> ServiceDao { get; private set; }
         public DatabaseDao<Worker> WorkerDao { get; private set; }
         public OrderToServiceDao OrderToServiceDao { get; set; }
-
-
     }
 }

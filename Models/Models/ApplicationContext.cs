@@ -292,9 +292,11 @@ namespace Models
                     .HasColumnName("name")
                     .HasColumnType("character(30)");
 
-                entity.Property(e => e.PhoneNumber).HasColumnName("phone_number");
+				entity.Property(e => e.PhoneNumber)
+						.HasColumnName("phone_number")
+						.HasMaxLength(15);
 
-                entity.HasOne(d => d.IdAddressNavigation)
+				entity.HasOne(d => d.IdAddressNavigation)
                     .WithMany(p => p.Worker)
                     .HasForeignKey(d => d.IdAddress)
                     .HasConstraintName("worker_address_fkey");

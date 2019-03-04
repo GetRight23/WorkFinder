@@ -7,3 +7,5 @@ TestApplication/obj/
 TestApplication/bin/
 JSONConvertor/bin/
 JSONConvertor/obj/
+DBFiller/obj/
+DBFiller/bin/

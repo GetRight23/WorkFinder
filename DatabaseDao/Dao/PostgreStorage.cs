@@ -60,7 +60,7 @@ namespace DatabaseDao
             command.CommandText =
                 "create table if not exists worker (" +
                 "id serial primary key, " +
-                "phone_number float not null, " +
+				"phone_number character varying(15) not null, " +
                 "address integer references city_districts(id) not null, " +
                 "info character varying(500) not null, " +
                 "id_address integer references address(id) not null" +

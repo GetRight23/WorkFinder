@@ -13,7 +13,7 @@ namespace Models
         }
 
         public int Id { get; set; }
-        public double PhoneNumber { get; set; }
+        public string PhoneNumber { get; set; }
         public string Info { get; set; }
         public int IdAddress { get; set; }
         public string Name { get; set; }
