@@ -131,7 +131,7 @@ namespace DatabaseDao
 				logger.Error("Cannot create Feedback table");
 			}
 		}
-		public override void createOrderListTable(DbConnection connection)
+		public override void createOrdersListTable(DbConnection connection)
 		{
 			try
 			{
@@ -254,3 +254,16 @@ namespace DatabaseDao
 		}
 	}
 }
+
+//create table users(
+//					id serial primary key,
+//					login character varying(256) not null,
+//					password character varying(256) not null,
+//					id_worker integer references worker(id) unique
+//					)
+
+//create table photo(
+//				id serial primary key,
+//				link character varying(256) not null,
+//				id_user integer references users(id)
+//				)

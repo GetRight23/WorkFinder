@@ -17,7 +17,7 @@ namespace DatabaseDao
 			createAddressTable(connection);
 			createWorkerTable(connection);
 			createFeedbackTable(connection);
-			createOrderListTable(connection);
+			createOrdersListTable(connection);
 			createOrderTable(connection);
 			createProfCategoryTable(connection);
 			createProfessionTable(connection);
@@ -42,7 +42,7 @@ namespace DatabaseDao
 		public abstract void createAddressTable(DbConnection connection);
 		public abstract void createWorkerTable(DbConnection connection);
 		public abstract void createFeedbackTable(DbConnection connection);
-		public abstract void createOrderListTable(DbConnection connection);
+		public abstract void createOrdersListTable(DbConnection connection);
 		public abstract void createOrderTable(DbConnection connection);
 		public abstract void createProfCategoryTable(DbConnection connection);
 		public abstract void createProfessionTable(DbConnection connection);
