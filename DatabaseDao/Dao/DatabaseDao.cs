@@ -39,10 +39,13 @@ namespace DatabaseDao
 		public Type selectEntityById(int id)
 		{
 			Type entity = null;
-			try {
+			try
+			{
 				entity = m_daoSet.Where(e => e.getId() == id).Single();
 				logger.Trace($"Selection {typeof(Type).Name} by id = {id} is done correctly!");
-			} catch (System.InvalidOperationException) {
+			}
+			catch (System.InvalidOperationException)
+			{
 				logger.Error($"Cannot find {typeof(Type).Name} by id = {id}");
 			}
 			return entity;

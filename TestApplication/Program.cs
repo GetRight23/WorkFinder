@@ -6,6 +6,7 @@ using System.Text;
 using DatabaseDao;
 using System.Collections.Generic;
 using JSONConvertor;
+using Newtonsoft.Json.Linq;
 
 namespace TestApplication
 {
@@ -14,13 +15,8 @@ namespace TestApplication
 		static void Main(string[] args)
 		{
 			Console.OutputEncoding = Encoding.UTF8;
-            Storage storage = PostgreStorage.getInstance();
-
-			DBFiller dBFiller = new DBFiller(storage);
-			dBFiller.
-
 			Console.WriteLine("Done");
-			Console.ReadKey();           
-        }
+			Console.ReadKey();
+		}
 	}
 }
