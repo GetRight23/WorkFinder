@@ -115,6 +115,7 @@ namespace DatabaseDao
 			}
 			catch (Exception ex)
 			{
+				m_appContext.Database.RollbackTransaction();
 				m_logger.Error(ex.Message);
 				m_logger.Error($"Cannot begin insert {typeof(Type).Name} transaction");
 			}
