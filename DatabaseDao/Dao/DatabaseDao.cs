@@ -4,6 +4,7 @@ using System.Linq;
 using Models;
 using Microsoft.EntityFrameworkCore;
 using NLog;
+using System.Transactions;
 
 namespace DatabaseDao
 {
@@ -28,6 +29,10 @@ namespace DatabaseDao
 				m_logger.Trace($"{typeof(Type).Name} selection is done correctly!");
 				return selectedEntities;
 			}
+			catch (TransactionException)
+			{
+				throw;
+			}
 			catch (Exception ex)
 			{
 				m_logger.Error(ex.Message);
@@ -43,6 +48,10 @@ namespace DatabaseDao
 			{
 				entity = m_daoSet.Where(e => e.getId() == id).Single();
 				m_logger.Trace($"Selection {typeof(Type).Name} by id = {id} is done correctly!");
+			}
+			catch (TransactionException)
+			{
+				throw;
 			}
 			catch (System.InvalidOperationException)
 			{
@@ -64,6 +73,10 @@ namespace DatabaseDao
 					return true;
 				}
 			}
+			catch (TransactionException)
+			{
+				throw;
+			}
 			catch (Exception ex)
 			{
 				m_logger.Error(ex.Message);
@@ -83,6 +96,10 @@ namespace DatabaseDao
 					m_logger.Trace($"{typeof(Type).Name} with id = {entity.getId()} is added!");
 					return entity.getId();
 				}
+			}
+			catch(TransactionException)
+			{
+				throw;
 			}
 			catch (Exception ex)
 			{

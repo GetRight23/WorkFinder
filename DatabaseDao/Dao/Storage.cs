@@ -8,7 +8,7 @@ namespace DatabaseDao
 {
 	public abstract class Storage
 	{
-		private static ApplicationContext m_ctx = new ApplicationContext();
+		public static ApplicationContext m_ctx = new ApplicationContext();
 
 		public Storage(DbConnection connection)
 		{

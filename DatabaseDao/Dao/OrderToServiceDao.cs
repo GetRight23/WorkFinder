@@ -4,6 +4,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
+using System.Transactions;
 
 namespace DatabaseDao
 {
@@ -63,6 +64,10 @@ namespace DatabaseDao
 				}
 				m_appContext.SaveChanges();
 			}
+			catch (TransactionException)
+			{
+				throw;
+			}
 			catch (SystemException)
 			{
 				Console.WriteLine("Cannot remove relationship orders to services");
@@ -83,6 +88,10 @@ namespace DatabaseDao
 					m_daoSet.Remove(orderToService);
 				}
 				m_appContext.SaveChanges();
+			}
+			catch (TransactionException)
+			{
+				throw;
 			}
 			catch (SystemException ex)
 			{
