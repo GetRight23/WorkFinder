@@ -1,9 +1,0 @@
-O:\WorkFinder\ConfigurationClass\bin\Debug\netcoreapp2.1\ConfigurationClass.dll.config
-O:\WorkFinder\ConfigurationClass\bin\Debug\netcoreapp2.1\ConfigurationClass.deps.json
-O:\WorkFinder\ConfigurationClass\bin\Debug\netcoreapp2.1\ConfigurationClass.dll
-O:\WorkFinder\ConfigurationClass\bin\Debug\netcoreapp2.1\ConfigurationClass.pdb
-O:\WorkFinder\ConfigurationClass\obj\Debug\netcoreapp2.1\ConfigurationClass.csproj.CoreCompileInputs.cache
-O:\WorkFinder\ConfigurationClass\obj\Debug\netcoreapp2.1\ConfigurationClass.AssemblyInfoInputs.cache
-O:\WorkFinder\ConfigurationClass\obj\Debug\netcoreapp2.1\ConfigurationClass.AssemblyInfo.cs
-O:\WorkFinder\ConfigurationClass\obj\Debug\netcoreapp2.1\ConfigurationClass.dll
-O:\WorkFinder\ConfigurationClass\obj\Debug\netcoreapp2.1\ConfigurationClass.pdb
