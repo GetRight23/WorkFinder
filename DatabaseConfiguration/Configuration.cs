@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Configuration;
 
-namespace ConfigurationClass
+namespace DatabaseConfiguration
 {
-	public static class ConfigurationClass
+	public static class Configuration
 	{
 		public static string GetConnectionString()
 		{

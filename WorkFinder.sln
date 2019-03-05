@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JSONConvertor", "JSONConver
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DBFiller", "DBFiller\DBFiller.csproj", "{93C7E967-47DE-42D3-B2F4-DC1B685FFD98}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConfigurationClass", "ConfigurationClass\ConfigurationClass.csproj", "{CB7AF01D-EDAA-4AD2-B697-DCAE8FF82ED9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DatabaseConfiguration", "DatabaseConfiguration\DatabaseConfiguration.csproj", "{CB7AF01D-EDAA-4AD2-B697-DCAE8FF82ED9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

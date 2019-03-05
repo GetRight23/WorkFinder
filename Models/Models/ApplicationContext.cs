@@ -1,8 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using System.Configuration;
-using ConfigurationClass;
+using DatabaseConfiguration;
 
 namespace Models
 {
@@ -33,7 +32,7 @@ namespace Models
 		{
 			if (!optionsBuilder.IsConfigured)
 			{
-				optionsBuilder.UseNpgsql(ConfigurationClass.ConfigurationClass.GetConnectionString());
+				optionsBuilder.UseNpgsql(Configuration.GetConnectionString());
 			}
 		}
 

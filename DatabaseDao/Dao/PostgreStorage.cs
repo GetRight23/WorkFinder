@@ -1,11 +1,8 @@
-using Models;
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Data.SqlClient;
 using Npgsql;
 using System.Data.Common;
 using NLog;
+using DatabaseConfiguration;
 
 namespace DatabaseDao
 {
@@ -15,7 +12,7 @@ namespace DatabaseDao
 		private Logger m_logger = LogManager.GetCurrentClassLogger();
 
 		private PostgreStorage()
-			: base(new NpgsqlConnection(ConfigurationClass.ConfigurationClass.GetConnectionString()))
+			: base(new NpgsqlConnection(Configuration.GetConnectionString()))
 		{
 		}
 

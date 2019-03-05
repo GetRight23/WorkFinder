@@ -1,0 +1,10 @@
+O:\WorkFinder\DatabaseConfiguration\bin\Debug\netcoreapp2.1\Configuration.dll.config
+O:\WorkFinder\DatabaseConfiguration\bin\Debug\netcoreapp2.1\Configuration.deps.json
+O:\WorkFinder\DatabaseConfiguration\bin\Debug\netcoreapp2.1\Configuration.dll
+O:\WorkFinder\DatabaseConfiguration\bin\Debug\netcoreapp2.1\Configuration.pdb
+O:\WorkFinder\DatabaseConfiguration\obj\Debug\netcoreapp2.1\DatabaseConfiguration.csproj.CoreCompileInputs.cache
+O:\WorkFinder\DatabaseConfiguration\obj\Debug\netcoreapp2.1\DatabaseConfiguration.AssemblyInfoInputs.cache
+O:\WorkFinder\DatabaseConfiguration\obj\Debug\netcoreapp2.1\DatabaseConfiguration.AssemblyInfo.cs
+O:\WorkFinder\DatabaseConfiguration\obj\Debug\netcoreapp2.1\Configuration.dll
+O:\WorkFinder\DatabaseConfiguration\obj\Debug\netcoreapp2.1\Configuration.pdb
+O:\WorkFinder\DatabaseConfiguration\obj\Debug\netcoreapp2.1\DatabaseConfiguration.csprojAssemblyReference.cache

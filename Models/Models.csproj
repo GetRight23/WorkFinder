@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ConfigurationClass\ConfigurationClass.csproj" />
+    <ProjectReference Include="..\DatabaseConfiguration\DatabaseConfiguration.csproj" />
   </ItemGroup>
 
 </Project>
