@@ -73,7 +73,7 @@ namespace DatabaseDao
 			}
 			catch (SystemException)
 			{
-				Console.WriteLine("Cannot remove relationship orders to services");
+				m_logger.Error("Cannot remove relationship orders to services");
 				return false;
 			}
 			return true;
@@ -98,8 +98,8 @@ namespace DatabaseDao
 			}
 			catch (SystemException ex)
 			{
-				Console.WriteLine(ex.Message);
-				Console.WriteLine("Cannot remove relationship orders to services");
+				m_logger.Error(ex.Message);
+				m_logger.Error("Cannot remove relationship orders to services");
 				return false;
 			}
 			return true;
