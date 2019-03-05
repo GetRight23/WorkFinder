@@ -91,5 +91,34 @@ namespace DatabaseDao
 			}
 			return 0;
 		}
+
+		public List<int> insertEntities(List<Type> entities)
+		{
+			try
+			{
+				if (entities.Count != 0)
+				{
+					List<int> Ids = new List<int>();
+					m_appContext.Database.BeginTransaction();
+					foreach (var entity in entities)
+					{
+						m_daoSet.Add(entity);
+						m_appContext.SaveChanges();
+
+						Ids.Add(entity.getId());
+					}
+					m_appContext.Database.CommitTransaction();
+
+					m_logger.Trace($"Transaction {typeof(Type).Name} is complited");
+					return Ids;
+				}
+			}
+			catch (Exception ex)
+			{
+				m_logger.Error(ex.Message);
+				m_logger.Error($"Cannot begin insert {typeof(Type).Name} transaction");
+			}
+			return null;
+		}
 	}
 }

@@ -15,6 +15,14 @@ namespace TestApplication
 		static void Main(string[] args)
 		{
 			Console.OutputEncoding = Encoding.UTF8;
+
+			List<City> cities = new List<City>();
+			cities.Add(new City { Name = "xyi" });
+			cities.Add(new City { Name = "pezda" });
+
+			Storage storage = new PostgreStorage();
+			storage.CityDao.insertEntities(cities);
+
 			Console.WriteLine("Done");
 			Console.ReadKey();
 		}

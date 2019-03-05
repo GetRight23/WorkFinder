@@ -8,20 +8,12 @@ namespace DatabaseDao
 {
 	public class PostgreStorage : Storage
 	{
-		private static PostgreStorage m_instance = null;
 		private Logger m_logger = LogManager.GetCurrentClassLogger();
 
-		private PostgreStorage()
+		public PostgreStorage()
 			: base(new NpgsqlConnection(Configuration.GetConnectionString()))
-		{
-		}
+		{}
 
-		public static PostgreStorage getInstance()
-		{
-			if (m_instance == null)
-				m_instance = new PostgreStorage();
-			return m_instance;
-		}
 		public override void createCityTable(DbConnection connection)
 		{
 			try
