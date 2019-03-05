@@ -15,7 +15,7 @@ namespace DatabaseDao
 		private Logger logger = LogManager.GetCurrentClassLogger();
 
 		private PostgreStorage()
-			: base(new NpgsqlConnection(@"Host=138.197.176.34;Port=5432;Database=test1;Username=oleg;Password=oleg"))
+			: base(new NpgsqlConnection(ConfigurationClass.ConfigurationClass.GetConnectionString()))
 		{
 		}
 
@@ -230,7 +230,7 @@ namespace DatabaseDao
 			{
 				logger.Error(ex.Message);
 				logger.Error("Cannot create Service table");
-			}
+			
 		}
 		public override void createOrderToService(DbConnection connection)
 		{

@@ -1,11 +1,13 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using System.Configuration;
+using ConfigurationClass;
 
 namespace Models
 {
 	public partial class ApplicationContext : DbContext
-	{
+	{		
 		public ApplicationContext()
 		{
 		}
@@ -33,7 +35,7 @@ namespace Models
 		{
 			if (!optionsBuilder.IsConfigured)
 			{
-				optionsBuilder.UseNpgsql("Host=138.197.176.34;Port=5432;Database=test1;Username=oleg;Password=oleg");
+				optionsBuilder.UseNpgsql(ConfigurationClass.ConfigurationClass.GetConnectionString());
 			}
 		}
 
