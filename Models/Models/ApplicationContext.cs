@@ -9,13 +9,11 @@ namespace Models
 	public partial class ApplicationContext : DbContext
 	{		
 		public ApplicationContext()
-		{
-		}
+		{}
 
 		public ApplicationContext(DbContextOptions<ApplicationContext> options)
 			: base(options)
-		{
-		}
+		{}
 
 		public virtual DbSet<Address> Address { get; set; }
 		public virtual DbSet<City> City { get; set; }

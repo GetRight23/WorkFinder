@@ -11,11 +11,11 @@ namespace DatabaseDao
 	{
 		private ApplicationContext m_appContext = null;
 		private DbSet<Type> m_daoSet = null;
-		private Logger logger = null;
+		private Logger m_logger = null;
 
 		public DatabaseDao(ApplicationContext appContext, DbSet<Type> daoSet)
 		{
-			logger = LogManager.GetCurrentClassLogger();
+			m_logger = LogManager.GetCurrentClassLogger();
 			m_appContext = appContext;
 			m_daoSet = daoSet;
 		}
@@ -25,13 +25,13 @@ namespace DatabaseDao
 			try
 			{
 				List<Type> selectedEntities = m_daoSet.ToList();
-				logger.Trace($"{typeof(Type).Name} selection is done correctly!");
+				m_logger.Trace($"{typeof(Type).Name} selection is done correctly!");
 				return selectedEntities;
 			}
 			catch (Exception ex)
 			{
-				logger.Error(ex.Message);
-				logger.Error($"Cannot select {typeof(Type).Name} entities");
+				m_logger.Error(ex.Message);
+				m_logger.Error($"Cannot select {typeof(Type).Name} entities");
 			}
 			return null;
 		}
@@ -42,11 +42,11 @@ namespace DatabaseDao
 			try
 			{
 				entity = m_daoSet.Where(e => e.getId() == id).Single();
-				logger.Trace($"Selection {typeof(Type).Name} by id = {id} is done correctly!");
+				m_logger.Trace($"Selection {typeof(Type).Name} by id = {id} is done correctly!");
 			}
 			catch (System.InvalidOperationException)
 			{
-				logger.Error($"Cannot find {typeof(Type).Name} by id = {id}");
+				m_logger.Error($"Cannot find {typeof(Type).Name} by id = {id}");
 			}
 			return entity;
 		}
@@ -60,14 +60,14 @@ namespace DatabaseDao
 				{
 					m_daoSet.Remove(entity);
 					m_appContext.SaveChanges();
-					logger.Trace($"{typeof(Type).Name} with id {id} is deleted!");
+					m_logger.Trace($"{typeof(Type).Name} with id {id} is deleted!");
 					return true;
 				}
 			}
 			catch (Exception ex)
 			{
-				logger.Error(ex.Message);
-				logger.Error($"Cannot delete {typeof(Type).Name} by id = {id}");
+				m_logger.Error(ex.Message);
+				m_logger.Error($"Cannot delete {typeof(Type).Name} by id = {id}");
 			}
 			return false;
 		}
@@ -80,14 +80,14 @@ namespace DatabaseDao
 				{
 					m_daoSet.Add(entity);
 					m_appContext.SaveChanges();
-					logger.Trace($"{typeof(Type).Name} with id = {entity.getId()} is added!");
+					m_logger.Trace($"{typeof(Type).Name} with id = {entity.getId()} is added!");
 					return entity.getId();
 				}
 			}
 			catch (Exception ex)
 			{
-				logger.Error(ex.Message);
-				logger.Error($"Cannot insert {typeof(Type).Name}");
+				m_logger.Error(ex.Message);
+				m_logger.Error($"Cannot insert {typeof(Type).Name}");
 			}
 			return 0;
 		}

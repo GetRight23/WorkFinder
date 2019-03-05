@@ -8,7 +8,8 @@ namespace DatabaseDao
 {
 	public abstract class Storage
 	{
-		private static ApplicationContext ctx = new ApplicationContext();
+		private static ApplicationContext m_ctx = new ApplicationContext();
+
 		public Storage(DbConnection connection)
 		{
 			connection.Open();
@@ -27,19 +28,19 @@ namespace DatabaseDao
 			createPhotoTable(connection);
 			connection.Close();
 
-			AddressDao = new DatabaseDao<Address>(ctx, ctx.Address);
-			CityDao = new DatabaseDao<City>(ctx, ctx.City);
-			CityDistrictsDao = new DatabaseDao<CityDistricts>(ctx, ctx.CityDistricts);
-			FeedbackDao = new DatabaseDao<Feedback>(ctx, ctx.Feedback);
-			OrderListDao = new DatabaseDao<Orderslist>(ctx, ctx.Orderslist);
-			OrderTableDao = new DatabaseDao<OrderTable>(ctx, ctx.OrderTable);
-			ProfCategoryDao = new DatabaseDao<ProfCategory>(ctx, ctx.ProfCategory);
-			ProfesionDao = new DatabaseDao<Profession>(ctx, ctx.Profession);
-			ServiceDao = new DatabaseDao<Service>(ctx, ctx.Service);
-			WorkerDao = new DatabaseDao<Worker>(ctx, ctx.Worker);
-			OrderToServiceDao = new OrderToServiceDao(ctx, ctx.OrderToService);
-			UserDao = new DatabaseDao<User>(ctx, ctx.User);
-			PhotoDao = new DatabaseDao<Photo>(ctx, ctx.Photo);
+			AddressDao = new DatabaseDao<Address>(m_ctx, m_ctx.Address);
+			CityDao = new DatabaseDao<City>(m_ctx, m_ctx.City);
+			CityDistrictsDao = new DatabaseDao<CityDistricts>(m_ctx, m_ctx.CityDistricts);
+			FeedbackDao = new DatabaseDao<Feedback>(m_ctx, m_ctx.Feedback);
+			OrderListDao = new DatabaseDao<Orderslist>(m_ctx, m_ctx.Orderslist);
+			OrderTableDao = new DatabaseDao<OrderTable>(m_ctx, m_ctx.OrderTable);
+			ProfCategoryDao = new DatabaseDao<ProfCategory>(m_ctx, m_ctx.ProfCategory);
+			ProfesionDao = new DatabaseDao<Profession>(m_ctx, m_ctx.Profession);
+			ServiceDao = new DatabaseDao<Service>(m_ctx, m_ctx.Service);
+			WorkerDao = new DatabaseDao<Worker>(m_ctx, m_ctx.Worker);
+			OrderToServiceDao = new OrderToServiceDao(m_ctx, m_ctx.OrderToService);
+			UserDao = new DatabaseDao<User>(m_ctx, m_ctx.User);
+			PhotoDao = new DatabaseDao<Photo>(m_ctx, m_ctx.Photo);
 		}
 		public abstract void createCityTable(DbConnection connection);
 		public abstract void createCityDistrictsTable(DbConnection connection);

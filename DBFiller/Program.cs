@@ -10,7 +10,6 @@ namespace DBFiller
 		static void Main(string[] args)
 		{			
 			Storage storage = PostgreStorage.getInstance();
-			
 		}
 	}
 }

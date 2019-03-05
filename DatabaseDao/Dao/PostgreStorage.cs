@@ -11,8 +11,8 @@ namespace DatabaseDao
 {
 	public class PostgreStorage : Storage
 	{
-		private static PostgreStorage instance = null;
-		private Logger logger = LogManager.GetCurrentClassLogger();
+		private static PostgreStorage m_instance = null;
+		private Logger m_logger = LogManager.GetCurrentClassLogger();
 
 		private PostgreStorage()
 			: base(new NpgsqlConnection(ConfigurationClass.ConfigurationClass.GetConnectionString()))
@@ -21,9 +21,9 @@ namespace DatabaseDao
 
 		public static PostgreStorage getInstance()
 		{
-			if (instance == null)
-				instance = new PostgreStorage();
-			return instance;
+			if (m_instance == null)
+				m_instance = new PostgreStorage();
+			return m_instance;
 		}
 		public override void createCityTable(DbConnection connection)
 		{
@@ -36,12 +36,12 @@ namespace DatabaseDao
 					"name character varying(30) not null" +
 					")";
 				command.ExecuteNonQuery();
-				logger.Trace("City table is created");
+				m_logger.Trace("City table is created");
 			}
 			catch (Exception ex)
 			{
-				logger.Error(ex.Message);
-				logger.Error("Cannot create city table");
+				m_logger.Error(ex.Message);
+				m_logger.Error("Cannot create city table");
 			}
 		}
 		public override void createCityDistrictsTable(DbConnection connection)
@@ -55,12 +55,12 @@ namespace DatabaseDao
 					"name character varying(30) not null" +
 					")";
 				command.ExecuteNonQuery();
-				logger.Trace("City_districts table is created");
+				m_logger.Trace("City_districts table is created");
 			}
 			catch (Exception ex)
 			{
-				logger.Error(ex.Message);
-				logger.Error("Cannot create city_districts table");
+				m_logger.Error(ex.Message);
+				m_logger.Error("Cannot create city_districts table");
 			}
 		}
 		public override void createAddressTable(DbConnection connection)
@@ -77,12 +77,12 @@ namespace DatabaseDao
 					"id_city integer references city(id) not null" +
 					")";
 				command.ExecuteNonQuery();
-				logger.Trace("Address table is created");
+				m_logger.Trace("Address table is created");
 			}
 			catch (Exception ex)
 			{
-				logger.Error(ex.Message);
-				logger.Error("Cannot create address table");
+				m_logger.Error(ex.Message);
+				m_logger.Error("Cannot create address table");
 			}
 		}
 		public override void createWorkerTable(DbConnection connection)
@@ -99,12 +99,12 @@ namespace DatabaseDao
 					"id_address integer references address(id) not null" +
 					")";
 				command.ExecuteNonQuery();
-				logger.Trace("Worker table is created");
+				m_logger.Trace("Worker table is created");
 			}
 			catch (Exception ex)
 			{
-				logger.Error(ex.Message);
-				logger.Error("Cannot create worker table");
+				m_logger.Error(ex.Message);
+				m_logger.Error("Cannot create worker table");
 			}
 		}
 		public override void createFeedbackTable(DbConnection connection)
@@ -123,12 +123,12 @@ namespace DatabaseDao
 					"id_worker integer references worker(id) not null" +
 					")";
 				command.ExecuteNonQuery();
-				logger.Trace("Feedback table is created");
+				m_logger.Trace("Feedback table is created");
 			}
 			catch (Exception ex)
 			{
-				logger.Error(ex.Message);
-				logger.Error("Cannot create Feedback table");
+				m_logger.Error(ex.Message);
+				m_logger.Error("Cannot create Feedback table");
 			}
 		}
 		public override void createOrdersListTable(DbConnection connection)
@@ -142,12 +142,12 @@ namespace DatabaseDao
 					"id_worker integer references worker(id) not null" +
 					")";
 				command.ExecuteNonQuery();
-				logger.Trace("OrderList table is created");
+				m_logger.Trace("OrderList table is created");
 			}
 			catch (Exception ex)
 			{
-				logger.Error(ex.Message);
-				logger.Error("Cannot create OrderList table");
+				m_logger.Error(ex.Message);
+				m_logger.Error("Cannot create OrderList table");
 			}
 		}
 		public override void createOrderTable(DbConnection connection)
@@ -162,12 +162,12 @@ namespace DatabaseDao
 					"id_order_list integer references orderslist(id) not null" +
 					")";
 				command.ExecuteNonQuery();
-				logger.Trace("Order table is created");
+				m_logger.Trace("Order table is created");
 			}
 			catch (Exception ex)
 			{
-				logger.Error(ex.Message);
-				logger.Error("Cannot create Order table");
+				m_logger.Error(ex.Message);
+				m_logger.Error("Cannot create Order table");
 			}
 		}
 		public override void createProfCategoryTable(DbConnection connection)
@@ -181,12 +181,12 @@ namespace DatabaseDao
 					"name character varying(45) not null" +
 					")";
 				command.ExecuteNonQuery();
-				logger.Trace("Prof_category table is created");
+				m_logger.Trace("Prof_category table is created");
 			}
 			catch (Exception ex)
 			{
-				logger.Error(ex.Message);
-				logger.Error("Cannot create Prof_category table");
+				m_logger.Error(ex.Message);
+				m_logger.Error("Cannot create Prof_category table");
 			}
 		}
 		public override void createProfessionTable(DbConnection connection)
@@ -203,12 +203,12 @@ namespace DatabaseDao
 					"id_prof_category integer references prof_category(id) not null" +
 					")";
 				command.ExecuteNonQuery();
-				logger.Trace("Profession table is created");
+				m_logger.Trace("Profession table is created");
 			}
 			catch (Exception ex)
 			{
-				logger.Error(ex.Message);
-				logger.Error("Cannot create Profession table");
+				m_logger.Error(ex.Message);
+				m_logger.Error("Cannot create Profession table");
 			}
 		}
 		public override void createServiceTable(DbConnection connection)
@@ -224,14 +224,16 @@ namespace DatabaseDao
 					"id_proffesion integer references profession(id) not null" +
 					")";
 				command.ExecuteNonQuery();
-				logger.Trace("Service table is created");
+				m_logger.Trace("Service table is created");
 			}
 			catch (Exception ex)
 			{
-				logger.Error(ex.Message);
-				logger.Error("Cannot create Service table");
-			
+				m_logger.Error(ex.Message);
+				m_logger.Error("Cannot create Service table");
+
+			}
 		}
+
 		public override void createOrderToService(DbConnection connection)
 		{
 			try
@@ -244,12 +246,12 @@ namespace DatabaseDao
 					"id_order integer references order_table(id) not null" +
 					")";
 				command.ExecuteNonQuery();
-				logger.Trace("Order_to_service table is created");
+				m_logger.Trace("Order_to_service table is created");
 			}
 			catch (Exception ex)
 			{
-				logger.Error(ex.Message);
-				logger.Error("Cannot create Order_to_service table");
+				m_logger.Error(ex.Message);
+				m_logger.Error("Cannot create Order_to_service table");
 			}
 		}
 
@@ -266,12 +268,12 @@ namespace DatabaseDao
 						"id_worker integer references worker(id) unique" +
 					")";
 				command.ExecuteNonQuery();
-				logger.Trace("User table is created");
+				m_logger.Trace("User table is created");
 			}
 			catch (Exception ex)
 			{
-				logger.Error(ex.Message);
-				logger.Error("Cannot create User table");
+				m_logger.Error(ex.Message);
+				m_logger.Error("Cannot create User table");
 			}
 		}
 		public override void createPhotoTable(DbConnection connection)
@@ -286,14 +288,13 @@ namespace DatabaseDao
 						"id_user integer references user_table(id)" +
 					")";
 				command.ExecuteNonQuery();
-				logger.Trace("Photo table is created");
+				m_logger.Trace("Photo table is created");
 			}
 			catch (Exception ex)
 			{
-				logger.Error(ex.Message);
-				logger.Error("Cannot create Photo table");
+				m_logger.Error(ex.Message);
+				m_logger.Error("Cannot create Photo table");
 			}
 		}
 	}
 }
->>>>>>> origin/master
