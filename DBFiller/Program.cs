@@ -11,8 +11,10 @@ namespace DBFiller
 		static void Main(string[] args)
 		{
 			Storage storage = new PostgreStorage();
-			FeedbackFiller feedbackFiller = new FeedbackFiller(storage);
-			feedbackFiller.fillEntities();
+
+			bool temp = storage.CityDao.deleteEntityById(26);
+			Console.WriteLine(temp);
+			Console.ReadKey();
 		}
 	}
 }

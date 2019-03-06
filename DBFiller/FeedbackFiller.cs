@@ -12,7 +12,7 @@ namespace DBFiller
 
 		public override void fillEntities()
 		{
-			List<Address> addresses = Storage.AddressDao.selectEntities();
+			//List<Address> addresses = Storage.AddressDao.selectEntities();
 			FileLoader loader = new FileLoader();
 			loader.filter(loader.entities);
 

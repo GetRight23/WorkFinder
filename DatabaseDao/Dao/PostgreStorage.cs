@@ -12,7 +12,7 @@ namespace DatabaseDao
 
 		public PostgreStorage()
 			: base(new NpgsqlConnection(Configuration.GetConnectionString()))
-		{}
+		{ }
 
 		public override void createCityTable(DbConnection connection)
 		{
@@ -41,7 +41,8 @@ namespace DatabaseDao
 				command.CommandText =
 					"create table if not exists city_districts (" +
 					"id serial primary key, " +
-					"name character varying(30) not null" +
+					"name character varying(30) not null," +
+					"id_city integer references city(id) on delete cascade not null" +
 					")";
 				command.ExecuteNonQuery();
 				m_logger.Trace("City_districts table is created");
@@ -62,8 +63,8 @@ namespace DatabaseDao
 					"id serial primary key, " +
 					"street_name character varying(45) not null, " +
 					"appt_num character varying(5) not null, " +
-					"id_city_district integer references city_districts(id) not null, " +
-					"id_city integer references city(id) not null" +
+					"id_city_district integer references city_districts(id) on delete cascade not null, " +
+					"id_city integer references city(id) on delete cascade not null" +
 					")";
 				command.ExecuteNonQuery();
 				m_logger.Trace("Address table is created");
@@ -83,9 +84,9 @@ namespace DatabaseDao
 					"create table if not exists worker (" +
 					"id serial primary key, " +
 					"phone_number character varying(15) not null, " +
-					"address integer references city_districts(id) not null, " +
+					//"address integer references city_districts(id) not null on delete cascade, " +
 					"info character varying(500) not null, " +
-					"id_address integer references address(id) not null" +
+					"id_address integer references address(id) on delete cascade not null" +
 					")";
 				command.ExecuteNonQuery();
 				m_logger.Trace("Worker table is created");
@@ -109,7 +110,7 @@ namespace DatabaseDao
 					"grade_value integer not null, " +
 					"date date not null, " +
 					"text character varying(500), " +
-					"id_worker integer references worker(id) not null" +
+					"id_worker integer references worker(id) on delete cascade not null" +
 					")";
 				command.ExecuteNonQuery();
 				m_logger.Trace("Feedback table is created");
@@ -128,7 +129,7 @@ namespace DatabaseDao
 				command.CommandText =
 					"create table if not exists orderslist (" +
 					"id serial primary key, " +
-					"id_worker integer references worker(id) not null" +
+					"id_worker integer references worker(id) on delete cascade not null" +
 					")";
 				command.ExecuteNonQuery();
 				m_logger.Trace("OrderList table is created");
@@ -148,7 +149,7 @@ namespace DatabaseDao
 					"create table if not exists order_table (" +
 					"id serial primary key, " +
 					"info character varying(500) not null, " +
-					"id_order_list integer references orderslist(id) not null" +
+					"id_order_list integer references orderslist(id) on delete cascade not null" +
 					")";
 				command.ExecuteNonQuery();
 				m_logger.Trace("Order table is created");
@@ -188,8 +189,8 @@ namespace DatabaseDao
 					"id serial primary key, " +
 					"category_name character varying(45) not null, " +
 					"name character varying(45) not null, " +
-					"id_worker integer references worker(id) not null, " +
-					"id_prof_category integer references prof_category(id) not null" +
+					"id_worker integer references worker(id) on delete cascade not null, " +
+					"id_prof_category integer references prof_category(id) on delete cascade not null" +
 					")";
 				command.ExecuteNonQuery();
 				m_logger.Trace("Profession table is created");
@@ -210,7 +211,7 @@ namespace DatabaseDao
 					"id serial primary key, " +
 					"price money not null, " +
 					"name character varying(100) not null, " +
-					"id_proffesion integer references profession(id) not null" +
+					"id_proffesion integer references profession(id) on delete cascade not null" +
 					")";
 				command.ExecuteNonQuery();
 				m_logger.Trace("Service table is created");
@@ -231,8 +232,8 @@ namespace DatabaseDao
 				command.CommandText =
 					"create table if not exists order_to_service (" +
 					"id serial primary key, " +
-					"id_service integer references service(id) not null, " +
-					"id_order integer references order_table(id) not null" +
+					"id_service integer references service(id) on delete cascade not null, " +
+					"id_order integer references order_table(id) on delete cascade not null" +
 					")";
 				command.ExecuteNonQuery();
 				m_logger.Trace("Order_to_service table is created");
@@ -254,7 +255,7 @@ namespace DatabaseDao
 						"id serial primary key, " +
 						"login character varying(256) not null, " +
 						"password character varying(256) not null, " +
-						"id_worker integer references worker(id) unique" +
+						"id_worker integer references worker(id) on delete cascade unique" +
 					")";
 				command.ExecuteNonQuery();
 				m_logger.Trace("User table is created");
@@ -274,7 +275,7 @@ namespace DatabaseDao
 					"create table if not exists photo (" +
 						"id serial primary key, " +
 						"link character varying(256) not null, " +
-						"id_user integer references user_table(id)" +
+						"id_user integer references user_table(id) on delete cascade not null" +
 					")";
 				command.ExecuteNonQuery();
 				m_logger.Trace("Photo table is created");
