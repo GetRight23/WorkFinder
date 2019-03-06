@@ -83,10 +83,11 @@ namespace DatabaseDao
 				command.CommandText =
 					"create table if not exists worker (" +
 					"id serial primary key, " +
-					"phone_number character varying(15) not null, " +
-					//"address integer references city_districts(id) not null on delete cascade, " +
+					"phone_number character varying(15) not null, " +					
 					"info character varying(500) not null, " +
-					"id_address integer references address(id) on delete cascade not null" +
+					"id_address integer references address(id) on delete cascade not null, " +
+					"name character varying(30) not null, " +
+					"last_name character varying(30) not null"+
 					")";
 				command.ExecuteNonQuery();
 				m_logger.Trace("Worker table is created");
@@ -187,7 +188,6 @@ namespace DatabaseDao
 				command.CommandText =
 					"create table if not exists profession (" +
 					"id serial primary key, " +
-					"category_name character varying(45) not null, " +
 					"name character varying(45) not null, " +
 					"id_worker integer references worker(id) on delete cascade not null, " +
 					"id_prof_category integer references prof_category(id) on delete cascade not null" +
@@ -223,7 +223,6 @@ namespace DatabaseDao
 
 			}
 		}
-
 		public override void createOrderToService(DbConnection connection)
 		{
 			try
@@ -244,7 +243,6 @@ namespace DatabaseDao
 				m_logger.Error("Cannot create Order_to_service table");
 			}
 		}
-
 		public override void createUserTable(DbConnection connection)
 		{
 			try

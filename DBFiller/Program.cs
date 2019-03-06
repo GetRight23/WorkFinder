@@ -11,9 +11,9 @@ namespace DBFiller
 		static void Main(string[] args)
 		{
 			Storage storage = new PostgreStorage();
+			ServiceFiller profCategoryFiller = new ServiceFiller(storage);
+			profCategoryFiller.fillEntities();
 
-			bool temp = storage.CityDao.deleteEntityById(26);
-			Console.WriteLine(temp);
 			Console.ReadKey();
 		}
 	}

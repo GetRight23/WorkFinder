@@ -12,13 +12,11 @@ namespace DBFiller
 
 		public override void fillEntities()
 		{
-			//List<Address> addresses = Storage.AddressDao.selectEntities();
 			FileLoader loader = new FileLoader();
-			loader.filter(loader.entities);
-
 			loader.load(@"E:\Projects\WorkFinder\WorkFinder\DBFiller\res\feedbacks.txt");
+					
 			List<string> feedBacks = new List<string>();
-			feedBacks.AddRange(loader.entities);
+			feedBacks.AddRange(loader.filter(loader.entities));
 
 			loader.load(@"E:\Projects\WorkFinder\WorkFinder\DBFiller\res\russian_names.txt");
 			List<string> names = new List<string>();

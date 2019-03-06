@@ -16,10 +16,18 @@ namespace DBFiller
 			List<Address> addresses = Storage.AddressDao.selectEntities();
 			FileLoader loader = new FileLoader();
 
-			List<string> lastNames = loader.load(@"E:\Projects\WorkFinder\WorkFinder\DBFiller\res\russian_surnames.txt");
-			List<string> names = loader.load(@"E:\Projects\WorkFinder\WorkFinder\DBFiller\res\russian_names.txt");
+			List<string> names = new List<string>();
+			List<string> lastNames = new List<string>();
+
+			loader.load(@"E:\Projects\WorkFinder\WorkFinder\DBFiller\res\russian_names.txt");
+			names.AddRange(loader.filter(loader.entities));
+
+			loader.load(@"E:\Projects\WorkFinder\WorkFinder\DBFiller\res\russian_surnames.txt");
+			lastNames.AddRange(loader.filter(loader.entities));
 
 			Random rand = new Random();
+
+			List<Worker> workers = new List<Worker>();
 
 			for (int i = 0; i < size; i++)
 			{
@@ -34,8 +42,9 @@ namespace DBFiller
 					Name = names[rand.Next(0, names.Count)],
 					LastName = lastNames[rand.Next(0, lastNames.Count)]
 				};
-				Storage.WorkerDao.insertEntity(worker);
+				workers.Add(worker);			
 			}
+			Storage.WorkerDao.insertEntities(workers);
 			Console.WriteLine("Worker added!");
 		}
 	}
