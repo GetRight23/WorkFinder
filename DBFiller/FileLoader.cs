@@ -9,23 +9,25 @@ namespace DBFiller
 {
 	public class FileLoader
 	{
-		public FileLoader() {}
-
-		public List<string> load(string filePath)
+		public List<String> entities { get; set; }
+		public FileLoader()
 		{
-			List<string> entities = new List<string>();
+			entities = new List<string>();
+		}
+
+		public virtual List<string> load(string filePath)
+		{
+			entities.Clear();
 			string line = null;
 			try
 			{
-				using (StreamReader fileSurnames = new StreamReader(filePath))
+				using (StreamReader file = new StreamReader(filePath))
 				{
-					while ((line = fileSurnames.ReadLine()) != null)
+					while ((line = file.ReadLine()) != null)
 					{
 						entities.Add(line);
 					}
 				}
-
-				return filter(entities);
 			}
 			catch (FileNotFoundException ex)
 			{
@@ -34,7 +36,7 @@ namespace DBFiller
 			return null;
 		}
 
-		private List<string> filter(List<string> entities)
+		public List<string> filter(List<string> entities)
 		{
 			const int maxSurnames = 100;
 			char endOfAlpahbet = Convert.ToChar((int)'Я' + 1);
@@ -54,6 +56,5 @@ namespace DBFiller
 			}
 			return result;
 		}
-
 	}
 }
