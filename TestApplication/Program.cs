@@ -17,7 +17,12 @@ namespace TestApplication
 			Console.OutputEncoding = Encoding.UTF8;
 
 			Storage storage = new PostgreStorage();
-
+			List<int> ids_lst = new List<int>() { 1, 2, 3, 4, 5 };
+			List<City> cities = storage.CityDao.selectEntitiesByIds(ids_lst);
+			foreach (var city in cities)
+			{
+				Console.WriteLine($"{city.Id} - {city.Name}");
+			}
 			Console.WriteLine("Done");
 			Console.ReadKey();
 		}

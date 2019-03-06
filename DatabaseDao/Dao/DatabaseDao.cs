@@ -138,5 +138,85 @@ namespace DatabaseDao
 			}
 			return null;
 		}
+
+		public void updateEntity(Type entity)
+		{
+			try
+			{
+				if (entity != null)
+				{
+					m_daoSet.Update(entity);
+					m_appContext.SaveChanges();
+					m_logger.Trace($"{typeof(Type).Name} with id {entity.getId()} is updated");
+				}
+			}
+			catch (Exception ex)
+			{
+				m_logger.Error(ex.Message);
+				m_logger.Error($"Cannot update {typeof(Type).Name} with id {entity.getId()}");
+			}
+		}
+
+		public void updateEntities(List<Type> entities)
+		{
+			try
+			{
+				m_appContext.Database.BeginTransaction();
+				foreach (var entity in entities)
+				{
+					updateEntity(entity);
+				}
+				m_appContext.Database.CommitTransaction();
+			}
+			catch (TransactionException ex)
+			{
+				m_appContext.Database.RollbackTransaction();
+				m_logger.Error(ex.Message);
+				m_logger.Error($"Cannot begin update {typeof(Type).Name} transaction");
+			}
+		}
+
+		public List<Type> selectEntitiesByIds(List<int> ids)
+		{
+			List<Type> entities = new List<Type>();
+			try
+			{
+				m_appContext.Database.BeginTransaction();
+				foreach (var id in ids)
+				{
+					entities.Add(selectEntityById(id));
+				}
+				m_appContext.Database.CommitTransaction();
+			}
+			catch (TransactionException ex)
+			{
+				m_appContext.Database.RollbackTransaction();
+				m_logger.Error(ex.Message);
+				m_logger.Error($"Cannot begin select {typeof(Type).Name} transaction");
+			}
+			return entities;
+		}
+
+		public bool deleteEntitiesByIds(List<int> ids)
+		{
+			try
+			{
+				bool state = true;
+				m_appContext.Database.BeginTransaction();
+				foreach (var id in ids)
+				{
+					state = deleteEntityById(id);
+				}
+				m_appContext.Database.CommitTransaction();
+				return state;
+			}
+			catch (TransactionException ex)
+			{
+				m_appContext.Database.RollbackTransaction();
+				m_logger.Error(ex.Message);
+				m_logger.Error($"Cannot begin delete {typeof(Type).Name} transaction");
+				return false;
+			}
+		}
 	}
 }

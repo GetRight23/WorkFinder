@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
 using System.Transactions;
+using NLog;
 
 namespace DatabaseDao
 {
@@ -12,10 +13,12 @@ namespace DatabaseDao
 	{
 		private ApplicationContext m_appContext = null;
 		private DbSet<OrderToService> m_daoSet = null;
+		private Logger m_logger = null;
 
 		public OrderToServiceDao(ApplicationContext appContext, DbSet<OrderToService> daoSet)
 		{
 			m_appContext = appContext;
+			m_logger = LogManager.GetCurrentClassLogger();
 			m_daoSet = daoSet;
 		}
 
@@ -70,7 +73,7 @@ namespace DatabaseDao
 			}
 			catch (SystemException)
 			{
-				Console.WriteLine("Cannot remove relationship orders to services");
+				m_logger.Error("Cannot remove relationship orders to services");
 				return false;
 			}
 			return true;
@@ -95,8 +98,8 @@ namespace DatabaseDao
 			}
 			catch (SystemException ex)
 			{
-				Console.WriteLine(ex.Message);
-				Console.WriteLine("Cannot remove relationship orders to services");
+				m_logger.Error(ex.Message);
+				m_logger.Error("Cannot remove relationship orders to services");
 				return false;
 			}
 			return true;
@@ -108,6 +111,43 @@ namespace DatabaseDao
 			int id = m_daoSet.Add(orderToService).Entity.Id;
 			m_appContext.SaveChanges();
 			return id;
+		}
+
+		public void updateEntity(OrderToService entity)
+		{
+			try
+			{
+				if (entity != null)
+				{
+					m_daoSet.Update(entity);
+					m_appContext.SaveChanges();
+					m_logger.Trace($"OrderToService with id {entity.Id} updated");
+				}
+			}
+			catch (Exception ex)
+			{
+				m_logger.Error(ex.Message);
+				m_logger.Error($"Cannot update OrderToService with id {entity.Id}");
+			}
+		}
+
+		public void updateEntities(List<OrderToService> entities)
+		{
+			try
+			{
+				m_appContext.Database.BeginTransaction();
+				foreach (var entity in entities)
+				{
+					updateEntity(entity);
+				}
+				m_appContext.Database.CommitTransaction();
+			}
+			catch (TransactionException ex)
+			{
+				m_appContext.Database.RollbackTransaction();
+				m_logger.Error(ex.Message);
+				m_logger.Error($"Cannot begin update OrderToService transaction");
+			}
 		}
 	}
 }
