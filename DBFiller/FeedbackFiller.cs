@@ -12,34 +12,30 @@ namespace DBFiller
 
 		public override void fillEntities()
 		{
-			FileLoader loader = new FileLoader();
-			loader.load(@"E:\Projects\WorkFinder\WorkFinder\DBFiller\res\feedbacks.txt");
-					
 			List<string> feedBacks = new List<string>();
-			feedBacks.AddRange(loader.filter(loader.entities));
-
-			loader.load(@"E:\Projects\WorkFinder\WorkFinder\DBFiller\res\russian_names.txt");
 			List<string> names = new List<string>();
-			names.AddRange(loader.entities);
-
-			Random rand = new Random();
 
 			List<Worker> listWorkers = Storage.WorkerDao.selectEntities();
+
+			fileLoader.load(@"E:\Projects\WorkFinder\WorkFinder\DBFiller\res\feedbacks.txt");
+			feedBacks.AddRange(fileLoader.filter(fileLoader.entities));
+
+			fileLoader.load(@"E:\Projects\WorkFinder\WorkFinder\DBFiller\res\russian_names.txt");
+			names.AddRange(fileLoader.entities);
 
 			for (int i = 0; i < listWorkers.Count; i++)
 			{
 				Feedback feedback = new Feedback()
 				{
-					Name = names[rand.Next(0, names.Count)],
-					Patronymic = names[rand.Next(0, names.Count)],
-					GradeValue = rand.Next(1, 5),
+					Name = names[Random.Next(0, names.Count)],
+					Patronymic = names[Random.Next(0, names.Count)],
+					GradeValue = Random.Next(1, 5),
 					Date = DateTime.Now,
-					Text = feedBacks[rand.Next(0, feedBacks.Count)],
-					IdWorker = listWorkers[rand.Next(0, listWorkers.Count)].Id
+					Text = feedBacks[Random.Next(0, feedBacks.Count)],
+					IdWorker = listWorkers[Random.Next(0, listWorkers.Count)].Id
 				};
 				Storage.FeedbackDao.insertEntity(feedback);
 			}
-			Console.WriteLine("Feedback added!");
 		}
 	}
 }

@@ -10,12 +10,14 @@ namespace DBFiller
 {
     public abstract class DBFiller
     {
+
 		public DBFiller(Storage storage)
         {
 			Storage = storage;
 		}
-
 		public abstract void fillEntities();
 		public Storage Storage { get; private set; }
+		public FileLoader fileLoader { get; private set; }
+		public Random Random { get; set; }
 	}
 }

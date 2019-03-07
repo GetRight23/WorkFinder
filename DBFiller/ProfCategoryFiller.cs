@@ -12,15 +12,12 @@ namespace DBFiller
 
 		public override void fillEntities()
 		{
-			FileLoader loader = new FileLoader();
-			loader.filter(loader.entities);
-
-			loader.load(@"E:\Projects\WorkFinder\WorkFinder\DBFiller\res\prof_categories.txt");
 			List<string> prof_categories = new List<string>();
-			prof_categories.AddRange(loader.entities);
 
-			Random rand = new Random();
 			List<ProfCategory> listProfCategory = new List<ProfCategory>();
+
+			fileLoader.load(@"E:\Projects\WorkFinder\WorkFinder\DBFiller\res\prof_categories.txt");		
+			prof_categories.AddRange(fileLoader.entities);
 
 			for (int i = 0; i < prof_categories.Count; i++)
 			{

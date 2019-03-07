@@ -11,15 +11,12 @@ namespace DBFiller
 		public CityFiller(Storage storage) : base(storage) {}
 		public override void fillEntities()
 		{
-			FileLoader loader = new FileLoader();
-			loader.load(@"E:\Projects\WorkFinder\WorkFinder\DBFiller\res\cities.txt");
-
 			List<string> cityList = new List<string>();
-			cityList.AddRange(loader.entities);
-
-			Random rand = new Random();
 
 			List<City> cities = new List<City>();
+
+			fileLoader.load(@"E:\Projects\WorkFinder\WorkFinder\DBFiller\res\cities.txt");		
+			cityList.AddRange(fileLoader.entities);
 
 			for (int i = 0; i < cityList.Count; i++)
 			{
