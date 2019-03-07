@@ -11,8 +11,6 @@ namespace DBFiller
 		static void Main(string[] args)
 		{
 			Storage storage = new PostgreStorage();
-			ServiceFiller profCategoryFiller = new ServiceFiller(storage);
-			profCategoryFiller.fillEntities();
 
 			Console.ReadKey();
 		}
