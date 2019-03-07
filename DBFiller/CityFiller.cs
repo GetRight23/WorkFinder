@@ -16,7 +16,7 @@ namespace DBFiller
 			List<City> cities = new List<City>();
 
 			fileLoader.load(@"E:\Projects\WorkFinder\WorkFinder\DBFiller\res\cities.txt");		
-			cityList.AddRange(fileLoader.entities);
+			cityList.AddRange(fileLoader.Entities);
 
 			for (int i = 0; i < cityList.Count; i++)
 			{

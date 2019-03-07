@@ -17,7 +17,7 @@ namespace DBFiller
 			List<OrderTable> orders = new List<OrderTable>();
 
 			fileLoader.load(@"E:\Projects\WorkFinder\WorkFinder\DBFiller\res\orders.txt");
-			orderTables.AddRange(fileLoader.entities);
+			orderTables.AddRange(fileLoader.Entities);
 			
 			for (int i = 0; i < orderTables.Count; i++)
 			{

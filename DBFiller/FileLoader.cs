@@ -9,15 +9,15 @@ namespace DBFiller
 {
 	public class FileLoader
 	{
-		public List<String> entities { get; set; }
+		public List<string> Entities { get; set; }
 		public FileLoader()
 		{
-			entities = new List<string>();
+			Entities = new List<string>();
 		}
 
 		public virtual List<string> load(string filePath)
 		{
-			entities.Clear();
+			Entities.Clear();
 			string line = null;
 			try
 			{
@@ -25,7 +25,7 @@ namespace DBFiller
 				{
 					while ((line = file.ReadLine()) != null)
 					{
-						entities.Add(line);
+						Entities.Add(line);
 					}
 				}
 			}

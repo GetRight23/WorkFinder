@@ -20,10 +20,10 @@ namespace DBFiller
 			List<Worker> workers = new List<Worker>();
 
 			fileLoader.load(@"E:\Projects\WorkFinder\WorkFinder\DBFiller\res\russian_names.txt");
-			names.AddRange(fileLoader.filter(fileLoader.entities));
+			names.AddRange(fileLoader.filter(fileLoader.Entities));
 
 			fileLoader.load(@"E:\Projects\WorkFinder\WorkFinder\DBFiller\res\russian_surnames.txt");
-			lastNames.AddRange(fileLoader.filter(fileLoader.entities));
+			lastNames.AddRange(fileLoader.filter(fileLoader.Entities));
 
 			for (int i = 0; i < size; i++)
 			{

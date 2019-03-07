@@ -18,10 +18,10 @@ namespace DBFiller
 			List<Worker> workers = Storage.WorkerDao.selectEntities();
 
 			fileLoader.load(@"E:\Projects\WorkFinder\WorkFinder\DBFiller\res\logins.txt");
-			logins.AddRange(fileLoader.entities);
+			logins.AddRange(fileLoader.Entities);
 
 			fileLoader.load(@"E:\Projects\WorkFinder\WorkFinder\DBFiller\res\passwords.txt");
-			passwords.AddRange(fileLoader.entities);
+			passwords.AddRange(fileLoader.Entities);
 
 			for (int i = 0; i < workers.Count; i++)
 			{
