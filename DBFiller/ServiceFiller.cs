@@ -17,7 +17,8 @@ namespace DBFiller
 			List<Profession> professions = Storage.ProfesionDao.selectEntities();
 
 			fileLoader.load(@".\res\services.txt");		
-			services.AddRange(fileLoader.entities);
+			services.AddRange(fileLoader.Entities);
+
 
 			for (int i = 0; i < services.Count; i++)
 			{

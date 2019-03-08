@@ -21,9 +21,8 @@ namespace DBFiller
 
 			List<Address> addresses = new List<Address>();
 
-			Console.ReadKey();
 			fileLoader.load(@".\res\street_names.txt");
-			listStreetNames.AddRange(fileLoader.entities);			
+			listStreetNames.AddRange(fileLoader.Entities);			
 
 			for (int i = 0; i < listCity.Count; i++)
 			{

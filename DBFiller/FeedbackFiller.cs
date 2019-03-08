@@ -18,10 +18,10 @@ namespace DBFiller
 			List<Worker> listWorkers = Storage.WorkerDao.selectEntities();
 
 			fileLoader.load(@".\res\feedbacks.txt");
-			feedBacks.AddRange(fileLoader.filter(fileLoader.entities));
+			feedBacks.AddRange(fileLoader.filter(fileLoader.Entities));
 
 			fileLoader.load(@".\res\russian_names.txt");
-			names.AddRange(fileLoader.entities);
+			names.AddRange(fileLoader.Entities);
 
 			for (int i = 0; i < listWorkers.Count; i++)
 			{

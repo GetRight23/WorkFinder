@@ -18,7 +18,7 @@ namespace DBFiller
 
 			fileLoader.load(@".\res\city_districts.txt");
 			
-			cityDistricts.AddRange(fileLoader.entities);
+			cityDistricts.AddRange(fileLoader.Entities);
 		
 			for (int i = 0; i < cityDistricts.Count; i++)
 			{

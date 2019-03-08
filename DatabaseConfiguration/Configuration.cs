@@ -7,7 +7,7 @@ namespace DatabaseConfiguration
 	{
 		public static string GetConnectionString()
 		{
-			string connStr = null;
+			string connectionString = null;
 			try
 			{
 				var appSettings = ConfigurationManager.AppSettings;
@@ -18,14 +18,14 @@ namespace DatabaseConfiguration
 				}
 				else
 				{
-					connStr = appSettings["ConnectionString"];
+                    connectionString = appSettings["ConnectionString"];
 				}
 			}
 			catch (ConfigurationErrorsException)
 			{
 				Console.WriteLine("Error reading app settings");
 			}
-			return connStr;
+			return connectionString;
 		}
 	}
 }

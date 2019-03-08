@@ -19,7 +19,7 @@ namespace DBFiller
 			List<Profession> professions = new List<Profession>();
 
 			fileLoader.load(@".\res\professions.txt");
-			professionList.AddRange(fileLoader.entities);
+			professionList.AddRange(fileLoader.Entities);
 
 			for (int i = 0; i < professionList.Count; i++)
 			{
