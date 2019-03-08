@@ -5,9 +5,23 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath></OutputPath>
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\DatabaseDao\DatabaseDao.csproj" />
     <ProjectReference Include="..\Models\Models.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <None Update="res\cities.txt">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="cd $(OutDir)&#xD;&#xA;md res&#xD;&#xA;cd ..\..\..\&#xD;&#xA;copy res $(OutDir)\res&#xD;&#xA;exit 0" />
+  </Target>
 
 </Project>

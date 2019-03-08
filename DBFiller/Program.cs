@@ -12,6 +12,9 @@ namespace DBFiller
 		{
 			Storage storage = new PostgreStorage();
 
+			AddressFiller addressFiller = new AddressFiller(storage);
+			addressFiller.fillEntities();
+
 			Console.ReadKey();
 		}
 	}

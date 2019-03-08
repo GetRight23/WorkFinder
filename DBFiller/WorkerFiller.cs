@@ -19,10 +19,10 @@ namespace DBFiller
 			List<Address> addresses = Storage.AddressDao.selectEntities();
 			List<Worker> workers = new List<Worker>();
 
-			fileLoader.load(@"E:\Projects\WorkFinder\WorkFinder\DBFiller\res\russian_names.txt");
+			fileLoader.load(@".\res\russian_names.txt");
 			names.AddRange(fileLoader.filter(fileLoader.entities));
 
-			fileLoader.load(@"E:\Projects\WorkFinder\WorkFinder\DBFiller\res\russian_surnames.txt");
+			fileLoader.load(@".\res\russian_surnames.txt");
 			lastNames.AddRange(fileLoader.filter(fileLoader.entities));
 
 			for (int i = 0; i < size; i++)

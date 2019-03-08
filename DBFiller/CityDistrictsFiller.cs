@@ -16,7 +16,7 @@ namespace DBFiller
 			List<CityDistricts> listCityDistricts = new List<CityDistricts>();
 			List<City> listCity = Storage.CityDao.selectEntities();
 
-			fileLoader.load(@"E:\Projects\WorkFinder\WorkFinder\DBFiller\res\city_districts.txt");
+			fileLoader.load(@".\res\city_districts.txt");
 			
 			cityDistricts.AddRange(fileLoader.entities);
 		

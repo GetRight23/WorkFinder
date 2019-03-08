@@ -2,6 +2,7 @@
 using Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 namespace DBFiller
@@ -20,7 +21,8 @@ namespace DBFiller
 
 			List<Address> addresses = new List<Address>();
 
-			fileLoader.load(@"E:\Projects\WorkFinder\WorkFinder\DBFiller\res\street_names.txt");
+			Console.ReadKey();
+			fileLoader.load(@".\res\street_names.txt");
 			listStreetNames.AddRange(fileLoader.entities);			
 
 			for (int i = 0; i < listCity.Count; i++)

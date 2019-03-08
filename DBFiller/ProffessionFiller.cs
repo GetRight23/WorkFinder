@@ -18,7 +18,7 @@ namespace DBFiller
 			List<ProfCategory> profCategories = Storage.ProfCategoryDao.selectEntities();
 			List<Profession> professions = new List<Profession>();
 
-			fileLoader.load(@"E:\Projects\WorkFinder\WorkFinder\DBFiller\res\professions.txt");
+			fileLoader.load(@".\res\professions.txt");
 			professionList.AddRange(fileLoader.entities);
 
 			for (int i = 0; i < professionList.Count; i++)

@@ -17,10 +17,10 @@ namespace DBFiller
 
 			List<Worker> listWorkers = Storage.WorkerDao.selectEntities();
 
-			fileLoader.load(@"E:\Projects\WorkFinder\WorkFinder\DBFiller\res\feedbacks.txt");
+			fileLoader.load(@".\res\feedbacks.txt");
 			feedBacks.AddRange(fileLoader.filter(fileLoader.entities));
 
-			fileLoader.load(@"E:\Projects\WorkFinder\WorkFinder\DBFiller\res\russian_names.txt");
+			fileLoader.load(@".\res\russian_names.txt");
 			names.AddRange(fileLoader.entities);
 
 			for (int i = 0; i < listWorkers.Count; i++)

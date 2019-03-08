@@ -16,7 +16,7 @@ namespace DBFiller
 
 			List<ProfCategory> listProfCategory = new List<ProfCategory>();
 
-			fileLoader.load(@"E:\Projects\WorkFinder\WorkFinder\DBFiller\res\prof_categories.txt");		
+			fileLoader.load(@".\res\prof_categories.txt");		
 			prof_categories.AddRange(fileLoader.entities);
 
 			for (int i = 0; i < prof_categories.Count; i++)
