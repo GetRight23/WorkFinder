@@ -1,21 +1,20 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using DatabaseConfiguration;
-using DatabaseDao;
+using NUnit.Framework;
 using Models;
+using DatabaseDao;
+using DatabaseConfiguration;
 using System.Data.Common;
 using System.Collections.Generic;
 
-namespace DatabaseTest
+namespace DatabaseTests
 {
-	[TestClass]
-	public class CityTableTests
+	public class CityTests
 	{
 		private static Storage Storage { get; set; }
 		private static DbConnection Connection { get; set; }
 		private static City city = null;
 
-		[ClassInitialize]
-		public static void initialize(TestContext context)
+		[OneTimeSetUp]
+		public void Setup()
 		{
 			Storage = new PostgreStorage(Configuration.TestConnection);
 
@@ -30,8 +29,8 @@ namespace DatabaseTest
 			Storage.createCityTable();
 		}
 
-		[ClassCleanup]
-		public static void cleanup()
+		[OneTimeTearDown]
+		public void CleanUp()
 		{
 			var command = Connection.CreateCommand();
 			command.CommandText = "drop table if exists city";
@@ -39,15 +38,7 @@ namespace DatabaseTest
 			Connection.Close();
 		}
 
-		[TestMethod]
-		public void runTests()
-		{
-			insertCityTest();
-			selectCityTest();
-			updateCityTest();
-			deleteCitytest();
-		}
-
+		[Test, Order(1)]
 		public void insertCityTest()
 		{
 			city = new City() { Name = "Kyiv" };
@@ -58,12 +49,14 @@ namespace DatabaseTest
 			Assert.IsTrue(id != 0);
 		}
 
+		[Test, Order(2)]
 		public void selectCityTest()
 		{
 			List<City> cities = Storage.CityDao.selectEntities();
 			Assert.IsTrue(cities.Count == 1);
 		}
 
+		[Test, Order(3)]
 		public void updateCityTest()
 		{
 			Assert.IsNotNull(city);
@@ -75,6 +68,7 @@ namespace DatabaseTest
 			Assert.IsTrue(Storage.CityDao.selectEntityById(city.Id).Name == "London");
 		}
 
+		[Test, Order(4)]
 		public void deleteCitytest()
 		{
 			Assert.IsNotNull(city);

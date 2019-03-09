@@ -1,22 +1,21 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using DatabaseConfiguration;
-using DatabaseDao;
+﻿using NUnit.Framework;
 using Models;
+using DatabaseDao;
+using DatabaseConfiguration;
 using System.Data.Common;
 using System.Collections.Generic;
 
-namespace DatabaseTest
+namespace DatabaseTests
 {
-	[TestClass]
-	public class CityDistrictsTableTests
+	public class CityDistrictsTests
 	{
 		private static Storage Storage { get; set; }
 		private static DbConnection Connection { get; set; }
 		private static City city = null;
 		private static CityDistricts district = null;
 
-		[ClassInitialize]
-		public static void initialize(TestContext context)
+		[OneTimeSetUp]
+		public void Setup()
 		{
 			Storage = new PostgreStorage(Configuration.TestConnection);
 
@@ -32,42 +31,37 @@ namespace DatabaseTest
 			Storage.createCityDistrictsTable();
 		}
 
-		[ClassCleanup]
-		public static void cleanup()
+		[OneTimeTearDown]
+		public void CleanUp()
 		{
 			var command = Connection.CreateCommand();
 			command.CommandText = "drop table if exists city_districts;" +
-									"drop table if exists city";
+								  "drop table if exists city";
 			command.ExecuteNonQuery();
 			Connection.Close();
 		}
-		
-		[TestMethod]
-		public void runTests()
-		{
-			insertCityDistrictTest();
-			selectCityDistrictTest();
-			updateCityDistrictTest();
-			deleteCityDistricttest();
-		}
 
-		public void insertCityDistrictTest()
+		[Test, Order(1)]
+		public void insertCityTest()
 		{
 			city = new City() { Name = "Kyiv" };
-			int city_id = Storage.CityDao.insertEntity(city);
-			district = new CityDistricts() { IdCity = city_id, Name = "South" };
-			int district_id = Storage.CityDistrictsDao.insertEntity(district);
+			int cityId = Storage.CityDao.insertEntity(city);
 
-			Assert.IsTrue(district_id != 0);
+			district = new CityDistricts() { IdCity = cityId, Name = "South" };
+			int districtId = Storage.CityDistrictsDao.insertEntity(district);
+
+			Assert.IsTrue(districtId != 0);
 		}
 
-		public void selectCityDistrictTest()
+		[Test, Order(2)]
+		public void selectCityTest()
 		{
 			List<CityDistricts> districts = Storage.CityDistrictsDao.selectEntities();
 			Assert.IsTrue(districts.Count == 1);
 		}
 
-		public void updateCityDistrictTest()
+		[Test, Order(3)]
+		public void updateCityTest()
 		{
 			Assert.IsNotNull(district);
 			district.Name = "North";
@@ -78,7 +72,8 @@ namespace DatabaseTest
 			Assert.IsTrue(Storage.CityDistrictsDao.selectEntityById(district.Id).Name == "North");
 		}
 
-		public void deleteCityDistricttest()
+		[Test, Order(4)]
+		public void deleteCitytest()
 		{
 			Assert.IsNotNull(district);
 			bool result = Storage.CityDistrictsDao.deleteEntityById(district.Id);
