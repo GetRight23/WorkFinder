@@ -1,7 +1,5 @@
 ﻿using DatabaseDao;
-using Models;
 using System;
-using System.Collections.Generic;
 using DatabaseConfiguration;
 
 namespace DBFiller
@@ -10,7 +8,8 @@ namespace DBFiller
 	{
 		static void Main(string[] args)
 		{
-			Storage storage = new PostgreStorage();
+			Storage storage = new PostgreStorage(Configuration.DefaultConnection);
+			storage.createTables();
 
 			AddressFiller addressFiller = new AddressFiller(storage);
 			addressFiller.fillEntities();

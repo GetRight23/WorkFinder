@@ -10,15 +10,15 @@ namespace DatabaseDao
 	{
 		private Logger m_logger = LogManager.GetCurrentClassLogger();
 
-		public PostgreStorage()
-			: base(new NpgsqlConnection(Configuration.GetConnectionString()))
+		public PostgreStorage(string connectionString)
+			: base(new NpgsqlConnection(connectionString))
 		{ }
 
-		public override void createCityTable(DbConnection connection)
+		public override void createCityTable()
 		{
 			try
 			{
-				var command = connection.CreateCommand();
+				var command = Connection.CreateCommand();
 				command.CommandText =
 					"create table if not exists city ( " +
 					"id serial primary key, " +
@@ -33,11 +33,11 @@ namespace DatabaseDao
 				m_logger.Error("Cannot create city table");
 			}
 		}
-		public override void createCityDistrictsTable(DbConnection connection)
+		public override void createCityDistrictsTable()
 		{
 			try
 			{
-				var command = connection.CreateCommand();
+				var command = Connection.CreateCommand();
 				command.CommandText =
 					"create table if not exists city_districts (" +
 					"id serial primary key, " +
@@ -53,11 +53,11 @@ namespace DatabaseDao
 				m_logger.Error("Cannot create city_districts table");
 			}
 		}
-		public override void createAddressTable(DbConnection connection)
+		public override void createAddressTable()
 		{
 			try
 			{
-				var command = connection.CreateCommand();
+				var command = Connection.CreateCommand();
 				command.CommandText =
 					"create table if not exists address (" +
 					"id serial primary key, " +
@@ -75,11 +75,11 @@ namespace DatabaseDao
 				m_logger.Error("Cannot create address table");
 			}
 		}
-		public override void createWorkerTable(DbConnection connection)
+		public override void createWorkerTable()
 		{
 			try
 			{
-				var command = connection.CreateCommand();
+				var command = Connection.CreateCommand();
 				command.CommandText =
 					"create table if not exists worker (" +
 					"id serial primary key, " +
@@ -98,11 +98,11 @@ namespace DatabaseDao
 				m_logger.Error("Cannot create worker table");
 			}
 		}
-		public override void createFeedbackTable(DbConnection connection)
+		public override void createFeedbackTable()
 		{
 			try
 			{
-				var command = connection.CreateCommand();
+				var command = Connection.CreateCommand();
 				command.CommandText =
 					"create table if not exists feedback (" +
 					"id serial primary key, " +
@@ -122,11 +122,11 @@ namespace DatabaseDao
 				m_logger.Error("Cannot create Feedback table");
 			}
 		}
-		public override void createOrdersListTable(DbConnection connection)
+		public override void createOrdersListTable()
 		{
 			try
 			{
-				var command = connection.CreateCommand();
+				var command = Connection.CreateCommand();
 				command.CommandText =
 					"create table if not exists orderslist (" +
 					"id serial primary key, " +
@@ -141,11 +141,11 @@ namespace DatabaseDao
 				m_logger.Error("Cannot create OrderList table");
 			}
 		}
-		public override void createOrderTable(DbConnection connection)
+		public override void createOrderTable()
 		{
 			try
 			{
-				var command = connection.CreateCommand();
+				var command = Connection.CreateCommand();
 				command.CommandText =
 					"create table if not exists order_table (" +
 					"id serial primary key, " +
@@ -161,11 +161,11 @@ namespace DatabaseDao
 				m_logger.Error("Cannot create Order table");
 			}
 		}
-		public override void createProfCategoryTable(DbConnection connection)
+		public override void createProfCategoryTable()
 		{
 			try
 			{
-				var command = connection.CreateCommand();
+				var command = Connection.CreateCommand();
 				command.CommandText =
 					"create table if not exists prof_category (" +
 					"id serial primary key, " +
@@ -180,11 +180,11 @@ namespace DatabaseDao
 				m_logger.Error("Cannot create Prof_category table");
 			}
 		}
-		public override void createProfessionTable(DbConnection connection)
+		public override void createProfessionTable()
 		{
 			try
 			{
-				var command = connection.CreateCommand();
+				var command = Connection.CreateCommand();
 				command.CommandText =
 					"create table if not exists profession (" +
 					"id serial primary key, " +
@@ -201,11 +201,11 @@ namespace DatabaseDao
 				m_logger.Error("Cannot create Profession table");
 			}
 		}
-		public override void createServiceTable(DbConnection connection)
+		public override void createServiceTable()
 		{
 			try
 			{
-				var command = connection.CreateCommand();
+				var command = Connection.CreateCommand();
 				command.CommandText =
 					"create table if not exists service (" +
 					"id serial primary key, " +
@@ -223,11 +223,11 @@ namespace DatabaseDao
 
 			}
 		}
-		public override void createOrderToService(DbConnection connection)
+		public override void createOrderToService()
 		{
 			try
 			{
-				var command = connection.CreateCommand();
+				var command = Connection.CreateCommand();
 				command.CommandText =
 					"create table if not exists order_to_service (" +
 					"id serial primary key, " +
@@ -243,11 +243,11 @@ namespace DatabaseDao
 				m_logger.Error("Cannot create Order_to_service table");
 			}
 		}
-		public override void createUserTable(DbConnection connection)
+		public override void createUserTable()
 		{
 			try
 			{
-				var command = connection.CreateCommand();
+				var command = Connection.CreateCommand();
 				command.CommandText =
 					"create table if not exists user_table (" +
 						"id serial primary key, " +
@@ -264,11 +264,11 @@ namespace DatabaseDao
 				m_logger.Error("Cannot create User table");
 			}
 		}
-		public override void createPhotoTable(DbConnection connection)
+		public override void createPhotoTable()
 		{
 			try
 			{
-				var command = connection.CreateCommand();
+				var command = Connection.CreateCommand();
 				command.CommandText =
 					"create table if not exists photo (" +
 						"id serial primary key, " +

@@ -1,18 +1,16 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
+﻿using Microsoft.EntityFrameworkCore;
 using DatabaseConfiguration;
 
 namespace Models
 {
 	public partial class ApplicationContext : DbContext
-	{		
-		public ApplicationContext()
-		{}
+	{	
+		public string ConnectionString { get; private set; }
 
-		public ApplicationContext(DbContextOptions<ApplicationContext> options)
-			: base(options)
-		{}
+		public ApplicationContext(string connectionString)
+		{
+			ConnectionString = connectionString;
+		}
 
 		public virtual DbSet<Address> Address { get; set; }
 		public virtual DbSet<City> City { get; set; }
@@ -32,7 +30,7 @@ namespace Models
 		{
 			if (!optionsBuilder.IsConfigured)
 			{
-				optionsBuilder.UseNpgsql(Configuration.GetConnectionString());
+				optionsBuilder.UseNpgsql(ConnectionString);
 			}
 		}
 

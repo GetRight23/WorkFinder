@@ -1,32 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Common;
-using System.Text;
+﻿using System.Data.Common;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Models;
 
 namespace DatabaseDao
 {
 	public abstract class Storage
 	{
-		public static ApplicationContext m_ctx = new ApplicationContext();
+		private ApplicationContext m_ctx = null;
+
+		public DbConnection Connection { get; private set; }
+
+		public DatabaseFacade Database { get; private set; }
 
 		public Storage(DbConnection connection)
 		{
-			connection.Open();
-			createCityTable(connection);
-			createCityDistrictsTable(connection);
-			createAddressTable(connection);
-			createWorkerTable(connection);
-			createFeedbackTable(connection);
-			createOrdersListTable(connection);
-			createOrderTable(connection);
-			createProfCategoryTable(connection);
-			createProfessionTable(connection);
-			createServiceTable(connection);
-			createOrderToService(connection);
-			createUserTable(connection);
-			createPhotoTable(connection);
-			connection.Close();
+			Connection = connection;
+			m_ctx = new ApplicationContext(connection.ConnectionString);
+			Database = m_ctx.Database;
 
 			AddressDao = new DatabaseDao<Address>(m_ctx, m_ctx.Address);
 			CityDao = new DatabaseDao<City>(m_ctx, m_ctx.City);
@@ -42,19 +32,38 @@ namespace DatabaseDao
 			UserDao = new DatabaseDao<User>(m_ctx, m_ctx.User);
 			PhotoDao = new DatabaseDao<Photo>(m_ctx, m_ctx.Photo);
 		}
-		public abstract void createCityTable(DbConnection connection);
-		public abstract void createCityDistrictsTable(DbConnection connection);
-		public abstract void createAddressTable(DbConnection connection);
-		public abstract void createWorkerTable(DbConnection connection);
-		public abstract void createFeedbackTable(DbConnection connection);
-		public abstract void createOrdersListTable(DbConnection connection);
-		public abstract void createOrderTable(DbConnection connection);
-		public abstract void createProfCategoryTable(DbConnection connection);
-		public abstract void createProfessionTable(DbConnection connection);
-		public abstract void createServiceTable(DbConnection connection);
-		public abstract void createOrderToService(DbConnection connection);
-		public abstract void createUserTable(DbConnection connection);
-		public abstract void createPhotoTable(DbConnection connection);
+
+		public void createTables()
+		{
+			Connection.Open();
+			createCityTable();
+			createCityDistrictsTable();
+			createAddressTable();
+			createWorkerTable();
+			createFeedbackTable();
+			createOrdersListTable();
+			createOrderTable();
+			createProfCategoryTable();
+			createProfessionTable();
+			createServiceTable();
+			createOrderToService();
+			createUserTable();
+			createPhotoTable();
+			Connection.Close();
+		}
+		public abstract void createCityTable();
+		public abstract void createCityDistrictsTable();
+		public abstract void createAddressTable();
+		public abstract void createWorkerTable();
+		public abstract void createFeedbackTable();
+		public abstract void createOrdersListTable();
+		public abstract void createOrderTable();
+		public abstract void createProfCategoryTable();
+		public abstract void createProfessionTable();
+		public abstract void createServiceTable();
+		public abstract void createOrderToService();
+		public abstract void createUserTable();
+		public abstract void createPhotoTable();
 
 
 		public DatabaseDao<Address> AddressDao { get; private set; }

@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="cd $(OutDir)&#xD;&#xA;md res&#xD;&#xA;cd ..\..\..\&#xD;&#xA;copy res $(OutDir)\res&#xD;&#xA;exit 0" />
+    <Exec Command="cd $(SolutionDir)&#xD;&#xA;copy conf.json $(OutDir)&#xD;&#xA;cd $(OutDir)&#xD;&#xA;md res&#xD;&#xA;cd ..\..\..\&#xD;&#xA;copy res $(OutDir)\res&#xD;&#xA;exit 0" />
   </Target>
 
 </Project>

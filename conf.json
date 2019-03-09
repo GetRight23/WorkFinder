@@ -1,0 +1,8 @@
+{
+  "Host" : "138.197.176.34",
+  "Port" : "5432",
+  "Username" : "oleg",
+  "Password" : "oleg",
+  "DefaultDatabase" : "test1",
+  "TestDatabase" :  "test2"
+}
