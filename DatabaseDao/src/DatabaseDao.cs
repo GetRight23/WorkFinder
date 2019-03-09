@@ -109,6 +109,26 @@ namespace DatabaseDao
 			return 0;
 		}
 
+		public bool updateEntity(Type entity)
+		{
+			try
+			{
+				if (entity != null)
+				{
+					m_daoSet.Update(entity);
+					m_appContext.SaveChanges();
+					m_logger.Trace($"{typeof(Type).Name} with id {entity.getId()} is updated");
+					return true;
+				}
+			}
+			catch (Exception ex)
+			{
+				m_logger.Error(ex.Message);
+				m_logger.Error($"Cannot update {typeof(Type).Name} with id {entity.getId()}");
+			}
+			return false;
+		}
+
 		public List<int> insertEntities(List<Type> entities)
 		{
 			try
@@ -137,26 +157,6 @@ namespace DatabaseDao
 				m_logger.Error($"Cannot begin insert {typeof(Type).Name} transaction");
 			}
 			return null;
-		}
-
-		public bool updateEntity(Type entity)
-		{
-			try
-			{
-				if (entity != null)
-				{
-					m_daoSet.Update(entity);
-					m_appContext.SaveChanges();
-					m_logger.Trace($"{typeof(Type).Name} with id {entity.getId()} is updated");
-					return true;
-				}
-			}
-			catch (Exception ex)
-			{
-				m_logger.Error(ex.Message);
-				m_logger.Error($"Cannot update {typeof(Type).Name} with id {entity.getId()}");
-			}
-			return false;
 		}
 
 		public bool updateEntities(List<Type> entities)
