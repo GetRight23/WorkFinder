@@ -8,7 +8,7 @@ using System.Transactions;
 
 namespace DatabaseDao
 {
-	public class DatabaseDao<Type> where Type : DBObject
+	public class DatabaseDao<Type> : IDatabaseDao<Type> where Type : DBObject
 	{
 		private ApplicationContext m_appContext = null;
 		private DbSet<Type> m_daoSet = null;
@@ -139,7 +139,7 @@ namespace DatabaseDao
 			return null;
 		}
 
-		public void updateEntity(Type entity)
+		public bool updateEntity(Type entity)
 		{
 			try
 			{
@@ -148,6 +148,7 @@ namespace DatabaseDao
 					m_daoSet.Update(entity);
 					m_appContext.SaveChanges();
 					m_logger.Trace($"{typeof(Type).Name} with id {entity.getId()} is updated");
+					return true;
 				}
 			}
 			catch (Exception ex)
@@ -155,9 +156,10 @@ namespace DatabaseDao
 				m_logger.Error(ex.Message);
 				m_logger.Error($"Cannot update {typeof(Type).Name} with id {entity.getId()}");
 			}
+			return false;
 		}
 
-		public void updateEntities(List<Type> entities)
+		public bool updateEntities(List<Type> entities)
 		{
 			try
 			{
@@ -167,6 +169,7 @@ namespace DatabaseDao
 					updateEntity(entity);
 				}
 				m_appContext.Database.CommitTransaction();
+				return true;
 			}
 			catch (TransactionException ex)
 			{
@@ -174,6 +177,7 @@ namespace DatabaseDao
 				m_logger.Error(ex.Message);
 				m_logger.Error($"Cannot begin update {typeof(Type).Name} transaction");
 			}
+			return false;
 		}
 
 		public List<Type> selectEntitiesByIds(List<int> ids)

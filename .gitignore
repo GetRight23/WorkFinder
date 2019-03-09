@@ -1,13 +1,3 @@
 .vs/
-DatabaseDao/obj/
-DatabaseDao/bin/
-Models/obj/
-Models/bin/
-TestApplication/obj/
-TestApplication/bin/
-JSONConvertor/bin/
-JSONConvertor/obj/
-DBFiller/obj/
-DBFiller/bin/
-DatabaseConfiguration/obj/
-DatabaseConfiguration/bin/
+*/obj/
+*/bin/
