@@ -40,6 +40,14 @@ namespace DatabaseTest
 		}
 
 		[TestMethod]
+		public void runTests()
+		{
+			insertCityTest();
+			selectCityTest();
+			updateCityTest();
+			deleteCitytest();
+		}
+
 		public void insertCityTest()
 		{
 			city = new City() { Name = "Kyiv" };
@@ -50,14 +58,12 @@ namespace DatabaseTest
 			Assert.IsTrue(id != 0);
 		}
 
-		[TestMethod]
 		public void selectCityTest()
 		{
 			List<City> cities = Storage.CityDao.selectEntities();
 			Assert.IsTrue(cities.Count == 1);
 		}
 
-		[TestMethod]
 		public void updateCityTest()
 		{
 			Assert.IsNotNull(city);
@@ -69,7 +75,6 @@ namespace DatabaseTest
 			Assert.IsTrue(Storage.CityDao.selectEntityById(city.Id).Name == "London");
 		}
 
-		[TestMethod]
 		public void deleteCitytest()
 		{
 			Assert.IsNotNull(city);
