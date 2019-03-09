@@ -1,7 +1,9 @@
 ﻿using DatabaseDao;
 using Models;
+using NLog;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 namespace DBFiller
@@ -14,19 +16,26 @@ namespace DBFiller
 			List<string> cityList = new List<string>();
 
 			List<City> cities = new List<City>();
-
-			fileLoader.load(@".\res\cities.txt");		
-			cityList.AddRange(fileLoader.Entities);
-
-			for (int i = 0; i < cityList.Count; i++)
+			try
 			{
-				City city = new City()
+				fileLoader.load(@".\res\cities.txt");
+				cityList.AddRange(fileLoader.Entities);
+
+				for (int i = 0; i < cityList.Count; i++)
 				{
-					Name = cityList[i]
-				};
-				cities.Add(city);
+					City city = new City()
+					{
+						Name = cityList[i]
+					};
+					cities.Add(city);
+				}
+				Storage.CityDao.insertEntities(cities);
+				m_logger.Trace("City Table filled");
 			}
-			Storage.CityDao.insertEntities(cities);
+			catch (Exception ex)
+			{
+				m_logger.Error(ex.Message);
+			}			
 		}
 	}
 }

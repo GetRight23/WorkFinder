@@ -1,35 +1,51 @@
 ﻿using DatabaseDao;
 using Models;
+using NLog;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 namespace DBFiller
 {
 	class CityDistrictsFiller : DBFiller
 	{
-		public CityDistrictsFiller(Storage storage) : base(storage){}
+		public CityDistrictsFiller(Storage storage) : base(storage)
+		{
+			m_logger = LogManager.GetCurrentClassLogger();
+		}
 		public override void fillEntities()
 		{
 			List<string> cityDistricts = new List<string>();
-
-			List<CityDistricts> listCityDistricts = new List<CityDistricts>();
-			List<City> listCity = Storage.CityDao.selectEntities();
-
-			fileLoader.load(@".\res\city_districts.txt");
-			
-			cityDistricts.AddRange(fileLoader.Entities);
-		
-			for (int i = 0; i < cityDistricts.Count; i++)
+			try
 			{
-				CityDistricts district = new CityDistricts()
+				List<CityDistricts> listCityDistricts = new List<CityDistricts>();
+				List<City> listCity = Storage.CityDao.selectEntities();
+
+				fileLoader.load(@".\res\city_districts.txt");
+
+				cityDistricts.AddRange(fileLoader.Entities);
+
+				for (int i = 0; i < cityDistricts.Count; i++)
 				{
-					Name = cityDistricts[Random.Next(0, cityDistricts.Count)],
-					IdCity = listCity[Random.Next(0, listCity.Count)].Id
-				};
-				listCityDistricts.Add(district);
+					CityDistricts district = new CityDistricts()
+					{
+						Name = cityDistricts[Random.Next(0, cityDistricts.Count)],
+						IdCity = listCity[Random.Next(0, listCity.Count)].Id
+					};
+					listCityDistricts.Add(district);
+				}
+				Storage.CityDistrictsDao.insertEntities(listCityDistricts);
+				m_logger.Trace("City Districts Table filled");
 			}
-			Storage.CityDistrictsDao.insertEntities(listCityDistricts);
+			catch (FileNotFoundException ex)
+			{
+				m_logger.Error(ex.Message);
+			}
+			catch (Exception ex)
+			{
+				m_logger.Error(ex.Message);
+			}		
 		}
 	}
 }

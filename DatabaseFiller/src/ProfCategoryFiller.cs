@@ -2,6 +2,7 @@
 using Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 namespace DBFiller
@@ -16,18 +17,26 @@ namespace DBFiller
 
 			List<ProfCategory> listProfCategory = new List<ProfCategory>();
 
-			fileLoader.load(@".\res\prof_categories.txt");		
-			prof_categories.AddRange(fileLoader.Entities);
-
-			for (int i = 0; i < prof_categories.Count; i++)
+			try
 			{
-				ProfCategory profCategory = new ProfCategory()
+				fileLoader.load(@".\res\prof_categories.txt");
+				prof_categories.AddRange(fileLoader.Entities);
+
+				for (int i = 0; i < prof_categories.Count; i++)
 				{
-					Name = prof_categories[i]
-				};
-				listProfCategory.Add(profCategory);
+					ProfCategory profCategory = new ProfCategory()
+					{
+						Name = prof_categories[i]
+					};
+					listProfCategory.Add(profCategory);
+				}
+				Storage.ProfCategoryDao.insertEntities(listProfCategory);
+				m_logger.Trace("Prof Category Table filled");
 			}
-			Storage.ProfCategoryDao.insertEntities(listProfCategory);
+			catch (Exception ex)
+			{
+				m_logger.Error(ex.Message);
+			}			
 		}
 	}
 }

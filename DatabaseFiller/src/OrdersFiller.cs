@@ -1,7 +1,9 @@
 ﻿using DatabaseDao;
 using Models;
+using NLog;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 namespace DBFiller
@@ -13,22 +15,30 @@ namespace DBFiller
 		{
 			List<string> orderTables = new List<string>();
 
-			List<Orderslist> orderslists = Storage.OrderListDao.selectEntities();
-			List<OrderTable> orders = new List<OrderTable>();
-
-			fileLoader.load(@".\res\orders.txt");
-			orderTables.AddRange(fileLoader.Entities);
-			
-			for (int i = 0; i < orderTables.Count; i++)
+			try
 			{
-				OrderTable order = new OrderTable()
+				List<Orderslist> orderslists = Storage.OrderListDao.selectEntities();
+				List<OrderTable> orders = new List<OrderTable>();
+
+				fileLoader.load(@".\res\orders.txt");
+				orderTables.AddRange(fileLoader.Entities);
+
+				for (int i = 0; i < orderTables.Count; i++)
 				{
-					Info = "Test info",
-					IdOrderList = orderslists[Random.Next(0, orderslists.Count)].Id
-				};
-				orders.Add(order);
+					OrderTable order = new OrderTable()
+					{
+						Info = "Test info",
+						IdOrderList = orderslists[Random.Next(0, orderslists.Count)].Id
+					};
+					orders.Add(order);
+				}
+				Storage.OrderTableDao.insertEntities(orders);
+				m_logger.Trace("Orders Table filled");
 			}
-			Storage.OrderTableDao.insertEntities(orders);
+			catch (Exception ex)
+			{
+				m_logger.Error(ex.Message);
+			}		
 		}
 	}
 }

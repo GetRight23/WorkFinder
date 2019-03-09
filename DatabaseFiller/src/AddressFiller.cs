@@ -1,5 +1,6 @@
 ﻿using DatabaseDao;
 using Models;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -15,28 +16,35 @@ namespace DBFiller
 		{
 			string apptNum = null;
 			List<string> listStreetNames = new List<string>();
-
-			List<City> listCity = Storage.CityDao.selectEntities();
-			List<CityDistricts> listCityDistricts = Storage.CityDistrictsDao.selectEntities();
-
-			List<Address> addresses = new List<Address>();
-
-			fileLoader.load(@".\res\street_names.txt");
-			listStreetNames.AddRange(fileLoader.Entities);			
-
-			for (int i = 0; i < listCity.Count; i++)
+			try
 			{
-				apptNum = Random.Next(0, 100).ToString();
-				Address address = new Address()
+				List<City> listCity = Storage.CityDao.selectEntities();
+				List<CityDistricts> listCityDistricts = Storage.CityDistrictsDao.selectEntities();
+
+				List<Address> addresses = new List<Address>();
+
+				fileLoader.load(@".\res\street_names.txt");
+				listStreetNames.AddRange(fileLoader.Entities);
+
+				for (int i = 0; i < listCity.Count; i++)
 				{
-					StreetName = listStreetNames[Random.Next(0, listStreetNames.Count)],
-					ApptNum = apptNum,
-					IdCityDistrict = listCityDistricts[Random.Next(0, listCityDistricts.Count)].Id,
-					IdCity = listCity[Random.Next(0, listCity.Count)].Id
-				};
-				addresses.Add(address);
+					apptNum = Random.Next(0, 100).ToString();
+					Address address = new Address()
+					{
+						StreetName = listStreetNames[Random.Next(0, listStreetNames.Count)],
+						ApptNum = apptNum,
+						IdCityDistrict = listCityDistricts[Random.Next(0, listCityDistricts.Count)].Id,
+						IdCity = listCity[Random.Next(0, listCity.Count)].Id
+					};
+					addresses.Add(address);
+				}
+				Storage.AddressDao.insertEntities(addresses);
+				m_logger.Trace("Address Table filled");
 			}
-			Storage.AddressDao.insertEntities(addresses);
+			catch (Exception ex)
+			{
+				m_logger.Error(ex.Message);
+			}			
 		}
 	}
 }
