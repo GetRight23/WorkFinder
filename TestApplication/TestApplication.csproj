@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\DatabaseCache\DatabaseCache.csproj" />
     <ProjectReference Include="..\DatabaseDao\DatabaseDao.csproj" />
     <ProjectReference Include="..\JSONConvertor\JSONConvertor.csproj" />
     <ProjectReference Include="..\Models\Models.csproj" />
