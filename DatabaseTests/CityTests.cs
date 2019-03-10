@@ -11,6 +11,7 @@ namespace DatabaseTests
 	{
 		private static Storage Storage { get; set; }
 		private static DbConnection Connection { get; set; }
+		private static DatabaseDao<City> CityDao { get; set; }
 		private static City city = null;
 
 		[OneTimeSetUp]
@@ -24,6 +25,7 @@ namespace DatabaseTests
 			Assert.IsNotNull(Storage);
 
 			Connection = Storage.Connection;
+			CityDao = Storage.CityDao;
 
 			Connection.Open();
 			Storage.createCityTable();
@@ -44,7 +46,7 @@ namespace DatabaseTests
 			city = new City() { Name = "Kyiv" };
 			Assert.IsNotNull(city);
 
-			int id = Storage.CityDao.insertEntity(city);
+			int id = CityDao.insertEntity(city);
 
 			Assert.IsTrue(id != 0);
 		}
@@ -52,7 +54,7 @@ namespace DatabaseTests
 		[Test, Order(2)]
 		public void selectCityTest()
 		{
-			List<City> cities = Storage.CityDao.selectEntities();
+			List<City> cities = CityDao.selectEntities();
 			Assert.IsTrue(cities.Count == 1);
 		}
 
@@ -62,20 +64,20 @@ namespace DatabaseTests
 			Assert.IsNotNull(city);
 			city.Name = "London";
 
-			bool result = Storage.CityDao.updateEntity(city);
+			bool result = CityDao.updateEntity(city);
 
 			Assert.IsTrue(result);
-			Assert.IsTrue(Storage.CityDao.selectEntityById(city.Id).Name == "London");
+			Assert.IsTrue(CityDao.selectEntityById(city.Id).Name == "London");
 		}
 
 		[Test, Order(4)]
 		public void deleteCitytest()
 		{
 			Assert.IsNotNull(city);
-			bool result = Storage.CityDao.deleteEntityById(city.Id);
+			bool result = CityDao.deleteEntityById(city.Id);
 
 			Assert.IsTrue(result);
-			Assert.IsTrue(Storage.CityDao.selectEntities().Count == 0);
+			Assert.IsTrue(CityDao.selectEntities().Count == 0);
 		}
 	}
 }

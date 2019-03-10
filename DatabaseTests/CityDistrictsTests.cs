@@ -11,6 +11,8 @@ namespace DatabaseTests
 	{
 		private static Storage Storage { get; set; }
 		private static DbConnection Connection { get; set; }
+		private static DatabaseDao<City> CityDao { get; set; }
+		private static DatabaseDao<CityDistricts> CityDistrictsDao { get; set; }
 		private static City city = null;
 		private static CityDistricts district = null;
 
@@ -22,9 +24,12 @@ namespace DatabaseTests
 			Assert.IsNotNull(Storage.Connection);
 			Assert.IsNotNull(Storage.Database);
 			Assert.IsNotNull(Storage.CityDao);
+			Assert.IsNotNull(Storage.CityDistrictsDao);
 			Assert.IsNotNull(Storage);
 
 			Connection = Storage.Connection;
+			CityDao = Storage.CityDao;
+			CityDistrictsDao = Storage.CityDistrictsDao;
 
 			Connection.Open();
 			Storage.createCityTable();
@@ -42,44 +47,44 @@ namespace DatabaseTests
 		}
 
 		[Test, Order(1)]
-		public void insertCityTest()
+		public void insertCityDistrictsTest()
 		{
 			city = new City() { Name = "Kyiv" };
-			int cityId = Storage.CityDao.insertEntity(city);
+			int cityId = CityDao.insertEntity(city);
 
 			district = new CityDistricts() { IdCity = cityId, Name = "South" };
-			int districtId = Storage.CityDistrictsDao.insertEntity(district);
+			int districtId = CityDistrictsDao.insertEntity(district);
 
 			Assert.IsTrue(districtId != 0);
 		}
 
 		[Test, Order(2)]
-		public void selectCityTest()
+		public void selectCityDistrictsTest()
 		{
-			List<CityDistricts> districts = Storage.CityDistrictsDao.selectEntities();
+			List<CityDistricts> districts = CityDistrictsDao.selectEntities();
 			Assert.IsTrue(districts.Count == 1);
 		}
 
 		[Test, Order(3)]
-		public void updateCityTest()
+		public void updateCityDistrictsTest()
 		{
 			Assert.IsNotNull(district);
 			district.Name = "North";
 
-			bool result = Storage.CityDistrictsDao.updateEntity(district);
+			bool result = CityDistrictsDao.updateEntity(district);
 
 			Assert.IsTrue(result);
-			Assert.IsTrue(Storage.CityDistrictsDao.selectEntityById(district.Id).Name == "North");
+			Assert.IsTrue(CityDistrictsDao.selectEntityById(district.Id).Name == "North");
 		}
 
 		[Test, Order(4)]
-		public void deleteCitytest()
+		public void deleteCityDistrictstest()
 		{
 			Assert.IsNotNull(district);
-			bool result = Storage.CityDistrictsDao.deleteEntityById(district.Id);
+			bool result = CityDistrictsDao.deleteEntityById(district.Id);
 
 			Assert.IsTrue(result);
-			Assert.IsTrue(Storage.CityDistrictsDao.selectEntities().Count == 0);
+			Assert.IsTrue(CityDistrictsDao.selectEntities().Count == 0);
 		}
 	}
 }
