@@ -7,9 +7,9 @@ using Models;
 
 namespace DBFiller
 {
-	class ProffessionFiller : DBFiller
+	class ProfessionFiller : DBFiller
 	{
-		public ProffessionFiller(Storage storage) : base(storage){}
+		public ProfessionFiller(Storage storage) : base(storage){}
 
 		public override void fillEntities()
 		{
@@ -34,8 +34,8 @@ namespace DBFiller
 					};
 					professions.Add(profession);
 				}
-				Storage.ProfesionDao.insertEntities(professions);
-				m_logger.Trace("Proffesions Table filled");
+				Storage.ProfessionDao.insertEntities(professions);
+				m_logger.Trace("Professions Table filled");
 			}
 			catch (Exception ex)
 			{

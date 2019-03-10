@@ -129,7 +129,7 @@ namespace JSONConvertor
 			jsonObject["Id"] = service.Id;
 			jsonObject["Price"] = service.Price;
 			jsonObject["Name"] = service.Name;
-			jsonObject["IdProffesion"] = service.IdProffesion;
+			jsonObject["IdProfession"] = service.IdProffesion;
 			return jsonObject;
 		}
 		public JObject toJson(Worker worker)
@@ -204,7 +204,7 @@ namespace JSONConvertor
 				Id = Convert.ToInt32(jsonObject["Id"]),
 				Price = Convert.ToDecimal(jsonObject["Price"]),
 				Name = Convert.ToString(jsonObject["Name"]),
-				IdProffesion = Convert.ToInt32(jsonObject["IdProffesion"])
+				IdProffesion = Convert.ToInt32(jsonObject["IdProfession"])
 			};
 			return service;
 		}

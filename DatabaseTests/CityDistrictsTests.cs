@@ -41,7 +41,7 @@ namespace DatabaseTests
 		{
 			var command = Connection.CreateCommand();
 			command.CommandText = "drop table if exists city_districts;" +
-								  "drop table if exists city";
+									"drop table if exists city";
 			command.ExecuteNonQuery();
 			Connection.Close();
 		}
@@ -51,6 +51,8 @@ namespace DatabaseTests
 		{
 			city = new City() { Name = "Kyiv" };
 			int cityId = CityDao.insertEntity(city);
+
+			Assert.IsTrue(cityId != 0);
 
 			district = new CityDistricts() { IdCity = cityId, Name = "South" };
 			int districtId = CityDistrictsDao.insertEntity(district);
