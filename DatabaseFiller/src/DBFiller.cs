@@ -13,7 +13,7 @@ namespace DBFiller
     {
 		protected Logger m_logger { get; private set; }
 		public DBFiller(Storage storage)
-        {
+        	{
 			Storage = storage;
 			m_logger = LogManager.GetCurrentClassLogger();
 		}
