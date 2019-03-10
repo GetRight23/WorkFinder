@@ -16,31 +16,39 @@ namespace DBFiller
 			List<string> names = new List<string>();
 			List<string> lastNames = new List<string>();
 
-			List<Address> addresses = Storage.AddressDao.selectEntities();
-			List<Worker> workers = new List<Worker>();
-
-			fileLoader.load(@".\res\russian_names.txt");
-			names.AddRange(fileLoader.filter(fileLoader.Entities));
-
-			fileLoader.load(@".\res\russian_surnames.txt");
-			lastNames.AddRange(fileLoader.filter(fileLoader.Entities));
-
-			for (int i = 0; i < size; i++)
+			try
 			{
-				int firstPart = Random.Next(10, 99);
-				int secondPart = Random.Next(100, 999);
-				int thirdPart = Random.Next(1000, 9999);
-				Worker worker = new Worker()
+				List<Address> addresses = Storage.AddressDao.selectEntities();
+				List<Worker> workers = new List<Worker>();
+
+				fileLoader.load(@".\res\russian_names.txt");
+				names.AddRange(fileLoader.Entities);
+
+				fileLoader.load(@".\res\russian_surnames.txt");
+				lastNames.AddRange(fileLoader.Entities);
+
+				for (int i = 0; i < size; i++)
 				{
-					PhoneNumber = $"+380{firstPart}{secondPart}{thirdPart}",
-					Info = "test",
-					IdAddress = addresses[Random.Next(0, addresses.Count)].Id,
-					Name = names[Random.Next(0, names.Count)],
-					LastName = lastNames[Random.Next(0, lastNames.Count)]
-				};
-				workers.Add(worker);			
+					int firstPart = Random.Next(10, 99);
+					int secondPart = Random.Next(100, 999);
+					int thirdPart = Random.Next(1000, 9999);
+					Worker worker = new Worker()
+					{
+						PhoneNumber = $"+380{firstPart}{secondPart}{thirdPart}",
+						Info = "test",
+						IdAddress = addresses[Random.Next(0, addresses.Count)].Id,
+						Name = names[Random.Next(0, names.Count)],
+						LastName = lastNames[Random.Next(0, lastNames.Count)]
+					};
+					workers.Add(worker);
+				}
+				Storage.WorkerDao.insertEntities(workers);
+				m_logger.Trace("Worker Table filled");
 			}
-			Storage.WorkerDao.insertEntities(workers);
+			catch (Exception ex)
+			{
+				m_logger.Error(ex.Message);
+			}		
 		}
 	}
 }
