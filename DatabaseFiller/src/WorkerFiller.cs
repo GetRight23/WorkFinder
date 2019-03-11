@@ -12,22 +12,20 @@ namespace DBFiller
 
 		public override void fillEntities()
 		{
-			const int size = 10;
-			List<string> names = new List<string>();
-			List<string> lastNames = new List<string>();
-
 			try
 			{
+				List<string> names = new List<string>();
+				List<string> lastNames = new List<string>();
+
+				List<User> users = Storage.UserDao.selectEntities();
 				List<Address> addresses = Storage.AddressDao.selectEntities();
 				List<Worker> workers = new List<Worker>();
 
-				fileLoader.load(@".\res\russian_names.txt");
-				names.AddRange(fileLoader.Entities);
+				names = FileLoader.load(@".\res\russian_names.txt");
+				lastNames = FileLoader.load(@".\res\russian_surnames.txt");
 
-				fileLoader.load(@".\res\russian_surnames.txt");
-				lastNames.AddRange(fileLoader.Entities);
-
-				for (int i = 0; i < size; i++)
+				int workersSize = users.Count;
+				for (int i = 0; i < workersSize; i++)
 				{
 					int firstPart = Random.Next(10, 99);
 					int secondPart = Random.Next(100, 999);
@@ -38,16 +36,17 @@ namespace DBFiller
 						Info = "test",
 						IdAddress = addresses[Random.Next(0, addresses.Count)].Id,
 						Name = names[Random.Next(0, names.Count)],
-						LastName = lastNames[Random.Next(0, lastNames.Count)]
+						LastName = lastNames[Random.Next(0, lastNames.Count)],
+						IdUser = users[i].Id
 					};
 					workers.Add(worker);
 				}
 				Storage.WorkerDao.insertEntities(workers);
-				m_logger.Trace("Worker Table filled");
+				Logger.Info("Worker Table filled");
 			}
 			catch (Exception ex)
 			{
-				m_logger.Error(ex.Message);
+				Logger.Error(ex.Message);
 			}		
 		}
 	}

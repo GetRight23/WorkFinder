@@ -87,7 +87,8 @@ namespace DatabaseDao
 					"info character varying(500) not null, " +
 					"id_address integer references address(id) on delete cascade not null, " +
 					"name character varying(30) not null, " +
-					"last_name character varying(30) not null"+
+					"last_name character varying(30) not null,"+
+					"id_user integer references user_table(id) on delete cascade not null unique" +
 					")";
 				command.ExecuteNonQuery();
 				m_logger.Trace("Worker table is created");
@@ -251,8 +252,7 @@ namespace DatabaseDao
 					"create table if not exists user_table (" +
 						"id serial primary key, " +
 						"login character varying(256) not null, " +
-						"password character varying(256) not null, " +
-						"id_worker integer references worker(id) on delete cascade unique" +
+						"password character varying(256) not null "+
 					")";
 				command.ExecuteNonQuery();
 				m_logger.Trace("User table is created");

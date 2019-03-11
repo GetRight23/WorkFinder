@@ -13,32 +13,34 @@ namespace DBFiller
 
 		public override void fillEntities()
 		{
-			List<string> professionList = new List<string>();
-
 			try
 			{
-				List<Worker> workers = Storage.WorkerDao.selectEntities();
 				List<ProfCategory> profCategories = Storage.ProfCategoryDao.selectEntities();
+
+				List<string >professionNames = FileLoader.load(@".\res\professions.txt");
+
+				int professionsSize = professionNames.Count;
+				int profCategoriesSize = profCategories.Count;
 				List<Profession> professions = new List<Profession>();
-
-				fileLoader.load(@".\res\professions.txt");
-				professionList.AddRange(fileLoader.Entities);
-
-				for (int i = 0; i < professionList.Count; i++)
+				for (int i = 0; i < profCategoriesSize; i++)
 				{
-					Profession profession = new Profession()
+					int professionsPerCategory = Random.Next(0, professionsSize);
+					for (int j = 0; j < professionsPerCategory; ++j)
 					{
-						Name = professionList[Random.Next(0, professionList.Count)],
-						IdProfCategory = profCategories[Random.Next(0, profCategories.Count)].Id
-					};
-					professions.Add(profession);
+						Profession profession = new Profession()
+						{
+							Name = professionNames[Random.Next(0, professionsSize)],
+							IdProfCategory = profCategories[Random.Next(0, profCategoriesSize)].Id
+						};
+						professions.Add(profession);
+					}
+					Storage.ProfessionDao.insertEntities(professions);
 				}
-				Storage.ProfessionDao.insertEntities(professions);
-				m_logger.Trace("Professions Table filled");
+				Logger.Info("Professions Table filled");
 			}
 			catch (Exception ex)
 			{
-				m_logger.Error(ex.Message);
+				Logger.Error(ex.Message);
 			}			
 		}
 	}

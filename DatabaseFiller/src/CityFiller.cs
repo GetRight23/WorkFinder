@@ -13,28 +13,26 @@ namespace DBFiller
 		public CityFiller(Storage storage) : base(storage) {}
 		public override void fillEntities()
 		{
-			List<string> cityList = new List<string>();
-
-			List<City> cities = new List<City>();
 			try
 			{
-				fileLoader.load(@".\res\cities.txt");
-				cityList.AddRange(fileLoader.Entities);
+				List<string> citiesNames = FileLoader.load(@".\res\cities.txt");
+				int cityNamesSize = citiesNames.Count;
 
-				for (int i = 0; i < cityList.Count; i++)
+				List<City> cities = new List<City>();
+				for (int i = 0; i < cityNamesSize; i++)
 				{
 					City city = new City()
 					{
-						Name = cityList[i]
+						Name = citiesNames[i]
 					};
 					cities.Add(city);
 				}
 				Storage.CityDao.insertEntities(cities);
-				m_logger.Trace("City Table filled");
+				Logger.Info("City Table filled");
 			}
 			catch (Exception ex)
 			{
-				m_logger.Error(ex.Message);
+				Logger.Error(ex.Message);
 			}			
 		}
 	}

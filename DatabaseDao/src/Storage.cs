@@ -40,17 +40,17 @@ namespace DatabaseDao
 			createCityTable();
 			createCityDistrictsTable();
 			createAddressTable();
+			createUserTable();
+			createPhotoTable();
+			createProfCategoryTable();
+			createProfessionTable();
+			createServiceTable();
 			createWorkerTable();
 			createFeedbackTable();
 			createOrdersListTable();
 			createOrderTable();
-			createProfCategoryTable();
-			createProfessionTable();
-			createServiceTable();
 			createOrderToService();
 			createProfessionToWorker();
-			createUserTable();
-			createPhotoTable();
 			Connection.Close();
 		}
 		public abstract void createCityTable();

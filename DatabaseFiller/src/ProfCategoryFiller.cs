@@ -13,14 +13,11 @@ namespace DBFiller
 
 		public override void fillEntities()
 		{
-			List<string> prof_categories = new List<string>();
-
-			List<ProfCategory> listProfCategory = new List<ProfCategory>();
-
 			try
 			{
-				fileLoader.load(@".\res\prof_categories.txt");
-				prof_categories.AddRange(fileLoader.Entities);
+				List<string> prof_categories = new List<string>();
+				List<ProfCategory> listProfCategory = new List<ProfCategory>();
+				prof_categories = FileLoader.load(@".\res\prof_categories.txt");
 
 				for (int i = 0; i < prof_categories.Count; i++)
 				{
@@ -31,11 +28,11 @@ namespace DBFiller
 					listProfCategory.Add(profCategory);
 				}
 				Storage.ProfCategoryDao.insertEntities(listProfCategory);
-				m_logger.Trace("Prof Category Table filled");
+				Logger.Info("Prof Category Table filled");
 			}
 			catch (Exception ex)
 			{
-				m_logger.Error(ex.Message);
+				Logger.Error(ex.Message);
 			}			
 		}
 	}

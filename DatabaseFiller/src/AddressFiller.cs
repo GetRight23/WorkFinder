@@ -3,8 +3,7 @@ using Models;
 using NLog;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Text;
+using System.Linq;
 
 namespace DBFiller
 {
@@ -14,36 +13,42 @@ namespace DBFiller
 
 		public override void fillEntities()
 		{
-			string apptNum = null;
-			List<string> listStreetNames = new List<string>();
 			try
 			{
-				List<City> listCity = Storage.CityDao.selectEntities();
-				List<CityDistricts> listCityDistricts = Storage.CityDistrictsDao.selectEntities();
+				List<City> cities = Storage.CityDao.selectEntities();
 
+				List<string> streetNames = FileLoader.load(@".\res\street_names.txt");
+
+				int streetNamesSize = streetNames.Count;
+				int citiesSize = cities.Count;
 				List<Address> addresses = new List<Address>();
-
-				fileLoader.load(@".\res\street_names.txt");
-				listStreetNames.AddRange(fileLoader.Entities);
-
-				for (int i = 0; i < listCity.Count; i++)
+				for (int i = 0; i < citiesSize; i++)
 				{
-					apptNum = Random.Next(0, 100).ToString();
-					Address address = new Address()
+					List<CityDistricts> cityDistricts = cities[i].CityDistricts.ToList();
+					int disrictsSize = cityDistricts.Count;
+					for (int j = 0; j < disrictsSize; ++j)
 					{
-						StreetName = listStreetNames[Random.Next(0, listStreetNames.Count)],
-						ApptNum = apptNum,
-						IdCityDistrict = listCityDistricts[Random.Next(0, listCityDistricts.Count)].Id,
-						IdCity = listCity[Random.Next(0, listCity.Count)].Id
-					};
-					addresses.Add(address);
+						int stretsPerDirstrict = Random.Next(1, streetNamesSize / 4);
+						for (int k = 0; k < stretsPerDirstrict; k++)
+						{
+							Address address = new Address()
+							{
+								StreetName = streetNames[Random.Next(0, streetNamesSize)],
+								ApptNum = Random.Next(0, 100).ToString(),
+								IdCityDistrict = cityDistricts[j].Id,
+								IdCity = cities[i].Id
+							};
+							addresses.Add(address);
+						}
+					}
+					Storage.AddressDao.insertEntities(addresses);
+					addresses.Clear();
 				}
-				Storage.AddressDao.insertEntities(addresses);
-				m_logger.Trace("Address Table filled");
+				Logger.Info("Address Table filled");
 			}
 			catch (Exception ex)
 			{
-				m_logger.Error(ex.Message);
+				Logger.Error(ex.Message);
 			}			
 		}
 	}

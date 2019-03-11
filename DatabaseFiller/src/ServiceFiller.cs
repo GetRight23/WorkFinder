@@ -17,9 +17,7 @@ namespace DBFiller
 			{
 				List<Service> serviceList = new List<Service>();
 
-				fileLoader.load(@".\res\services.txt");
-				services.AddRange(fileLoader.Entities);
-
+				services = FileLoader.load(@".\res\services.txt");
 
 				for (int i = 0; i < services.Count; i++)
 				{
@@ -31,11 +29,11 @@ namespace DBFiller
 					serviceList.Add(service);
 				}
 				Storage.ServiceDao.insertEntities(serviceList);
-				m_logger.Trace("Services Table filled");
+				Logger.Info("Services Table filled");
 			}
 			catch (Exception ex)
 			{
-				m_logger.Error(ex.Message);
+				Logger.Error(ex.Message);
 			}			
 		}
 	}

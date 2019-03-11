@@ -9,15 +9,11 @@ namespace DBFiller
 {
 	public class FileLoader
 	{
-		public List<string> Entities { get; private set; }
-		public FileLoader()
-		{
-			Entities = new List<string>();
-		}
+		public FileLoader() {}
 
-		public void load(string filePath)
+		public List<string> load(string filePath)
 		{
-			Entities.Clear();
+			List<string> entities = new List<string>();
 			string line = null;
 			try
 			{
@@ -25,14 +21,16 @@ namespace DBFiller
 				{
 					while ((line = file.ReadLine()) != null)
 					{
-						Entities.Add(line);
+						entities.Add(line);
 					}
 				}
+				return entities;
 			}
 			catch (FileNotFoundException ex)
 			{
 				Console.WriteLine(ex);
 			}
+			return null;
 		}
 	}
 }

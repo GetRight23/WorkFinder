@@ -11,15 +11,19 @@ namespace DBFiller
 {
     public abstract class DBFiller
     {
-		protected Logger m_logger { get; private set; }
+		protected Logger Logger { get; private set; }
+		public Storage Storage { get; private set; }
+		public FileLoader FileLoader { get; private set; }
+		public Random Random { get; set; }
+
 		public DBFiller(Storage storage)
 		{
+			Logger = LogManager.GetCurrentClassLogger();
 			Storage = storage;
-			m_logger = LogManager.GetCurrentClassLogger();
+			FileLoader = new FileLoader();
+			Random = new Random();
 		}
+
 		public abstract void fillEntities();
-		public Storage Storage { get; private set; }
-		public FileLoader fileLoader { get; private set; }
-		public Random Random { get; set; }
 	}
 }

@@ -21,11 +21,9 @@ namespace DBFiller
 				List<Worker> listWorkers = Storage.WorkerDao.selectEntities();
 				List<Feedback> feedbackList = new List<Feedback>();
 
-				fileLoader.load(@".\res\feedbacks.txt");
-				feedBacks.AddRange(fileLoader.Entities);
+				feedBacks = FileLoader.load(@".\res\feedbacks.txt");
 
-				fileLoader.load(@".\res\russian_names.txt");
-				names.AddRange(fileLoader.Entities);
+				names = FileLoader.load(@".\res\russian_names.txt");
 
 				for (int i = 0; i < listWorkers.Count; i++)
 				{
@@ -41,11 +39,11 @@ namespace DBFiller
 					feedbackList.Add(feedback);
 				}
 				Storage.FeedbackDao.insertEntities(feedbackList);
-				m_logger.Trace("Feedback Table filled");
+				Logger.Info("Feedback Table filled");
 			}
 			catch (Exception ex)
 			{
-				m_logger.Error(ex.Message);
+				Logger.Error(ex.Message);
 			}			
 		}
 	}

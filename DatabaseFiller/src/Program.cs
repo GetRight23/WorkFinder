@@ -8,13 +8,16 @@ namespace DBFiller
 	{
 		static void Main(string[] args)
 		{
-			Storage storage = new PostgreStorage(Configuration.DefaultConnection);
+			Storage storage = new PostgreStorage(Configuration.TestConnection);
 			storage.createTables();
 
 			AddressFiller addressFiller = new AddressFiller(storage);
-			addressFiller.fillEntities();
+			CityDistrictsFiller cityDistrictsFiller = new CityDistrictsFiller(storage);
+			CityFiller cityFiller = new CityFiller(storage);
 
-			Console.ReadKey();
+			cityFiller.fillEntities();
+			cityDistrictsFiller.fillEntities();
+			addressFiller.fillEntities();
 		}
 	}
 }

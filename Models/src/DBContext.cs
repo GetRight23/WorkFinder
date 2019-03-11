@@ -267,13 +267,7 @@ namespace Models
 			{
 				entity.ToTable("user_table");
 
-				entity.HasIndex(e => e.IdWorker)
-					.HasName("user_table_id_worker_key")
-					.IsUnique();
-
 				entity.Property(e => e.Id).HasColumnName("id");
-
-				entity.Property(e => e.IdWorker).HasColumnName("id_worker");
 
 				entity.Property(e => e.Login)
 					.IsRequired()
@@ -284,21 +278,21 @@ namespace Models
 					.IsRequired()
 					.HasColumnName("password")
 					.HasMaxLength(256);
-
-				entity.HasOne(d => d.IdWorkerNavigation)
-					.WithOne(p => p.User)
-					.HasForeignKey<User>(d => d.IdWorker)
-					.OnDelete(DeleteBehavior.Cascade)
-					.HasConstraintName("user_table_id_worker_fkey");
 			});
 
 			modelBuilder.Entity<Worker>(entity =>
 			{
 				entity.ToTable("worker");
 
+				entity.HasIndex(e => e.IdUser)
+					.HasName("worker_id_user_key")
+					.IsUnique();
+
 				entity.Property(e => e.Id).HasColumnName("id");
 
 				entity.Property(e => e.IdAddress).HasColumnName("id_address");
+
+				entity.Property(e => e.IdUser).HasColumnName("id_user");
 
 				entity.Property(e => e.Info)
 					.IsRequired()
@@ -324,6 +318,11 @@ namespace Models
 					.WithMany(p => p.Worker)
 					.HasForeignKey(d => d.IdAddress)
 					.HasConstraintName("worker_id_address_fkey");
+
+				entity.HasOne(d => d.IdUserNavigation)
+					.WithOne(p => p.Worker)
+					.HasForeignKey<Worker>(d => d.IdUser)
+					.HasConstraintName("worker_id_user_fkey");
 			});
 		}
 	}
