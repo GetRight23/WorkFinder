@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace Models
 {
-	public partial class Orderslist : DBObject
+	public partial class OrdersList : DBObject
 	{
-		public Orderslist()
+		public OrdersList()
 		{
-			OrderTable = new HashSet<OrderTable>();
+			OrderTable = new HashSet<Order>();
 		}
 
 		public int Id { get; set; }
@@ -16,6 +16,6 @@ namespace Models
 		public override int getId() { return Id; }
 
 		public virtual Worker IdWorkerNavigation { get; set; }
-		public virtual ICollection<OrderTable> OrderTable { get; set; }
+		public virtual ICollection<Order> OrderTable { get; set; }
 	}
 }

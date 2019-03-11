@@ -1,15 +1,10 @@
 ﻿using DatabaseDao;
-using Models;
 using NLog;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
 
 namespace DBFiller
 {
-    public abstract class DBFiller
+    abstract class DBFiller
     {
 		protected Logger Logger { get; private set; }
 		public Storage Storage { get; private set; }

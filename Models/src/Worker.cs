@@ -8,7 +8,7 @@ namespace Models
 		public Worker()
 		{
 			Feedback = new HashSet<Feedback>();
-			Orderslist = new HashSet<Orderslist>();
+			Orderslist = new HashSet<OrdersList>();
 			ProfessionToWorker = new HashSet<ProfessionToWorker>();
 		}
 
@@ -25,7 +25,7 @@ namespace Models
 		public virtual Address IdAddressNavigation { get; set; }
 		public virtual User IdUserNavigation { get; set; }
 		public virtual ICollection<Feedback> Feedback { get; set; }
-		public virtual ICollection<Orderslist> Orderslist { get; set; }
+		public virtual ICollection<OrdersList> Orderslist { get; set; }
 		public virtual ICollection<ProfessionToWorker> ProfessionToWorker { get; set; }
 	}
 }

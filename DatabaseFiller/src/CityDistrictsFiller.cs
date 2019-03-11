@@ -3,8 +3,6 @@ using Models;
 using NLog;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Text;
 
 namespace DBFiller
 {
@@ -16,20 +14,18 @@ namespace DBFiller
 			try
 			{
 				List<City> cities = Storage.CityDao.selectEntities();
-			
-				List<CityDistricts> cityDistricts = new List<CityDistricts>();
+
 				List<string> cityDistrictsNames = FileLoader.load(@".\res\city_districts.txt");
 
-				int citiesSize = cities.Count;
-				int cityDistrictNamesSize = cityDistrictsNames.Count;
-				for (int i = 0; i < citiesSize; i++)
+				List<CityDistricts> cityDistricts = new List<CityDistricts>();
+				for (int i = 0; i < cities.Count; i++)
 				{
-					int districtsPerCity = Random.Next(1, cityDistrictNamesSize);
+					int districtsPerCity = Random.Next(1, cityDistrictsNames.Count);
 					for (int j = 0; j < districtsPerCity; j++)
 					{
 						CityDistricts district = new CityDistricts()
 						{
-							Name = cityDistrictsNames[Random.Next(0, cityDistrictNamesSize)],
+							Name = cityDistrictsNames[Random.Next(0, cityDistrictsNames.Count)],
 							IdCity = cities[i].Id
 						};
 						cityDistricts.Add(district);
@@ -37,7 +33,7 @@ namespace DBFiller
 					Storage.CityDistrictsDao.insertEntities(cityDistricts);
 					cityDistricts.Clear();
 				}
-				Logger.Info("City Districts Table filled");
+				Logger.Info("City districts table filled");
 			}
 			catch (Exception ex)
 			{

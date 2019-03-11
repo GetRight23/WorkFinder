@@ -22,9 +22,9 @@ namespace DatabaseDao
 			CityDao = new DatabaseDao<City>(m_dbContext, m_dbContext.City);
 			CityDistrictsDao = new DatabaseDao<CityDistricts>(m_dbContext, m_dbContext.CityDistricts);
 			FeedbackDao = new DatabaseDao<Feedback>(m_dbContext, m_dbContext.Feedback);
-			OrderListDao = new DatabaseDao<Orderslist>(m_dbContext, m_dbContext.Orderslist);
-			OrderTableDao = new DatabaseDao<OrderTable>(m_dbContext, m_dbContext.OrderTable);
-			ProfCategoryDao = new DatabaseDao<ProfCategory>(m_dbContext, m_dbContext.ProfCategory);
+			OrderListDao = new DatabaseDao<OrdersList>(m_dbContext, m_dbContext.OrdersList);
+			OrderDao = new DatabaseDao<Order>(m_dbContext, m_dbContext.Order);
+			ProfCategoryDao = new DatabaseDao<ProfessionCategory>(m_dbContext, m_dbContext.ProfCategory);
 			ProfessionDao = new DatabaseDao<Profession>(m_dbContext, m_dbContext.Profession);
 			ServiceDao = new DatabaseDao<Service>(m_dbContext, m_dbContext.Service);
 			WorkerDao = new DatabaseDao<Worker>(m_dbContext, m_dbContext.Worker);
@@ -73,9 +73,9 @@ namespace DatabaseDao
 		public DatabaseDao<City> CityDao { get; private set; }
 		public DatabaseDao<CityDistricts> CityDistrictsDao { get; private set; }
 		public DatabaseDao<Feedback> FeedbackDao { get; private set; }
-		public DatabaseDao<Orderslist> OrderListDao { get; private set; }
-		public DatabaseDao<OrderTable> OrderTableDao { get; private set; }
-		public DatabaseDao<ProfCategory> ProfCategoryDao { get; private set; }
+		public DatabaseDao<OrdersList> OrderListDao { get; private set; }
+		public DatabaseDao<Order> OrderDao { get; private set; }
+		public DatabaseDao<ProfessionCategory> ProfCategoryDao { get; private set; }
 		public DatabaseDao<Profession> ProfessionDao { get; private set; }
 		public DatabaseDao<Service> ServiceDao { get; private set; }
 		public DatabaseDao<Worker> WorkerDao { get; private set; }

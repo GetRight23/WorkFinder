@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace Models
 {
-	public partial class ProfCategory : DBObject
+	public partial class ProfessionCategory : DBObject
 	{
-		public ProfCategory()
+		public ProfessionCategory()
 		{
 			Profession = new HashSet<Profession>();
 		}

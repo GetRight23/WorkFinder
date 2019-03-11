@@ -16,10 +16,10 @@ namespace Models
 		public virtual DbSet<City> City { get; set; }
 		public virtual DbSet<CityDistricts> CityDistricts { get; set; }
 		public virtual DbSet<Feedback> Feedback { get; set; }
-		public virtual DbSet<OrderTable> OrderTable { get; set; }
+		public virtual DbSet<Order> Order { get; set; }
 		public virtual DbSet<OrderToService> OrderToService { get; set; }
-		public virtual DbSet<Orderslist> Orderslist { get; set; }
-		public virtual DbSet<ProfCategory> ProfCategory { get; set; }
+		public virtual DbSet<OrdersList> OrdersList { get; set; }
+		public virtual DbSet<ProfessionCategory> ProfCategory { get; set; }
 		public virtual DbSet<Profession> Profession { get; set; }
 		public virtual DbSet<ProfessionToWorker> ProfessionToWorker { get; set; }
 		public virtual DbSet<Service> Service { get; set; }
@@ -130,7 +130,7 @@ namespace Models
 					.HasMaxLength(500);
 			});
 
-			modelBuilder.Entity<OrderTable>(entity =>
+			modelBuilder.Entity<Order>(entity =>
 			{
 				entity.ToTable("order_table");
 
@@ -170,7 +170,7 @@ namespace Models
 					.HasConstraintName("order_to_service_id_service_fkey");
 			});
 
-			modelBuilder.Entity<Orderslist>(entity =>
+			modelBuilder.Entity<OrdersList>(entity =>
 			{
 				entity.ToTable("orderslist");
 
@@ -193,7 +193,7 @@ namespace Models
 					.HasMaxLength(256);
 			});
 
-			modelBuilder.Entity<ProfCategory>(entity =>
+			modelBuilder.Entity<ProfessionCategory>(entity =>
 			{
 				entity.ToTable("prof_category");
 

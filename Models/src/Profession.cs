@@ -17,7 +17,7 @@ namespace Models
 
 		public override int getId() { return Id; }
 
-		public virtual ProfCategory IdProfCategoryNavigation { get; set; }
+		public virtual ProfessionCategory IdProfCategoryNavigation { get; set; }
 		public virtual ICollection<Service> Service { get; set; }
 		public virtual ICollection<ProfessionToWorker> ProfessionToWorker { get; set; }
 	}

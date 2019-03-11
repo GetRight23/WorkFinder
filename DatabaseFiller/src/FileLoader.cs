@@ -7,7 +7,7 @@ using System.Text;
 
 namespace DBFiller
 {
-	public class FileLoader
+	class FileLoader
 	{
 		public FileLoader() {}
 

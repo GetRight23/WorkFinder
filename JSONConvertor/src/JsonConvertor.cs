@@ -60,7 +60,7 @@ namespace JSONConvertor
 			jsonObject["IdWorker"] = feedback.IdWorker;
 			return jsonObject;
 		}
-		public JObject toJson(Orderslist orderslist)
+		public JObject toJson(OrdersList orderslist)
 		{
 			if (orderslist == null)
 			{
@@ -71,7 +71,7 @@ namespace JSONConvertor
 			jsonObject["IdWorker"] = orderslist.IdWorker;
 			return jsonObject;
 		}
-		public JObject toJson(OrderTable orderTable)
+		public JObject toJson(Order orderTable)
 		{
 			if (orderTable == null)
 			{
@@ -95,7 +95,7 @@ namespace JSONConvertor
 			jsonObject["IdService"] = orderToService.IdService;
 			return jsonObject;
 		}
-		public JObject toJson(ProfCategory profCategory)
+		public JObject toJson(ProfessionCategory profCategory)
 		{
 			if (profCategory == null)
 			{
@@ -223,13 +223,13 @@ namespace JSONConvertor
 			return profession;
 		}
 
-		public ProfCategory fromJsonToProfCategory(JObject jsonObject)
+		public ProfessionCategory fromJsonToProfCategory(JObject jsonObject)
 		{
 			if (jsonObject == null)
 			{
 				return null;
 			}
-			ProfCategory profCategory = new ProfCategory()
+			ProfessionCategory profCategory = new ProfessionCategory()
 			{
 				Id = Convert.ToInt32(jsonObject["Id"]),
 				Name = Convert.ToString(jsonObject["Name"])
@@ -252,13 +252,13 @@ namespace JSONConvertor
 			return orderToService;
 		}
 
-		public OrderTable fromJsonToOrderTable(JObject jsonObject)
+		public Order fromJsonToOrderTable(JObject jsonObject)
 		{
 			if (jsonObject == null)
 			{
 				return null;
 			}
-			OrderTable orderTable = new OrderTable()
+			Order orderTable = new Order()
 			{
 				Id = Convert.ToInt32(jsonObject["Id"]),
 				Info = Convert.ToString(jsonObject["Info"]),
@@ -267,13 +267,13 @@ namespace JSONConvertor
 			return orderTable;
 		}
 
-		public Orderslist fromJsonToOrderslist(JObject jsonObject)
+		public OrdersList fromJsonToOrderslist(JObject jsonObject)
 		{
 			if (jsonObject == null)
 			{
 				return null;
 			}
-			Orderslist orderslist = new Orderslist()
+			OrdersList orderslist = new OrdersList()
 			{
 				Id = Convert.ToInt32(jsonObject["Id"]),
 				IdWorker = Convert.ToInt32(jsonObject["IdWorker"])

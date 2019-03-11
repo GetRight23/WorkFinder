@@ -19,21 +19,18 @@ namespace DBFiller
 
 				List<string> streetNames = FileLoader.load(@".\res\street_names.txt");
 
-				int streetNamesSize = streetNames.Count;
-				int citiesSize = cities.Count;
 				List<Address> addresses = new List<Address>();
-				for (int i = 0; i < citiesSize; i++)
+				for (int i = 0; i < cities.Count; i++)
 				{
 					List<CityDistricts> cityDistricts = cities[i].CityDistricts.ToList();
-					int disrictsSize = cityDistricts.Count;
-					for (int j = 0; j < disrictsSize; ++j)
+					for (int j = 0; j < cityDistricts.Count; j++)
 					{
-						int stretsPerDirstrict = Random.Next(1, streetNamesSize / 4);
+						int stretsPerDirstrict = Random.Next(1, streetNames.Count / 4);
 						for (int k = 0; k < stretsPerDirstrict; k++)
 						{
 							Address address = new Address()
 							{
-								StreetName = streetNames[Random.Next(0, streetNamesSize)],
+								StreetName = streetNames[Random.Next(0, streetNames.Count)],
 								ApptNum = Random.Next(0, 100).ToString(),
 								IdCityDistrict = cityDistricts[j].Id,
 								IdCity = cities[i].Id
@@ -44,7 +41,7 @@ namespace DBFiller
 					Storage.AddressDao.insertEntities(addresses);
 					addresses.Clear();
 				}
-				Logger.Info("Address Table filled");
+				Logger.Info("Address table filled");
 			}
 			catch (Exception ex)
 			{

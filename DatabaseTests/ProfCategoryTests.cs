@@ -11,7 +11,7 @@ namespace DatabaseTests
 	{
 		private static Storage Storage { get; set; }
 		private static DbConnection Connection { get; set; }
-		private static ProfCategory professionCategory = null;
+		private static ProfessionCategory professionCategory = null;
 
 		[OneTimeSetUp]
 		public void Setup()
@@ -41,7 +41,7 @@ namespace DatabaseTests
 		[Test, Order(1)]
 		public void insertProffesionCategoryTest()
 		{
-			professionCategory = new ProfCategory() { Name = "Teacher" };
+			professionCategory = new ProfessionCategory() { Name = "Teacher" };
 			Assert.IsNotNull(professionCategory);
 
 			int id = Storage.ProfCategoryDao.insertEntity(professionCategory);
@@ -52,7 +52,7 @@ namespace DatabaseTests
 		[Test, Order(2)]
 		public void selectProffesionCategoryTest()
 		{
-			List<ProfCategory> cities = Storage.ProfCategoryDao.selectEntities();
+			List<ProfessionCategory> cities = Storage.ProfCategoryDao.selectEntities();
 			Assert.IsTrue(cities.Count == 1);
 		}
 

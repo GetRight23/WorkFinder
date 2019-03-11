@@ -2,11 +2,10 @@
 using Models;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace DBFiller
 {
-	public class WorkerFiller : DBFiller
+	class WorkerFiller : DBFiller
 	{
 		public WorkerFiller(Storage storage) : base(storage) {}
 
@@ -24,7 +23,7 @@ namespace DBFiller
 				names = FileLoader.load(@".\res\russian_names.txt");
 				lastNames = FileLoader.load(@".\res\russian_surnames.txt");
 
-				int workersSize = users.Count;
+				int workersSize = users.Count / 2;
 				for (int i = 0; i < workersSize; i++)
 				{
 					int firstPart = Random.Next(10, 99);

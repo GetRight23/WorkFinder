@@ -3,8 +3,6 @@ using Models;
 using NLog;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Text;
 
 namespace DBFiller
 {
@@ -16,10 +14,9 @@ namespace DBFiller
 			try
 			{
 				List<string> citiesNames = FileLoader.load(@".\res\cities.txt");
-				int cityNamesSize = citiesNames.Count;
 
 				List<City> cities = new List<City>();
-				for (int i = 0; i < cityNamesSize; i++)
+				for (int i = 0; i < citiesNames.Count; i++)
 				{
 					City city = new City()
 					{
@@ -28,7 +25,7 @@ namespace DBFiller
 					cities.Add(city);
 				}
 				Storage.CityDao.insertEntities(cities);
-				Logger.Info("City Table filled");
+				Logger.Info("City table filled");
 			}
 			catch (Exception ex)
 			{

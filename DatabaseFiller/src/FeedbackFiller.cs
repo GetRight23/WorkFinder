@@ -2,8 +2,6 @@
 using Models;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Text;
 
 namespace DBFiller
 {
@@ -13,19 +11,15 @@ namespace DBFiller
 
 		public override void fillEntities()
 		{
-			List<string> feedBacks = new List<string>();
-			List<string> names = new List<string>();
-
 			try
 			{
-				List<Worker> listWorkers = Storage.WorkerDao.selectEntities();
+				List<Worker> workers = Storage.WorkerDao.selectEntities();
+
+				List<string>  names = FileLoader.load(@".\res\russian_names.txt");
+				List<string>  feedBacks = FileLoader.load(@".\res\feedbacks.txt");
+
 				List<Feedback> feedbackList = new List<Feedback>();
-
-				feedBacks = FileLoader.load(@".\res\feedbacks.txt");
-
-				names = FileLoader.load(@".\res\russian_names.txt");
-
-				for (int i = 0; i < listWorkers.Count; i++)
+				for (int i = 0; i < workers.Count; i++)
 				{
 					Feedback feedback = new Feedback()
 					{
@@ -34,12 +28,12 @@ namespace DBFiller
 						GradeValue = Random.Next(1, 5),
 						Date = DateTime.Now,
 						Text = feedBacks[Random.Next(0, feedBacks.Count)],
-						IdWorker = listWorkers[Random.Next(0, listWorkers.Count)].Id
+						IdWorker = workers[Random.Next(0, workers.Count)].Id
 					};
 					feedbackList.Add(feedback);
 				}
 				Storage.FeedbackDao.insertEntities(feedbackList);
-				Logger.Info("Feedback Table filled");
+				Logger.Info("Feedback table filled");
 			}
 			catch (Exception ex)
 			{

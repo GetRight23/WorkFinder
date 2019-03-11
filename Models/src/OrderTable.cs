@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace Models
 {
-	public partial class OrderTable : DBObject
+	public partial class Order : DBObject
 	{
-		public OrderTable()
+		public Order()
 		{
 			OrderToService = new HashSet<OrderToService>();
 		}
@@ -16,7 +16,7 @@ namespace Models
 
 		public override int getId() { return Id; }
 
-		public virtual Orderslist IdOrderListNavigation { get; set; }
+		public virtual OrdersList IdOrderListNavigation { get; set; }
 		public virtual ICollection<OrderToService> OrderToService { get; set; }
 	}
 }

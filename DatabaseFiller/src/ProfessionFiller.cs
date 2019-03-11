@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Text;
 using DatabaseDao;
 using Models;
 
@@ -15,22 +13,20 @@ namespace DBFiller
 		{
 			try
 			{
-				List<ProfCategory> profCategories = Storage.ProfCategoryDao.selectEntities();
+				List<ProfessionCategory> profCategories = Storage.ProfCategoryDao.selectEntities();
 
-				List<string >professionNames = FileLoader.load(@".\res\professions.txt");
+				List<string> professionNames = FileLoader.load(@".\res\professions.txt");
 
-				int professionsSize = professionNames.Count;
-				int profCategoriesSize = profCategories.Count;
 				List<Profession> professions = new List<Profession>();
-				for (int i = 0; i < profCategoriesSize; i++)
+				for (int i = 0; i < profCategories.Count; i++)
 				{
-					int professionsPerCategory = Random.Next(0, professionsSize);
-					for (int j = 0; j < professionsPerCategory; ++j)
+					int professionsPerCategory = Random.Next(1, professionNames.Count);
+					for (int j = 0; j < professionsPerCategory; j++)
 					{
 						Profession profession = new Profession()
 						{
-							Name = professionNames[Random.Next(0, professionsSize)],
-							IdProfCategory = profCategories[Random.Next(0, profCategoriesSize)].Id
+							Name = professionNames[Random.Next(0, professionNames.Count)],
+							IdProfCategory = profCategories[i].Id
 						};
 						professions.Add(profession);
 					}

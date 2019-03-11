@@ -3,8 +3,6 @@ using Models;
 using NLog;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Text;
 
 namespace DBFiller
 {
@@ -13,26 +11,27 @@ namespace DBFiller
 		public OrdersFiller(Storage storage) : base(storage) {}
 		public override void fillEntities()
 		{
-			List<string> orderTables = new List<string>();
-
 			try
 			{
-				List<Orderslist> orderslists = Storage.OrderListDao.selectEntities();
-				List<OrderTable> orders = new List<OrderTable>();
+				List<OrdersList> ordersLists = Storage.OrderListDao.selectEntities();
 
-				orderTables = FileLoader.load(@".\res\orders.txt");
-
-				for (int i = 0; i < orderTables.Count; i++)
+				int counter = 0;
+				List<Order> orders = new List<Order>();
+				for (int i = 0; i < ordersLists.Count; i++)
 				{
-					OrderTable order = new OrderTable()
+					int ordersCount = Random.Next(0, 2);
+					for (int j = 0; j < ordersCount; j++)
 					{
-						Info = "Test info",
-						IdOrderList = orderslists[Random.Next(0, orderslists.Count)].Id
-					};
-					orders.Add(order);
+						Order order = new Order()
+						{
+							Info = $"Test order info {counter}",
+							IdOrderList = ordersLists[i].Id
+						};
+						orders.Add(order);
+					}
 				}
-				Storage.OrderTableDao.insertEntities(orders);
-				Logger.Info("Orders Table filled");
+				Storage.OrderDao.insertEntities(orders);
+				Logger.Info("Orders table filled");
 			}
 			catch (Exception ex)
 			{

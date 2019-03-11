@@ -1,0 +1,37 @@
+﻿using DatabaseDao;
+using Models;
+using System;
+using System.Collections.Generic;
+
+namespace DBFiller
+{
+	class ProfesssionCategoryFiller : DBFiller
+	{
+		public ProfesssionCategoryFiller(Storage storage) : base(storage) {}
+
+		public override void fillEntities()
+		{
+			try
+			{
+				List<ProfessionCategory> ProfessionCategories = new List<ProfessionCategory>();
+
+				List<string> professionCategories = FileLoader.load(@".\res\prof_categories.txt");
+
+				for (int i = 0; i < professionCategories.Count; i++)
+				{
+					ProfessionCategory profCategory = new ProfessionCategory()
+					{
+						Name = professionCategories[i]
+					};
+					ProfessionCategories.Add(profCategory);
+				}
+				Storage.ProfCategoryDao.insertEntities(ProfessionCategories);
+				Logger.Info("Prof category Table filled");
+			}
+			catch (Exception ex)
+			{
+				Logger.Error(ex.Message);
+			}			
+		}
+	}
+}
