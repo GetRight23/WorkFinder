@@ -11,13 +11,13 @@ namespace DatabaseDao
 {
 	public class ProfessionToWorkerDao
 	{
-		private ApplicationContext m_appContext = null;
+		private DBContext m_dbContext = null;
 		private DbSet<ProfessionToWorker> m_daoSet = null;
 		private Logger m_logger = null;
 
-		public ProfessionToWorkerDao(ApplicationContext appContext, DbSet<ProfessionToWorker> daoSet)
+		public ProfessionToWorkerDao(DBContext appContext, DbSet<ProfessionToWorker> daoSet)
 		{
-			m_appContext = appContext;
+			m_dbContext = appContext;
 			m_logger = LogManager.GetCurrentClassLogger();
 			m_daoSet = daoSet;
 		}
@@ -63,7 +63,7 @@ namespace DatabaseDao
 				{
 					m_daoSet.Remove(elem);
 				}
-				m_appContext.SaveChanges();
+				m_dbContext.SaveChanges();
 				return true;
 			}
 			catch (TransactionException)
@@ -86,7 +86,7 @@ namespace DatabaseDao
 				{
 					m_daoSet.Remove(elem);
 				}
-				m_appContext.SaveChanges();
+				m_dbContext.SaveChanges();
 				return true;
 			}
 			catch (TransactionException)
@@ -106,7 +106,7 @@ namespace DatabaseDao
 		{
 			ProfessionToWorker professionToWorker = new ProfessionToWorker(){ IdProfession = professionId, IdWorker = workerId };
 			int id = m_daoSet.Add(professionToWorker).Entity.Id;
-			m_appContext.SaveChanges();
+			m_dbContext.SaveChanges();
 			return id;
 		}
 
@@ -117,7 +117,7 @@ namespace DatabaseDao
 				if (entity != null)
 				{
 					m_daoSet.Update(entity);
-					m_appContext.SaveChanges();
+					m_dbContext.SaveChanges();
 					m_logger.Trace($"Profession to worker with id {entity.Id} updated");
 					return true;
 				}
@@ -136,18 +136,18 @@ namespace DatabaseDao
 			{
 				if (entities != null && entities.Count != 0)
 				{
-					m_appContext.Database.BeginTransaction();
+					m_dbContext.Database.BeginTransaction();
 					foreach (var entity in entities)
 					{
 						updateEntity(entity);
 					}
-					m_appContext.Database.CommitTransaction();
+					m_dbContext.Database.CommitTransaction();
 					return true;
 				}
 			}
 			catch (TransactionException ex)
 			{
-				m_appContext.Database.RollbackTransaction();
+				m_dbContext.Database.RollbackTransaction();
 				m_logger.Error(ex.Message);
 				m_logger.Error($"Cannot begin update profession to worker transaction");
 			}

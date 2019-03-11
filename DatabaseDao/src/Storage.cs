@@ -6,7 +6,7 @@ namespace DatabaseDao
 {
 	public abstract class Storage
 	{
-		private ApplicationContext m_ctx = null;
+		private DBContext m_dbContext = null;
 
 		public DbConnection Connection { get; private set; }
 
@@ -15,23 +15,23 @@ namespace DatabaseDao
 		public Storage(DbConnection connection)
 		{
 			Connection = connection;
-			m_ctx = new ApplicationContext(connection.ConnectionString);
-			Database = m_ctx.Database;
+			m_dbContext = new DBContext(connection.ConnectionString);
+			Database = m_dbContext.Database;
 
-			AddressDao = new DatabaseDao<Address>(m_ctx, m_ctx.Address);
-			CityDao = new DatabaseDao<City>(m_ctx, m_ctx.City);
-			CityDistrictsDao = new DatabaseDao<CityDistricts>(m_ctx, m_ctx.CityDistricts);
-			FeedbackDao = new DatabaseDao<Feedback>(m_ctx, m_ctx.Feedback);
-			OrderListDao = new DatabaseDao<Orderslist>(m_ctx, m_ctx.Orderslist);
-			OrderTableDao = new DatabaseDao<OrderTable>(m_ctx, m_ctx.OrderTable);
-			ProfCategoryDao = new DatabaseDao<ProfCategory>(m_ctx, m_ctx.ProfCategory);
-			ProfessionDao = new DatabaseDao<Profession>(m_ctx, m_ctx.Profession);
-			ServiceDao = new DatabaseDao<Service>(m_ctx, m_ctx.Service);
-			WorkerDao = new DatabaseDao<Worker>(m_ctx, m_ctx.Worker);
-			OrderToServiceDao = new OrderToServiceDao(m_ctx, m_ctx.OrderToService);
-			ProfessionToWorkerDao = new ProfessionToWorkerDao(m_ctx, m_ctx.ProfessionToWorker);
-			UserDao = new DatabaseDao<User>(m_ctx, m_ctx.User);
-			PhotoDao = new DatabaseDao<Photo>(m_ctx, m_ctx.Photo);
+			AddressDao = new DatabaseDao<Address>(m_dbContext, m_dbContext.Address);
+			CityDao = new DatabaseDao<City>(m_dbContext, m_dbContext.City);
+			CityDistrictsDao = new DatabaseDao<CityDistricts>(m_dbContext, m_dbContext.CityDistricts);
+			FeedbackDao = new DatabaseDao<Feedback>(m_dbContext, m_dbContext.Feedback);
+			OrderListDao = new DatabaseDao<Orderslist>(m_dbContext, m_dbContext.Orderslist);
+			OrderTableDao = new DatabaseDao<OrderTable>(m_dbContext, m_dbContext.OrderTable);
+			ProfCategoryDao = new DatabaseDao<ProfCategory>(m_dbContext, m_dbContext.ProfCategory);
+			ProfessionDao = new DatabaseDao<Profession>(m_dbContext, m_dbContext.Profession);
+			ServiceDao = new DatabaseDao<Service>(m_dbContext, m_dbContext.Service);
+			WorkerDao = new DatabaseDao<Worker>(m_dbContext, m_dbContext.Worker);
+			OrderToServiceDao = new OrderToServiceDao(m_dbContext, m_dbContext.OrderToService);
+			ProfessionToWorkerDao = new ProfessionToWorkerDao(m_dbContext, m_dbContext.ProfessionToWorker);
+			UserDao = new DatabaseDao<User>(m_dbContext, m_dbContext.User);
+			PhotoDao = new DatabaseDao<Photo>(m_dbContext, m_dbContext.Photo);
 		}
 
 		public void createTables()

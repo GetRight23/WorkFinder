@@ -11,13 +11,13 @@ namespace DatabaseDao
 {
 	public class OrderToServiceDao
 	{
-		private ApplicationContext m_appContext = null;
+		private DBContext m_dbContext = null;
 		private DbSet<OrderToService> m_daoSet = null;
 		private Logger m_logger = null;
 
-		public OrderToServiceDao(ApplicationContext appContext, DbSet<OrderToService> daoSet)
+		public OrderToServiceDao(DBContext appContext, DbSet<OrderToService> daoSet)
 		{
-			m_appContext = appContext;
+			m_dbContext = appContext;
 			m_logger = LogManager.GetCurrentClassLogger();
 			m_daoSet = daoSet;
 		}
@@ -65,7 +65,7 @@ namespace DatabaseDao
 					orderToService = elem;
 					m_daoSet.Remove(orderToService);
 				}
-				m_appContext.SaveChanges();
+				m_dbContext.SaveChanges();
 			}
 			catch (TransactionException)
 			{
@@ -90,7 +90,7 @@ namespace DatabaseDao
 					orderToService = elem;
 					m_daoSet.Remove(orderToService);
 				}
-				m_appContext.SaveChanges();
+				m_dbContext.SaveChanges();
 			}
 			catch (TransactionException)
 			{
@@ -109,7 +109,7 @@ namespace DatabaseDao
 		{
 			OrderToService orderToService = new OrderToService() { IdOrder = orderId, IdService = serviceId };
 			int id = m_daoSet.Add(orderToService).Entity.Id;
-			m_appContext.SaveChanges();
+			m_dbContext.SaveChanges();
 			return id;
 		}
 
@@ -120,7 +120,7 @@ namespace DatabaseDao
 				if (entity != null)
 				{
 					m_daoSet.Update(entity);
-					m_appContext.SaveChanges();
+					m_dbContext.SaveChanges();
 					m_logger.Trace($"OrderToService with id {entity.Id} updated");
 				}
 			}
@@ -135,16 +135,16 @@ namespace DatabaseDao
 		{
 			try
 			{
-				m_appContext.Database.BeginTransaction();
+				m_dbContext.Database.BeginTransaction();
 				foreach (var entity in entities)
 				{
 					updateEntity(entity);
 				}
-				m_appContext.Database.CommitTransaction();
+				m_dbContext.Database.CommitTransaction();
 			}
 			catch (TransactionException ex)
 			{
-				m_appContext.Database.RollbackTransaction();
+				m_dbContext.Database.RollbackTransaction();
 				m_logger.Error(ex.Message);
 				m_logger.Error($"Cannot begin update OrderToService transaction");
 			}

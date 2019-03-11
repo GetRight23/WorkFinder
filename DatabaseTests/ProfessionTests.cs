@@ -54,41 +54,12 @@ namespace DatabaseTests
 
 			int profCategoryId = Storage.ProfCategoryDao.insertEntity(professionCategory);
 
-			profession = new Profession() { Name = "Math"};
-			Assert.IsNotNull(professionCategory);
+			profession = new Profession() { Name = "Math", IdProfCategory = profCategoryId };
+			Assert.IsNotNull(profession);
 
-			int id = Storage.ProfCategoryDao.insertEntity(professionCategory);
+			int profId = Storage.ProfessionDao.insertEntity(profession);
 
-			Assert.IsTrue(id != 0);
-		}
-
-		[Test, Order(2)]
-		public void selectCityTest()
-		{
-			List<City> cities = CityDao.selectEntities();
-			Assert.IsTrue(cities.Count == 1);
-		}
-
-		[Test, Order(3)]
-		public void updateCityTest()
-		{
-			Assert.IsNotNull(city);
-			city.Name = "London";
-
-			bool result = CityDao.updateEntity(city);
-
-			Assert.IsTrue(result);
-			Assert.IsTrue(CityDao.selectEntityById(city.Id).Name == "London");
-		}
-
-		[Test, Order(4)]
-		public void deleteCitytest()
-		{
-			Assert.IsNotNull(city);
-			bool result = CityDao.deleteEntityById(city.Id);
-
-			Assert.IsTrue(result);
-			Assert.IsTrue(CityDao.selectEntities().Count == 0);
+			Assert.IsTrue(profId != 0);
 		}
 	}
 }

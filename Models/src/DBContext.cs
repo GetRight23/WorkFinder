@@ -3,11 +3,11 @@ using DatabaseConfiguration;
 
 namespace Models
 {
-	public partial class ApplicationContext : DbContext
+	public partial class DBContext : DbContext
 	{	
 		public string ConnectionString { get; private set; }
 
-		public ApplicationContext(string connectionString)
+		public DBContext(string connectionString)
 		{
 			ConnectionString = connectionString;
 		}

@@ -10,10 +10,7 @@ namespace DBFiller
 {
 	class CityDistrictsFiller : DBFiller
 	{
-		public CityDistrictsFiller(Storage storage) : base(storage)
-		{
-			m_logger = LogManager.GetCurrentClassLogger();
-		}
+		public CityDistrictsFiller(Storage storage) : base(storage) {}
 		public override void fillEntities()
 		{
 			List<string> cityDistricts = new List<string>();

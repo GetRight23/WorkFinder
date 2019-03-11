@@ -10,14 +10,14 @@ namespace DatabaseDao
 {
 	public class DatabaseDao<Type> : IDatabaseDao<Type> where Type : DBObject
 	{
-		private ApplicationContext m_appContext = null;
+		private DBContext m_dbContext = null;
 		private DbSet<Type> m_daoSet = null;
 		private Logger m_logger = null;
 
-		public DatabaseDao(ApplicationContext appContext, DbSet<Type> daoSet)
+		public DatabaseDao(DBContext appContext, DbSet<Type> daoSet)
 		{
 			m_logger = LogManager.GetCurrentClassLogger();
-			m_appContext = appContext;
+			m_dbContext = appContext;
 			m_daoSet = daoSet;
 		}
 
@@ -68,7 +68,7 @@ namespace DatabaseDao
 				if (entity != null)
 				{
 					m_daoSet.Remove(entity);
-					m_appContext.SaveChanges();
+					m_dbContext.SaveChanges();
 					m_logger.Trace($"{typeof(Type).Name} with id {id} is deleted!");
 					return true;
 				}
@@ -92,7 +92,7 @@ namespace DatabaseDao
 				if (entity != null)
 				{
 					m_daoSet.Add(entity);
-					m_appContext.SaveChanges();
+					m_dbContext.SaveChanges();
 					m_logger.Trace($"{typeof(Type).Name} with id = {entity.getId()} is added!");
 					return entity.getId();
 				}
@@ -116,7 +116,7 @@ namespace DatabaseDao
 				if (entity != null)
 				{
 					m_daoSet.Update(entity);
-					m_appContext.SaveChanges();
+					m_dbContext.SaveChanges();
 					m_logger.Trace($"{typeof(Type).Name} with id {entity.getId()} is updated");
 					return true;
 				}
@@ -136,15 +136,15 @@ namespace DatabaseDao
 				if (entities.Count != 0)
 				{
 					List<int> Ids = new List<int>();
-					m_appContext.Database.BeginTransaction();
+					m_dbContext.Database.BeginTransaction();
 					foreach (var entity in entities)
 					{
 						m_daoSet.Add(entity);
-						m_appContext.SaveChanges();
+						m_dbContext.SaveChanges();
 
 						Ids.Add(entity.getId());
 					}
-					m_appContext.Database.CommitTransaction();
+					m_dbContext.Database.CommitTransaction();
 
 					m_logger.Trace($"Transaction {typeof(Type).Name} is complited");
 					return Ids;
@@ -152,7 +152,7 @@ namespace DatabaseDao
 			}
 			catch (Exception ex)
 			{
-				m_appContext.Database.RollbackTransaction();
+				m_dbContext.Database.RollbackTransaction();
 				m_logger.Error(ex.Message);
 				m_logger.Error($"Cannot begin insert {typeof(Type).Name} transaction");
 			}
@@ -163,17 +163,17 @@ namespace DatabaseDao
 		{
 			try
 			{
-				m_appContext.Database.BeginTransaction();
+				m_dbContext.Database.BeginTransaction();
 				foreach (var entity in entities)
 				{
 					updateEntity(entity);
 				}
-				m_appContext.Database.CommitTransaction();
+				m_dbContext.Database.CommitTransaction();
 				return true;
 			}
 			catch (TransactionException ex)
 			{
-				m_appContext.Database.RollbackTransaction();
+				m_dbContext.Database.RollbackTransaction();
 				m_logger.Error(ex.Message);
 				m_logger.Error($"Cannot begin update {typeof(Type).Name} transaction");
 			}
@@ -185,16 +185,16 @@ namespace DatabaseDao
 			List<Type> entities = new List<Type>();
 			try
 			{
-				m_appContext.Database.BeginTransaction();
+				m_dbContext.Database.BeginTransaction();
 				foreach (var id in ids)
 				{
 					entities.Add(selectEntityById(id));
 				}
-				m_appContext.Database.CommitTransaction();
+				m_dbContext.Database.CommitTransaction();
 			}
 			catch (TransactionException ex)
 			{
-				m_appContext.Database.RollbackTransaction();
+				m_dbContext.Database.RollbackTransaction();
 				m_logger.Error(ex.Message);
 				m_logger.Error($"Cannot begin select {typeof(Type).Name} transaction");
 			}
@@ -206,17 +206,17 @@ namespace DatabaseDao
 			try
 			{
 				bool state = true;
-				m_appContext.Database.BeginTransaction();
+				m_dbContext.Database.BeginTransaction();
 				foreach (var id in ids)
 				{
 					state = deleteEntityById(id);
 				}
-				m_appContext.Database.CommitTransaction();
+				m_dbContext.Database.CommitTransaction();
 				return state;
 			}
 			catch (TransactionException ex)
 			{
-				m_appContext.Database.RollbackTransaction();
+				m_dbContext.Database.RollbackTransaction();
 				m_logger.Error(ex.Message);
 				m_logger.Error($"Cannot begin delete {typeof(Type).Name} transaction");
 				return false;

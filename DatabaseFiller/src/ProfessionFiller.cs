@@ -29,7 +29,6 @@ namespace DBFiller
 					Profession profession = new Profession()
 					{
 						Name = professionList[Random.Next(0, professionList.Count)],
-						IdWorker = workers[Random.Next(0, workers.Count)].Id,
 						IdProfCategory = profCategories[Random.Next(0, profCategories.Count)].Id
 					};
 					professions.Add(profession);

@@ -16,7 +16,6 @@ namespace DBFiller
 			try
 			{
 				List<Service> serviceList = new List<Service>();
-				List<Profession> professions = Storage.ProfesionDao.selectEntities();
 
 				fileLoader.load(@".\res\services.txt");
 				services.AddRange(fileLoader.Entities);
@@ -27,8 +26,7 @@ namespace DBFiller
 					Service service = new Service()
 					{
 						Price = Random.Next(1000, 5000),
-						Name = services[Random.Next(0, services.Count)],
-						IdProffesion = professions[Random.Next(0, professions.Count)].Id
+						Name = services[Random.Next(0, services.Count)]
 					};
 					serviceList.Add(service);
 				}
