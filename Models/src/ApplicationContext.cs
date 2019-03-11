@@ -21,6 +21,7 @@ namespace Models
 		public virtual DbSet<Orderslist> Orderslist { get; set; }
 		public virtual DbSet<ProfCategory> ProfCategory { get; set; }
 		public virtual DbSet<Profession> Profession { get; set; }
+		public virtual DbSet<ProfessionToWorker> ProfessionToWorker { get; set; }
 		public virtual DbSet<Service> Service { get; set; }
 		public virtual DbSet<Worker> Worker { get; set; }
 		public virtual DbSet<User> User { get; set; }
@@ -42,12 +43,6 @@ namespace Models
 			{
 				entity.ToTable("address");
 
-				entity.HasIndex(e => e.IdCity)
-					.HasName("citytoaddress");
-
-				entity.HasIndex(e => e.IdCityDistrict)
-					.HasName("citydistrtoaddress");
-
 				entity.Property(e => e.Id).HasColumnName("id");
 
 				entity.Property(e => e.ApptNum)
@@ -67,13 +62,11 @@ namespace Models
 				entity.HasOne(d => d.IdCityNavigation)
 					.WithMany(p => p.Address)
 					.HasForeignKey(d => d.IdCity)
-					.OnDelete(DeleteBehavior.ClientSetNull)
 					.HasConstraintName("address_id_city_fkey");
 
 				entity.HasOne(d => d.IdCityDistrictNavigation)
 					.WithMany(p => p.Address)
 					.HasForeignKey(d => d.IdCityDistrict)
-					.OnDelete(DeleteBehavior.ClientSetNull)
 					.HasConstraintName("address_id_city_district_fkey");
 			});
 
@@ -135,12 +128,6 @@ namespace Models
 				entity.Property(e => e.Text)
 					.HasColumnName("text")
 					.HasMaxLength(500);
-
-				entity.HasOne(d => d.IdWorkerNavigation)
-					.WithMany(p => p.Feedback)
-					.HasForeignKey(d => d.IdWorker)
-					.OnDelete(DeleteBehavior.ClientSetNull)
-					.HasConstraintName("feedback_id_worker_fkey");
 			});
 
 			modelBuilder.Entity<OrderTable>(entity =>
@@ -159,7 +146,6 @@ namespace Models
 				entity.HasOne(d => d.IdOrderListNavigation)
 					.WithMany(p => p.OrderTable)
 					.HasForeignKey(d => d.IdOrderList)
-					.OnDelete(DeleteBehavior.ClientSetNull)
 					.HasConstraintName("order_table_id_order_list_fkey");
 			});
 
@@ -176,13 +162,11 @@ namespace Models
 				entity.HasOne(d => d.IdOrderNavigation)
 					.WithMany(p => p.OrderToService)
 					.HasForeignKey(d => d.IdOrder)
-					.OnDelete(DeleteBehavior.ClientSetNull)
 					.HasConstraintName("order_to_service_id_order_fkey");
 
 				entity.HasOne(d => d.IdServiceNavigation)
 					.WithMany(p => p.OrderToService)
 					.HasForeignKey(d => d.IdService)
-					.OnDelete(DeleteBehavior.ClientSetNull)
 					.HasConstraintName("order_to_service_id_service_fkey");
 			});
 
@@ -193,12 +177,6 @@ namespace Models
 				entity.Property(e => e.Id).HasColumnName("id");
 
 				entity.Property(e => e.IdWorker).HasColumnName("id_worker");
-
-				entity.HasOne(d => d.IdWorkerNavigation)
-					.WithMany(p => p.Orderslist)
-					.HasForeignKey(d => d.IdWorker)
-					.OnDelete(DeleteBehavior.ClientSetNull)
-					.HasConstraintName("orderslist_id_worker_fkey");
 			});
 
 			modelBuilder.Entity<Photo>(entity =>
@@ -213,11 +191,6 @@ namespace Models
 					.IsRequired()
 					.HasColumnName("link")
 					.HasMaxLength(256);
-
-				entity.HasOne(d => d.IdUserNavigation)
-					.WithMany(p => p.Photo)
-					.HasForeignKey(d => d.IdUser)
-					.HasConstraintName("photo_id_user_fkey");
 			});
 
 			modelBuilder.Entity<ProfCategory>(entity =>
@@ -240,8 +213,6 @@ namespace Models
 
 				entity.Property(e => e.IdProfCategory).HasColumnName("id_prof_category");
 
-				entity.Property(e => e.IdWorker).HasColumnName("id_worker");
-
 				entity.Property(e => e.Name)
 					.IsRequired()
 					.HasColumnName("name")
@@ -250,14 +221,28 @@ namespace Models
 				entity.HasOne(d => d.IdProfCategoryNavigation)
 					.WithMany(p => p.Profession)
 					.HasForeignKey(d => d.IdProfCategory)
-					.OnDelete(DeleteBehavior.ClientSetNull)
 					.HasConstraintName("profession_id_prof_category_fkey");
+			});
+
+			modelBuilder.Entity<ProfessionToWorker>(entity =>
+			{
+				entity.ToTable("profession_to_worker");
+
+				entity.Property(e => e.Id).HasColumnName("id");
+
+				entity.Property(e => e.IdProfession).HasColumnName("id_profession");
+
+				entity.Property(e => e.IdWorker).HasColumnName("id_worker");
+
+				entity.HasOne(d => d.IdProfessionNavigation)
+					.WithMany(p => p.ProfessionToWorker)
+					.HasForeignKey(d => d.IdProfession)
+					.HasConstraintName("profession_to_worker_id_profession_fkey");
 
 				entity.HasOne(d => d.IdWorkerNavigation)
-					.WithMany(p => p.Profession)
+					.WithMany(p => p.ProfessionToWorker)
 					.HasForeignKey(d => d.IdWorker)
-					.OnDelete(DeleteBehavior.ClientSetNull)
-					.HasConstraintName("profession_id_worker_fkey");
+					.HasConstraintName("profession_to_worker_id_worker_fkey");
 			});
 
 			modelBuilder.Entity<Service>(entity =>
@@ -266,7 +251,7 @@ namespace Models
 
 				entity.Property(e => e.Id).HasColumnName("id");
 
-				entity.Property(e => e.IdProffesion).HasColumnName("id_proffesion");
+				entity.Property(e => e.IdProfession).HasColumnName("id_profession");
 
 				entity.Property(e => e.Name)
 					.IsRequired()
@@ -276,12 +261,6 @@ namespace Models
 				entity.Property(e => e.Price)
 					.HasColumnName("price")
 					.HasColumnType("money");
-
-				entity.HasOne(d => d.IdProffesionNavigation)
-					.WithMany(p => p.Service)
-					.HasForeignKey(d => d.IdProffesion)
-					.OnDelete(DeleteBehavior.ClientSetNull)
-					.HasConstraintName("service_id_proffesion_fkey");
 			});
 
 			modelBuilder.Entity<User>(entity =>
@@ -289,12 +268,10 @@ namespace Models
 				entity.ToTable("user_table");
 
 				entity.HasIndex(e => e.IdWorker)
-					.HasName("user_id_worker_key")
+					.HasName("user_table_id_worker_key")
 					.IsUnique();
 
-				entity.Property(e => e.Id)
-					.HasColumnName("id")
-					.HasDefaultValueSql("nextval('user_id_seq'::regclass)");
+				entity.Property(e => e.Id).HasColumnName("id");
 
 				entity.Property(e => e.IdWorker).HasColumnName("id_worker");
 
@@ -311,15 +288,13 @@ namespace Models
 				entity.HasOne(d => d.IdWorkerNavigation)
 					.WithOne(p => p.User)
 					.HasForeignKey<User>(d => d.IdWorker)
-					.HasConstraintName("user_id_worker_fkey");
+					.OnDelete(DeleteBehavior.Cascade)
+					.HasConstraintName("user_table_id_worker_fkey");
 			});
 
 			modelBuilder.Entity<Worker>(entity =>
 			{
 				entity.ToTable("worker");
-
-				entity.HasIndex(e => e.IdAddress)
-					.HasName("workertoaddress");
 
 				entity.Property(e => e.Id).HasColumnName("id");
 
@@ -333,12 +308,12 @@ namespace Models
 				entity.Property(e => e.LastName)
 					.IsRequired()
 					.HasColumnName("last_name")
-					.HasColumnType("character(30)");
+					.HasMaxLength(30);
 
 				entity.Property(e => e.Name)
 					.IsRequired()
 					.HasColumnName("name")
-					.HasColumnType("character(30)");
+					.HasMaxLength(30);
 
 				entity.Property(e => e.PhoneNumber)
 					.IsRequired()
@@ -348,10 +323,8 @@ namespace Models
 				entity.HasOne(d => d.IdAddressNavigation)
 					.WithMany(p => p.Worker)
 					.HasForeignKey(d => d.IdAddress)
-					.HasConstraintName("worker_address_fkey");
+					.HasConstraintName("worker_id_address_fkey");
 			});
-
-			modelBuilder.HasSequence<int>("users_id_seq");
 		}
 	}
 }

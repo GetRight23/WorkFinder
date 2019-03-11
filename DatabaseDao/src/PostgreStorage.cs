@@ -189,7 +189,6 @@ namespace DatabaseDao
 					"create table if not exists profession (" +
 					"id serial primary key, " +
 					"name character varying(45) not null, " +
-					"id_worker integer references worker(id) on delete cascade not null, " +
 					"id_prof_category integer references prof_category(id) on delete cascade not null" +
 					")";
 				command.ExecuteNonQuery();
@@ -211,7 +210,7 @@ namespace DatabaseDao
 					"id serial primary key, " +
 					"price money not null, " +
 					"name character varying(100) not null, " +
-					"id_proffesion integer references profession(id) on delete cascade not null" +
+					"id_profession integer references profession(id) on delete cascade not null" +
 					")";
 				command.ExecuteNonQuery();
 				m_logger.Trace("Service table is created");
@@ -282,6 +281,27 @@ namespace DatabaseDao
 			{
 				m_logger.Error(ex.Message);
 				m_logger.Error("Cannot create Photo table");
+			}
+		}
+
+		public override void createProfessionToWorker()
+		{
+			try
+			{
+				var command = Connection.CreateCommand();
+				command.CommandText =
+					"create table if not exists profession_to_worker (" +
+					"id serial primary key, " +
+					"id_profession integer references profession(id) on delete cascade not null, " +
+					"id_worker integer references worker(id) on delete cascade not null" +
+					")";
+				command.ExecuteNonQuery();
+				m_logger.Trace("Profession_to_worker table is created");
+			}
+			catch (Exception ex)
+			{
+				m_logger.Error(ex.Message);
+				m_logger.Error("Cannot create Profession_to_worker table");
 			}
 		}
 	}
