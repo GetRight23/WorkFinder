@@ -49,7 +49,7 @@ namespace DatabaseDao
 			List<int> orderIds = new List<int>();
 			foreach (var elem in orders)
 			{
-				orderIds.Add(elem.IdService);
+				orderIds.Add(elem.IdOrder);
 			}
 			return orderIds;
 		}
@@ -66,6 +66,7 @@ namespace DatabaseDao
 					m_daoSet.Remove(orderToService);
 				}
 				m_dbContext.SaveChanges();
+				return true;
 			}
 			catch (TransactionException)
 			{
@@ -73,10 +74,10 @@ namespace DatabaseDao
 			}
 			catch (SystemException)
 			{
-				m_logger.Error("Cannot remove relationship orders to services");
-				return false;
+				m_logger.Error("Cannot remove relationship orders to service");
+
 			}
-			return true;
+			return false;
 		}
 
 		public bool removeServicesByOrderId(int id)
@@ -91,6 +92,7 @@ namespace DatabaseDao
 					m_daoSet.Remove(orderToService);
 				}
 				m_dbContext.SaveChanges();
+				return true;
 			}
 			catch (TransactionException)
 			{
@@ -99,21 +101,22 @@ namespace DatabaseDao
 			catch (SystemException ex)
 			{
 				m_logger.Error(ex.Message);
-				m_logger.Error("Cannot remove relationship orders to services");
-				return false;
+				m_logger.Error("Cannot remove relationship order to services");
+
 			}
-			return true;
+			return false;
 		}
 
 		public int insertRelationship(int orderId, int serviceId)
 		{
 			OrderToService orderToService = new OrderToService() { IdOrder = orderId, IdService = serviceId };
-			int id = m_daoSet.Add(orderToService).Entity.Id;
+			int id = 0;
+			id = m_daoSet.Add(orderToService).Entity.Id;
 			m_dbContext.SaveChanges();
 			return id;
 		}
 
-		public void updateEntity(OrderToService entity)
+		public bool updateEntity(OrderToService entity)
 		{
 			try
 			{
@@ -121,33 +124,40 @@ namespace DatabaseDao
 				{
 					m_daoSet.Update(entity);
 					m_dbContext.SaveChanges();
-					m_logger.Trace($"OrderToService with id {entity.Id} updated");
+					m_logger.Trace($"Order to service with id {entity.Id} updated");
+					return true;
 				}
 			}
 			catch (Exception ex)
 			{
 				m_logger.Error(ex.Message);
-				m_logger.Error($"Cannot update OrderToService with id {entity.Id}");
+				m_logger.Error($"Cannot update Order to service with id {entity.Id}");
 			}
+			return false;
 		}
 
-		public void updateEntities(List<OrderToService> entities)
+		public bool updateEntities(List<OrderToService> entities)
 		{
 			try
 			{
-				m_dbContext.Database.BeginTransaction();
-				foreach (var entity in entities)
+				if(entities != null && entities.Count != 0)
 				{
-					updateEntity(entity);
+					m_dbContext.Database.BeginTransaction();
+					foreach (var entity in entities)
+					{
+						updateEntity(entity);
+					}
+					m_dbContext.Database.CommitTransaction();
+					return true;
 				}
-				m_dbContext.Database.CommitTransaction();
 			}
 			catch (TransactionException ex)
 			{
 				m_dbContext.Database.RollbackTransaction();
 				m_logger.Error(ex.Message);
-				m_logger.Error($"Cannot begin update OrderToService transaction");
+				m_logger.Error($"Cannot begin update Order to service transaction");
 			}
+			return false;
 		}
 	}
 }
