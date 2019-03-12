@@ -47,6 +47,7 @@ namespace DatabaseDao
 			{
 				Type entity = m_daoSet.Where(e => e.getId() == id).Single();
 				m_logger.Trace($"Selection {typeof(Type).Name} by id = {id} is done");
+				return entity;
 			}
 			catch (TransactionException)
 			{
@@ -54,7 +55,7 @@ namespace DatabaseDao
 			}
 			catch (Exception ex)
 			{
-				m_logger.Error(ex.InnerException.Message);
+				m_logger.Error(ex.Message);
 				m_logger.Error($"Cannot find {typeof(Type).Name} by id = {id}");
 			}
 			return null;

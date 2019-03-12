@@ -20,6 +20,7 @@ namespace JSONConvertor
 			jsonObject["IdCity"] = address.IdCity;
 			return jsonObject;
 		}
+
 		public JObject toJson(City city)
 		{
 			if (city == null)
@@ -31,6 +32,7 @@ namespace JSONConvertor
 			jsonObject["Name"] = city.Name;
 			return jsonObject;
 		}
+
 		public JObject toJson(CityDistricts cityDistricts)
 		{
 			if (cityDistricts == null)
@@ -43,6 +45,7 @@ namespace JSONConvertor
 			jsonObject["IdCity"] = cityDistricts.IdCity;
 			return jsonObject;
 		}
+
 		public JObject toJson(Feedback feedback)
 		{
 			if (feedback == null)
@@ -59,6 +62,7 @@ namespace JSONConvertor
 			jsonObject["IdWorker"] = feedback.IdWorker;
 			return jsonObject;
 		}
+
 		public JObject toJson(OrdersList orderslist)
 		{
 			if (orderslist == null)
@@ -70,6 +74,7 @@ namespace JSONConvertor
 			jsonObject["IdWorker"] = orderslist.IdWorker;
 			return jsonObject;
 		}
+
 		public JObject toJson(Order orderTable)
 		{
 			if (orderTable == null)
@@ -82,6 +87,7 @@ namespace JSONConvertor
 			jsonObject["IdOrderList"] = orderTable.IdOrderList;
 			return jsonObject;
 		}
+
 		public JObject toJson(OrderToService orderToService)
 		{
 			if (orderToService == null)
@@ -94,6 +100,7 @@ namespace JSONConvertor
 			jsonObject["IdService"] = orderToService.IdService;
 			return jsonObject;
 		}
+
 		public JObject toJson(ProfessionCategory profCategory)
 		{
 			if (profCategory == null)
@@ -105,6 +112,7 @@ namespace JSONConvertor
 			jsonObject["Name"] = profCategory.Name;
 			return jsonObject;
 		}
+
 		public JObject toJson(Profession profession)
 		{
 			if (profession == null)
@@ -117,6 +125,7 @@ namespace JSONConvertor
 			jsonObject["IdProfCategory"] = profession.IdProfCategory;
 			return jsonObject;
 		}
+
 		public JObject toJson(Service service)
 		{
 			if (service == null)
@@ -130,6 +139,7 @@ namespace JSONConvertor
 			jsonObject["IdProfession"] = service.IdProfession;
 			return jsonObject;
 		}
+
 		public JObject toJson(Worker worker)
 		{
 			if (worker == null)

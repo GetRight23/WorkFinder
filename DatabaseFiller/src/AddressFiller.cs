@@ -25,8 +25,8 @@ namespace DatabaseFiller
 					List<CityDistricts> cityDistricts = cities[i].CityDistricts.ToList();
 					for (int j = 0; j < cityDistricts.Count; j++)
 					{
-						int stretsPerDirstrict = Random.Next(1, streetNames.Count / 4);
-						for (int k = 0; k < stretsPerDirstrict; k++)
+						int streetsPerDistrict = Random.Next(1, streetNames.Count / 4);
+						for (int k = 0; k < streetsPerDistrict; k++)
 						{
 							Address address = new Address()
 							{
