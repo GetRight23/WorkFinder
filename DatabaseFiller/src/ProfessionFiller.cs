@@ -20,7 +20,7 @@ namespace DatabaseFiller
 				List<Profession> professions = new List<Profession>();
 				for (int i = 0; i < profCategories.Count; i++)
 				{
-					int professionsPerCategory = Random.Next(1, professionNames.Count);
+					int professionsPerCategory = Random.Next(1, professionNames.Count / 4);
 					for (int j = 0; j < professionsPerCategory; j++)
 					{
 						Profession profession = new Profession()

@@ -127,6 +127,11 @@ namespace Models
 				entity.Property(e => e.Text)
 					.HasColumnName("text")
 					.HasMaxLength(500);
+
+				entity.HasOne(d => d.IdWorkerNavigation)
+					.WithMany(p => p.Feedback)
+					.HasForeignKey(d => d.IdWorker)
+					.HasConstraintName("feedback_id_worker_fkey");
 			});
 
 			modelBuilder.Entity<Order>(entity =>
@@ -176,6 +181,11 @@ namespace Models
 				entity.Property(e => e.Id).HasColumnName("id");
 
 				entity.Property(e => e.IdWorker).HasColumnName("id_worker");
+
+				entity.HasOne(d => d.IdWorkerNavigation)
+					.WithMany(p => p.Orderslist)
+					.HasForeignKey(d => d.IdWorker)
+					.HasConstraintName("orderslist_id_worker_fkey");
 			});
 
 			modelBuilder.Entity<Photo>(entity =>
@@ -260,6 +270,11 @@ namespace Models
 				entity.Property(e => e.Price)
 					.HasColumnName("price")
 					.HasColumnType("money");
+
+				entity.HasOne(d => d.IdProfessionNavigation)
+					.WithMany(p => p.Service)
+					.HasForeignKey(d => d.IdProfession)
+					.HasConstraintName("service_id_profession_fkey");
 			});
 
 			modelBuilder.Entity<User>(entity =>

@@ -26,7 +26,7 @@ namespace DatabaseFiller
 					ProfessionCategories.Add(profCategory);
 				}
 				Storage.ProfessionCategoryDao.insertEntities(ProfessionCategories);
-				Logger.Info("Prof category table filled");
+				Logger.Info("Profession category table filled");
 			}
 			catch (Exception ex)
 			{

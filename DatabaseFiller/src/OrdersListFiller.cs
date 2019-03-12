@@ -19,7 +19,7 @@ namespace DatabaseFiller
 				List<OrdersList> ordersLists = new List<OrdersList>();
 				for (int i = 0; i < workers.Count; i++)
 				{
-					int orderListExists = Random.Next(0, 1);
+					int orderListExists = Random.Next(0, 2);
 					if(orderListExists == 1)
 					{
 						OrdersList ordersList = new OrdersList()

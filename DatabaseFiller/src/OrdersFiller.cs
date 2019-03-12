@@ -20,7 +20,7 @@ namespace DatabaseFiller
 				List<Order> orders = new List<Order>();
 				for (int i = 0; i < ordersLists.Count; i++)
 				{
-					int ordersCount = Random.Next(0, 2);
+					int ordersCount = Random.Next(0, 3);
 					for (int j = 0; j < ordersCount; j++)
 					{
 						Order order = new Order()

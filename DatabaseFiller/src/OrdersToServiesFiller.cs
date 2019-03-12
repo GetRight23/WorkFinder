@@ -19,7 +19,7 @@ namespace DatabaseFiller
 				List<OrderToService> ordersToServices = new List<OrderToService>();
 				for (int i = 0; i < orders.Count; i++)
 				{
-					int servicesPerOrder = Random.Next(1, services.Count);
+					int servicesPerOrder = Random.Next(1, services.Count / 4);
 					for (int j = 0; j < servicesPerOrder; j++)
 					{
 						OrderToService orderToService = new OrderToService()
