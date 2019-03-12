@@ -1,8 +1,6 @@
 using System;
 using Npgsql;
-using System.Data.Common;
 using NLog;
-using DatabaseConfiguration;
 
 namespace DatabaseDao
 {

@@ -1,5 +1,4 @@
 ﻿using DatabaseDao;
-using System;
 using DatabaseConfiguration;
 
 namespace DatabaseFiller
@@ -22,6 +21,7 @@ namespace DatabaseFiller
 			ProfesssionCategoryFiller professsionCategoryFiller = new ProfesssionCategoryFiller(storage);
 			ProfessionFiller professionFiller = new ProfessionFiller(storage);
 			ServiceFiller serviceFiller = new ServiceFiller(storage);
+			OrdersToServiesFiller ordersToServiesFiller = new OrdersToServiesFiller(storage);
 
 			cityFiller.fillEntities();
 			cityDistrictsFiller.fillEntities();
@@ -34,6 +34,7 @@ namespace DatabaseFiller
 			professsionCategoryFiller.fillEntities();
 			professionFiller.fillEntities();
 			serviceFiller.fillEntities();
+			ordersToServiesFiller.fillEntities();
 		}
 	}
 }

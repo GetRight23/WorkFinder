@@ -1,15 +1,17 @@
-﻿using DatabaseDao;
-using System;
+﻿using NLog;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 
 namespace DatabaseFiller
 {
 	class FileLoader
 	{
-		public FileLoader() {}
+		protected Logger Logger { get; private set; }
+
+		public FileLoader()
+		{
+			Logger = LogManager.GetCurrentClassLogger();
+		}
 
 		public List<string> load(string filePath)
 		{
@@ -28,7 +30,8 @@ namespace DatabaseFiller
 			}
 			catch (FileNotFoundException ex)
 			{
-				Console.WriteLine(ex);
+				Logger.Error(ex.InnerException.Message);
+				Logger.Error("Cannot open file");
 			}
 			return null;
 		}
