@@ -9,6 +9,7 @@ namespace DatabaseFiller
 	class CityDistrictsFiller : DBFiller
 	{
 		public CityDistrictsFiller(Storage storage) : base(storage) {}
+
 		public override void fillEntities()
 		{
 			try

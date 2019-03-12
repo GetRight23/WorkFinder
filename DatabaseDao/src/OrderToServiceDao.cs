@@ -2,7 +2,6 @@
 using Models;
 using System.Linq;
 using System.Collections.Generic;
-using System.Text;
 using Microsoft.EntityFrameworkCore;
 using System.Transactions;
 using NLog;
@@ -27,7 +26,7 @@ namespace DatabaseDao
 			try
 			{
 				List<OrderToService> ordersToServies = m_daoSet.Where(e => e.IdOrder == id).ToList();
-				m_logger.Trace("Order to service selection is done");
+				m_logger.Trace($"Order to service selection by order id = {id} is done");
 				return ordersToServies;
 			}
 			catch (TransactionException)
@@ -37,7 +36,7 @@ namespace DatabaseDao
 			catch (Exception ex)
 			{
 				m_logger.Error(ex.InnerException.Message);
-				m_logger.Error("Cannot select Order to service entities");
+				m_logger.Error($"Cannot select Order to service entities by order id = {id}");
 			}
 			return null;
 		}
@@ -47,7 +46,7 @@ namespace DatabaseDao
 			try
 			{
 				List<OrderToService> ordersToServies = m_daoSet.Where(e => e.IdService == id).ToList();
-				m_logger.Trace("Order to service selection is done");
+				m_logger.Trace($"Order to service selection by service id = {id} is done");
 				return ordersToServies;
 			}
 			catch (TransactionException)
@@ -57,7 +56,7 @@ namespace DatabaseDao
 			catch (Exception ex)
 			{
 				m_logger.Error(ex.InnerException.Message);
-				m_logger.Error("Cannot select Order to service entities");
+				m_logger.Error($"Cannot select Order to service entities by service id = {id}");
 			}
 			return null;
 		}

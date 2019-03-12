@@ -35,7 +35,7 @@ namespace DatabaseDao
 			}
 			catch (Exception ex)
 			{
-				m_logger.Error(ex.Message);
+				m_logger.Error(ex.InnerException.Message);
 				m_logger.Error($"Cannot select {typeof(Type).Name} entities");
 			}
 			return null;
@@ -52,8 +52,9 @@ namespace DatabaseDao
 			{
 				throw;
 			}
-			catch (System.InvalidOperationException)
+			catch (Exception ex)
 			{
+				m_logger.Error(ex.InnerException.Message);
 				m_logger.Error($"Cannot find {typeof(Type).Name} by id = {id}");
 			}
 			return null;
@@ -78,7 +79,7 @@ namespace DatabaseDao
 			}
 			catch (Exception ex)
 			{
-				m_logger.Error(ex.Message);
+				m_logger.Error(ex.InnerException.Message);
 				m_logger.Error($"Cannot delete {typeof(Type).Name} by id = {id}");
 			}
 			return false;
@@ -102,7 +103,7 @@ namespace DatabaseDao
 			}
 			catch (Exception ex)
 			{
-				m_logger.Error(ex.Message);
+				m_logger.Error(ex.InnerException.Message);
 				m_logger.Error($"Cannot insert {typeof(Type).Name}");
 			}
 			return 0;
@@ -126,7 +127,7 @@ namespace DatabaseDao
 			}
 			catch (Exception ex)
 			{
-				m_logger.Error(ex.Message);
+				m_logger.Error(ex.InnerException.Message);
 				m_logger.Error($"Cannot update {typeof(Type).Name} with id {entity.getId()}");
 			}
 			return false;
