@@ -2,7 +2,7 @@
 using System;
 using DatabaseConfiguration;
 
-namespace DBFiller
+namespace DatabaseFiller
 {
 	class Program
 	{
@@ -21,6 +21,7 @@ namespace DBFiller
 			OrdersFiller ordersFiller = new OrdersFiller(storage);
 			ProfesssionCategoryFiller professsionCategoryFiller = new ProfesssionCategoryFiller(storage);
 			ProfessionFiller professionFiller = new ProfessionFiller(storage);
+			ServiceFiller serviceFiller = new ServiceFiller(storage);
 
 			cityFiller.fillEntities();
 			cityDistrictsFiller.fillEntities();
@@ -32,6 +33,7 @@ namespace DBFiller
 			ordersFiller.fillEntities();
 			professsionCategoryFiller.fillEntities();
 			professionFiller.fillEntities();
+			serviceFiller.fillEntities();
 		}
 	}
 }

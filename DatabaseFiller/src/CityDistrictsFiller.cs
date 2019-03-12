@@ -4,7 +4,7 @@ using NLog;
 using System;
 using System.Collections.Generic;
 
-namespace DBFiller
+namespace DatabaseFiller
 {
 	class CityDistrictsFiller : DBFiller
 	{

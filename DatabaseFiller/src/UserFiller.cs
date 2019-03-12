@@ -3,11 +3,12 @@ using Models;
 using System;
 using System.Collections.Generic;
 
-namespace DBFiller
+namespace DatabaseFiller
 {
 	class UserFiller : DBFiller
 	{
 		public UserFiller(Storage storage) : base(storage) {}
+
 		public override void fillEntities()
 		{
 			try
@@ -31,7 +32,7 @@ namespace DBFiller
 					users.Add(user);
 				}
 				Storage.UserDao.insertEntities(users);
-				Logger.Info("User Table filled");
+				Logger.Info("User table filled");
 			}
 			catch (Exception ex)
 			{

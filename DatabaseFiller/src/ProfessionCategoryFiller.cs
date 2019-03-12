@@ -3,7 +3,7 @@ using Models;
 using System;
 using System.Collections.Generic;
 
-namespace DBFiller
+namespace DatabaseFiller
 {
 	class ProfesssionCategoryFiller : DBFiller
 	{
@@ -25,8 +25,8 @@ namespace DBFiller
 					};
 					ProfessionCategories.Add(profCategory);
 				}
-				Storage.ProfCategoryDao.insertEntities(ProfessionCategories);
-				Logger.Info("Prof category Table filled");
+				Storage.ProfessionCategoryDao.insertEntities(ProfessionCategories);
+				Logger.Info("Prof category table filled");
 			}
 			catch (Exception ex)
 			{

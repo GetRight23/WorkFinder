@@ -3,7 +3,7 @@ using Models;
 using System;
 using System.Collections.Generic;
 
-namespace DBFiller
+namespace DatabaseFiller
 {
 	class FeedbackFiller : DBFiller
 	{

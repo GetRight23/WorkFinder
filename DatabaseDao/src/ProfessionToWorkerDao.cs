@@ -104,7 +104,15 @@ namespace DatabaseDao
 
 		public int insertRelationship(int professionId, int workerId)
 		{
-			ProfessionToWorker professionToWorker = new ProfessionToWorker(){ IdProfession = professionId, IdWorker = workerId };
+			ProfessionToWorker professionToWorker = new ProfessionToWorker() { IdProfession = professionId, IdWorker = workerId };
+			int id = 0;
+			id = m_daoSet.Add(professionToWorker).Entity.Id;
+			m_dbContext.SaveChanges();
+			return id;
+		}
+
+		public int insertRelationship(ProfessionToWorker professionToWorker)
+		{
 			int id = 0;
 			id = m_daoSet.Add(professionToWorker).Entity.Id;
 			m_dbContext.SaveChanges();

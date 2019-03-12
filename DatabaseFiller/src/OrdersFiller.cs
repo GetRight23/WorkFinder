@@ -4,11 +4,12 @@ using NLog;
 using System;
 using System.Collections.Generic;
 
-namespace DBFiller
+namespace DatabaseFiller
 {
 	class OrdersFiller : DBFiller
 	{
 		public OrdersFiller(Storage storage) : base(storage) {}
+
 		public override void fillEntities()
 		{
 			try

@@ -24,7 +24,7 @@ namespace DatabaseDao
 			FeedbackDao = new DatabaseDao<Feedback>(m_dbContext, m_dbContext.Feedback);
 			OrderListDao = new DatabaseDao<OrdersList>(m_dbContext, m_dbContext.OrdersList);
 			OrderDao = new DatabaseDao<Order>(m_dbContext, m_dbContext.Order);
-			ProfCategoryDao = new DatabaseDao<ProfessionCategory>(m_dbContext, m_dbContext.ProfCategory);
+			ProfessionCategoryDao = new DatabaseDao<ProfessionCategory>(m_dbContext, m_dbContext.ProfCategory);
 			ProfessionDao = new DatabaseDao<Profession>(m_dbContext, m_dbContext.Profession);
 			ServiceDao = new DatabaseDao<Service>(m_dbContext, m_dbContext.Service);
 			WorkerDao = new DatabaseDao<Worker>(m_dbContext, m_dbContext.Worker);
@@ -75,7 +75,7 @@ namespace DatabaseDao
 		public DatabaseDao<Feedback> FeedbackDao { get; private set; }
 		public DatabaseDao<OrdersList> OrderListDao { get; private set; }
 		public DatabaseDao<Order> OrderDao { get; private set; }
-		public DatabaseDao<ProfessionCategory> ProfCategoryDao { get; private set; }
+		public DatabaseDao<ProfessionCategory> ProfessionCategoryDao { get; private set; }
 		public DatabaseDao<Profession> ProfessionDao { get; private set; }
 		public DatabaseDao<Service> ServiceDao { get; private set; }
 		public DatabaseDao<Worker> WorkerDao { get; private set; }

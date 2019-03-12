@@ -3,7 +3,7 @@ using Models;
 using System;
 using System.Collections.Generic;
 
-namespace DBFiller
+namespace DatabaseFiller
 {
 	class WorkerFiller : DBFiller
 	{
@@ -41,7 +41,7 @@ namespace DBFiller
 					workers.Add(worker);
 				}
 				Storage.WorkerDao.insertEntities(workers);
-				Logger.Info("Worker Table filled");
+				Logger.Info("Worker table filled");
 			}
 			catch (Exception ex)
 			{

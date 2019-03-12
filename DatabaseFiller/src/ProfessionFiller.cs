@@ -3,17 +3,17 @@ using System.Collections.Generic;
 using DatabaseDao;
 using Models;
 
-namespace DBFiller
+namespace DatabaseFiller
 {
 	class ProfessionFiller : DBFiller
 	{
-		public ProfessionFiller(Storage storage) : base(storage){}
+		public ProfessionFiller(Storage storage) : base(storage) {}
 
 		public override void fillEntities()
 		{
 			try
 			{
-				List<ProfessionCategory> profCategories = Storage.ProfCategoryDao.selectEntities();
+				List<ProfessionCategory> profCategories = Storage.ProfessionCategoryDao.selectEntities();
 
 				List<string> professionNames = FileLoader.load(@".\res\professions.txt");
 
@@ -31,6 +31,7 @@ namespace DBFiller
 						professions.Add(profession);
 					}
 					Storage.ProfessionDao.insertEntities(professions);
+					professions.Clear();
 				}
 				Logger.Info("Professions Table filled");
 			}

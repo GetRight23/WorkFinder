@@ -2,7 +2,7 @@
 using NLog;
 using System;
 
-namespace DBFiller
+namespace DatabaseFiller
 {
     abstract class DBFiller
     {

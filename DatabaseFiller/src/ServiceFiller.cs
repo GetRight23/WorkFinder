@@ -2,33 +2,45 @@
 using Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
-namespace DBFiller
+namespace DatabaseFiller
 {
 	class ServiceFiller : DBFiller
 	{
 		public ServiceFiller(Storage storage) : base(storage) {}
+
 		public override void fillEntities()
 		{
-			List<string> services = new List<string>();
-
 			try
 			{
-				List<Service> serviceList = new List<Service>();
+				List<ProfessionCategory> professionCategories = Storage.ProfessionCategoryDao.selectEntities();
 
-				services = FileLoader.load(@".\res\services.txt");
+				List<string> servicesNames = FileLoader.load(@".\res\services.txt");
 
-				for (int i = 0; i < services.Count; i++)
+				List<Service> services = new List<Service>();
+				for (int i = 0; i < professionCategories.Count; i++)
 				{
-					Service service = new Service()
+					List<Profession> proffesions = professionCategories[i].Profession.ToList();
+					for (int j = 0; j < proffesions.Count; j++)
 					{
-						Price = Random.Next(1000, 5000),
-						Name = services[Random.Next(0, services.Count)]
-					};
-					serviceList.Add(service);
+						int servicesPerProffesion = Random.Next(1, servicesNames.Count);
+						for (int k = 0; k < servicesPerProffesion; k++)
+						{
+							Service service = new Service()
+							{
+								Price = Random.Next(1000, 5000),
+								Name = servicesNames[Random.Next(0, servicesNames.Count)],
+								IdProfession = proffesions[j].Id
+							};
+							services.Add(service);
+						}	
+					}
+					Storage.ServiceDao.insertEntities(services);
+					services.Clear();
 				}
-				Storage.ServiceDao.insertEntities(serviceList);
-				Logger.Info("Services Table filled");
+				Storage.ServiceDao.insertEntities(services);
+				Logger.Info("Services table filled");
 			}
 			catch (Exception ex)
 			{

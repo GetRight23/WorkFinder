@@ -23,12 +23,12 @@ namespace DatabaseTests
 
 			Assert.IsNotNull(Storage.Connection);
 			Assert.IsNotNull(Storage.Database);
-			Assert.IsNotNull(Storage.ProfCategoryDao);
+			Assert.IsNotNull(Storage.ProfessionCategoryDao);
 			Assert.IsNotNull(Storage.ProfessionDao);
 			Assert.IsNotNull(Storage);
 
 			Connection = Storage.Connection;
-			ProfCategoryDao = Storage.ProfCategoryDao;
+			ProfCategoryDao = Storage.ProfessionCategoryDao;
 			ProfessionDao = Storage.ProfessionDao;
 
 			Connection.Open();
@@ -52,7 +52,7 @@ namespace DatabaseTests
 			professionCategory = new ProfessionCategory() { Name = "Teacher" };
 			Assert.IsNotNull(professionCategory);
 
-			int profCategoryId = Storage.ProfCategoryDao.insertEntity(professionCategory);
+			int profCategoryId = Storage.ProfessionCategoryDao.insertEntity(professionCategory);
 
 			profession = new Profession() { Name = "Math", IdProfCategory = profCategoryId };
 			Assert.IsNotNull(profession);

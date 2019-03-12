@@ -26,7 +26,7 @@ namespace DatabaseDao
 			try
 			{
 				List<Type> selectedEntities = m_daoSet.ToList();
-				m_logger.Trace($"{typeof(Type).Name} selection is done correctly!");
+				m_logger.Trace($"{typeof(Type).Name} selection is done");
 				return selectedEntities;
 			}
 			catch (TransactionException)
@@ -43,11 +43,10 @@ namespace DatabaseDao
 
 		public Type selectEntityById(int id)
 		{
-			Type entity = null;
 			try
 			{
-				entity = m_daoSet.Where(e => e.getId() == id).Single();
-				m_logger.Trace($"Selection {typeof(Type).Name} by id = {id} is done correctly!");
+				Type entity = m_daoSet.Where(e => e.getId() == id).Single();
+				m_logger.Trace($"Selection {typeof(Type).Name} by id = {id} is done");
 			}
 			catch (TransactionException)
 			{
@@ -57,7 +56,7 @@ namespace DatabaseDao
 			{
 				m_logger.Error($"Cannot find {typeof(Type).Name} by id = {id}");
 			}
-			return entity;
+			return null;
 		}
 
 		public bool deleteEntityById(int id)
@@ -69,7 +68,7 @@ namespace DatabaseDao
 				{
 					m_daoSet.Remove(entity);
 					m_dbContext.SaveChanges();
-					m_logger.Trace($"{typeof(Type).Name} with id {id} is deleted!");
+					m_logger.Trace($"{typeof(Type).Name} with id {id} is deleted");
 					return true;
 				}
 			}
@@ -93,7 +92,7 @@ namespace DatabaseDao
 				{
 					m_daoSet.Add(entity);
 					m_dbContext.SaveChanges();
-					m_logger.Trace($"{typeof(Type).Name} with id = {entity.getId()} is added!");
+					m_logger.Trace($"{typeof(Type).Name} with id = {entity.getId()} is added");
 					return entity.getId();
 				}
 			}
@@ -121,6 +120,10 @@ namespace DatabaseDao
 					return true;
 				}
 			}
+			catch (TransactionException)
+			{
+				throw;
+			}
 			catch (Exception ex)
 			{
 				m_logger.Error(ex.Message);
@@ -133,7 +136,7 @@ namespace DatabaseDao
 		{
 			try
 			{
-				if (entities.Count != 0)
+				if (entities != null && entities.Count != 0)
 				{
 					List<int> Ids = new List<int>();
 					m_dbContext.Database.BeginTransaction();
@@ -146,11 +149,11 @@ namespace DatabaseDao
 					}
 					m_dbContext.Database.CommitTransaction();
 
-					m_logger.Trace($"Transaction {typeof(Type).Name} is complited");
+					m_logger.Trace($"Insert transaction {typeof(Type).Name} is complited");
 					return Ids;
 				}
 			}
-			catch (Exception ex)
+			catch (TransactionException ex)
 			{
 				m_dbContext.Database.RollbackTransaction();
 				m_logger.Error(ex.Message);
@@ -163,13 +166,18 @@ namespace DatabaseDao
 		{
 			try
 			{
-				m_dbContext.Database.BeginTransaction();
-				foreach (var entity in entities)
+				if (entities != null && entities.Count != 0)
 				{
-					updateEntity(entity);
+					m_dbContext.Database.BeginTransaction();
+					foreach (var entity in entities)
+					{
+						updateEntity(entity);
+					}
+					m_dbContext.Database.CommitTransaction();
+
+					m_logger.Trace($"Update transaction {typeof(Type).Name} is complited");
+					return true;
 				}
-				m_dbContext.Database.CommitTransaction();
-				return true;
 			}
 			catch (TransactionException ex)
 			{
@@ -182,45 +190,56 @@ namespace DatabaseDao
 
 		public List<Type> selectEntitiesByIds(List<int> ids)
 		{
-			List<Type> entities = new List<Type>();
 			try
 			{
-				m_dbContext.Database.BeginTransaction();
-				foreach (var id in ids)
+				if (ids != null && ids.Count != 0)
 				{
-					entities.Add(selectEntityById(id));
+					List<Type> entities = new List<Type>();
+					m_dbContext.Database.BeginTransaction();
+					foreach (var id in ids)
+					{
+						entities.Add(selectEntityById(id));
+					}
+					m_dbContext.Database.CommitTransaction();
+
+					m_logger.Trace($"Select by ids transaction {typeof(Type).Name} is complited");
+					return entities;
 				}
-				m_dbContext.Database.CommitTransaction();
 			}
 			catch (TransactionException ex)
 			{
 				m_dbContext.Database.RollbackTransaction();
 				m_logger.Error(ex.Message);
-				m_logger.Error($"Cannot begin select {typeof(Type).Name} transaction");
+				m_logger.Error($"Cannot begin select by ids {typeof(Type).Name} transaction");
 			}
-			return entities;
+			return null;
 		}
 
 		public bool deleteEntitiesByIds(List<int> ids)
 		{
 			try
 			{
-				bool state = true;
-				m_dbContext.Database.BeginTransaction();
-				foreach (var id in ids)
+				if (ids != null && ids.Count != 0)
 				{
-					state = deleteEntityById(id);
+					bool state = true;
+					m_dbContext.Database.BeginTransaction();
+					foreach (var id in ids)
+					{
+						state = deleteEntityById(id);
+					}
+					m_dbContext.Database.CommitTransaction();
+
+					m_logger.Trace($"Delete by ids transaction {typeof(Type).Name} is complited");
+					return state;
 				}
-				m_dbContext.Database.CommitTransaction();
-				return state;
 			}
 			catch (TransactionException ex)
 			{
 				m_dbContext.Database.RollbackTransaction();
 				m_logger.Error(ex.Message);
-				m_logger.Error($"Cannot begin delete {typeof(Type).Name} transaction");
-				return false;
+				m_logger.Error($"Cannot begin delete by ids {typeof(Type).Name} transaction");
 			}
+			return false;
 		}
 	}
 }
