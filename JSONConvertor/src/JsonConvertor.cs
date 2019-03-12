@@ -144,6 +144,7 @@ namespace JSONConvertor
 			jsonObject["IdAddress"] = worker.IdAddress;
 			jsonObject["Name"] = worker.Name;
 			jsonObject["LastName"] = worker.LastName;
+			jsonObject["IdUser"] = worker.IdUser;
 			return jsonObject;
 		}
 
@@ -157,7 +158,6 @@ namespace JSONConvertor
 			jsonObject["Id"] = user.Id;
 			jsonObject["Login"] = user.Login;
 			jsonObject["Password"] = user.Password;
-			jsonObject["IdWorker"] = user.IdWorker;
 			return jsonObject;
 		}
 
@@ -187,7 +187,8 @@ namespace JSONConvertor
 				Info = Convert.ToString(jsonObject["Info"]),
 				IdAddress = Convert.ToInt32(jsonObject["IdAddress"]),
 				Name = Convert.ToString(jsonObject["Name"]),
-				LastName = Convert.ToString(jsonObject["LastName"])
+				LastName = Convert.ToString(jsonObject["LastName"]),
+				IdUser = Convert.ToInt32(jsonObject["IdUser"])
 			};
 			return worker;
 		}
@@ -355,7 +356,6 @@ namespace JSONConvertor
 			User user = new User()
 			{
 				Id = Convert.ToInt32(jsonObject["Id"]),
-				IdWorker = Convert.ToInt32(jsonObject["IdWorker"]),
 				Login = Convert.ToString(jsonObject["Login"]),
 				Password = Convert.ToString(jsonObject["Password"])
 			};
