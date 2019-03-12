@@ -46,7 +46,7 @@ namespace DatabaseFiller
 			catch (Exception ex)
 			{
 				Logger.Error(ex.InnerException.Message);
-				Logger.Error("AddressFiller filling failed");
+				Logger.Error("Address filler filling failed");
 			}			
 		}
 	}

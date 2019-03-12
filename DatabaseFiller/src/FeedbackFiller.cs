@@ -38,7 +38,7 @@ namespace DatabaseFiller
 			catch (Exception ex)
 			{
 				Logger.Error(ex.InnerException.Message);
-				Logger.Error("FeedbackFiller filling failed");
+				Logger.Error("Feedback filler filling failed");
 			}			
 		}
 	}

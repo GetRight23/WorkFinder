@@ -2,8 +2,6 @@
 using System.Text;
 using DatabaseDao;
 using DatabaseConfiguration;
-using Models;
-using DatabaseCache;
 
 namespace TestApplication
 {

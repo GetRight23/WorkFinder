@@ -39,7 +39,7 @@ namespace DatabaseFiller
 			catch (Exception ex)
 			{
 				Logger.Error(ex.InnerException.Message);
-				Logger.Error("CityDistrictsFiller filling failed");
+				Logger.Error("City districts filler filling failed");
 			}		
 		}
 	}

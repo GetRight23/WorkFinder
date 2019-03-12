@@ -22,6 +22,7 @@ namespace DatabaseFiller
 			ProfessionFiller professionFiller = new ProfessionFiller(storage);
 			ServiceFiller serviceFiller = new ServiceFiller(storage);
 			OrdersToServiesFiller ordersToServiesFiller = new OrdersToServiesFiller(storage);
+			ProfessinonsToWorkersFiller professinonsToWorkersFiller = new ProfessinonsToWorkersFiller(storage);
 
 			cityFiller.fillEntities();
 			cityDistrictsFiller.fillEntities();
@@ -35,6 +36,7 @@ namespace DatabaseFiller
 			professionFiller.fillEntities();
 			serviceFiller.fillEntities();
 			ordersToServiesFiller.fillEntities();
+			professinonsToWorkersFiller.fillEntities();
 		}
 	}
 }

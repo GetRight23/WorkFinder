@@ -29,6 +29,7 @@ namespace DatabaseFiller
 						};
 						ordersToServices.Add(orderToService);
 					}
+					Storage.OrderToServiceDao.insertRelationships(ordersToServices);
 					ordersToServices.Clear();
 				}
 				Logger.Info("Order to service table filled");
@@ -36,7 +37,7 @@ namespace DatabaseFiller
 			catch (Exception ex)
 			{
 				Logger.Error(ex.InnerException.Message);
-				Logger.Error("OrdersToServiesFiller filling failed");
+				Logger.Error("Orders to servies filler filling failed");
 			}
 		}
 	}
