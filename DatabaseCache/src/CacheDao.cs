@@ -2,28 +2,36 @@
 using DatabaseDao;
 using Models;
 using System.Linq;
+using JSONConvertor;
+using Newtonsoft.Json.Linq;
 
 namespace DatabaseCache
 {
-	public class CacheDao<Type> : IDatabaseDao<Type> where Type : DBObject
+	public abstract class CacheDao<Type> : IDatabaseDao<Type> where Type : DBObject
 	{
 		public static Storage Storage { get; private set; }
-		private List<Type> m_entities = null;
-		private DatabaseDao<Type> m_entitiesDao = null;
+		protected List<Type> m_entities = null;
+		protected DatabaseDao<Type> m_entitiesDao = null;
+		protected JsonConvertor m_jsonConvertor = null;
+		public string CachedJson { get; protected set; }
 
 		public CacheDao(Storage storage, DatabaseDao<Type> entitiesDao)
 		{
 			Storage = storage;
 			m_entitiesDao = entitiesDao;
+			m_jsonConvertor = new JsonConvertor();
+			CachedJson = null;
 		}
+
+		public abstract void updateCache();
 
 		public Type selectEntityById(int id)
 		{
 			if (m_entities == null)
 			{
-				m_entities = m_entitiesDao.selectEntities().ToList();
-			}			
-			
+				updateCache();
+			}
+
 			return m_entities.Where(e => e.getId() == id).Single();
 		}
 
@@ -31,7 +39,7 @@ namespace DatabaseCache
 		{
 			if (m_entities == null)
 			{
-				m_entities = m_entitiesDao.selectEntities().ToList();
+				updateCache();
 			}
 
 			return m_entities;
@@ -40,11 +48,12 @@ namespace DatabaseCache
 		public List<Type> selectEntitiesByIds(List<int> ids)
 		{
 			List<Type> result = new List<Type>();
-			if (m_entities == null)
-			{
-				m_entities = m_entitiesDao.selectEntities().ToList();				
-			}
 
+			if(m_entities == null)
+			{
+				updateCache();
+			}
+			
 			foreach (var item in ids)
 			{
 				result.Add(m_entities.Where(e => e.getId() == item).Single());
@@ -55,19 +64,10 @@ namespace DatabaseCache
 
 		public bool deleteEntityById(int id)
 		{
-			if (m_entities == null)
-			{
-				m_entities = m_entitiesDao.selectEntities().ToList();
-			}
-
 			bool result = m_entitiesDao.deleteEntityById(id);
 			if (result == true)
 			{
-				Type entity = m_entities.Where(e => e.getId() == id).Single();
-				if (entity != null)
-				{
-					m_entities.Remove(entity);
-				}
+				updateCache();
 			}
 
 			return result;
@@ -75,21 +75,10 @@ namespace DatabaseCache
 
 		public bool deleteEntitiesByIds(List<int> ids)
 		{
-			if (m_entities == null)
-			{
-				m_entities = m_entitiesDao.selectEntities().ToList();
-			}
 			bool result = m_entitiesDao.deleteEntitiesByIds(ids);
 			if (result == true)
 			{
-				foreach (var item in ids)
-				{
-					Type entity = m_entities.Where(e => e.getId() == item).Single();
-					if(entity != null)
-					{
-						m_entities.Remove(entity);
-					}					
-				}
+				updateCache();
 			}
 
 			return result;
@@ -97,75 +86,59 @@ namespace DatabaseCache
 
 		public int insertEntity(Type entity)
 		{
-			if (m_entities == null)
-			{
-				m_entities = m_entitiesDao.selectEntities().ToList();
-			}
-			int insertedId = m_entitiesDao.insertEntity(entity);
+			int insertedId = 0;
 			if(entity != null)
-			{
-				m_entities.Add(entity);
-			}
-
+			{				
+				insertedId = m_entitiesDao.insertEntity(entity);
+				if(insertedId != 0)
+				{
+					updateCache();
+				}				
+			}		
+			
 			return insertedId;
 		}
 
 		public List<int> insertEntities(List<Type> entities)
 		{
-			List<int> insertedIds = new List<int>();
-			if (m_entities == null)
-			{
-				m_entities = m_entitiesDao.selectEntities().ToList();
-			}
+			List<int> insertedIds = new List<int>();			
 
 			foreach (var item in entities)
 			{
 				Type entity = m_entities.Where(e => e.getId() == item.getId()).Single();
 				if(entity != null)
 				{
+					m_entitiesDao.insertEntity(entity);
 					insertedIds.Add(entity.getId());
 				}			
 			}
+
+			updateCache();
 
 			return insertedIds;
 		}
 
 		public bool updateEntity(Type entity)
 		{
-			if (m_entities == null)
-			{
-				m_entities = m_entitiesDao.selectEntities().ToList();
-			}
 			bool result = m_entitiesDao.updateEntity(entity);
 			
 			if(result != false)
 			{
-				Type temp = m_entities
-					.Where(e => e.getId() == entity.getId())
-					.Select(e => { e = entity; return e; })
-					.Single();
-			}
+				updateCache();
+			}			
+
 			return result;
 		}
 
 		public bool updateEntities(List<Type> entities)
 		{
-			if (m_entities == null)
-			{
-				m_entities = m_entitiesDao.selectEntities().ToList();
-			}
 			bool result = m_entitiesDao.updateEntities(entities);
 
 			if (result != false)
 			{
-				foreach (var item in entities)
-				{
-					Type temp = m_entities
-					.Where(e => e.getId() == item.getId())
-					.Select(e => { e = item; return e; })
-					.Single();
-				}	
+				updateCache();
 			}
+
 			return result;
 		}
 	}
