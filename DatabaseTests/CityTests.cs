@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace DatabaseTests
 {
-	public class CityTests
+	class CityTests
 	{
 		private static Storage Storage { get; set; }
 		private static DbConnection Connection { get; set; }

@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace DatabaseTests
 {
-	public class CityDistrictsTests
+	class CityDistrictsTests
 	{
 		private static Storage Storage { get; set; }
 		private static DbConnection Connection { get; set; }
@@ -51,8 +51,6 @@ namespace DatabaseTests
 		{
 			city = new City() { Name = "Kyiv" };
 			int cityId = CityDao.insertEntity(city);
-
-			Assert.IsTrue(cityId != 0);
 
 			district = new CityDistricts() { IdCity = cityId, Name = "South" };
 			int districtId = CityDistrictsDao.insertEntity(district);
