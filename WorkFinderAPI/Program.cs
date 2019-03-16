@@ -10,7 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Models;
 
-namespace WebApplication1
+namespace WorkFinderAPI
 {
 	public class Program
 	{

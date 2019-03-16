@@ -16,7 +16,7 @@ using Microsoft.Extensions.Options;
 using Models;
 using Npgsql;
 
-namespace WebApplication1
+namespace WorkFinderAPI
 {
 	public class Startup
 	{

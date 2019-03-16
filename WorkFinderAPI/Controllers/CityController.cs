@@ -9,8 +9,9 @@ using JSONConvertor;
 using Models;
 using Newtonsoft.Json.Linq;
 using DatabaseCache;
+using NLog;
 
-namespace WebApplication1.Controllers
+namespace WorkFinderAPI.Controllers
 {
 	[Route("api/v1/[controller]")]
 	[ApiController]
@@ -27,7 +28,7 @@ namespace WebApplication1.Controllers
 			m_cache = new CityCache(storage, storage.CityDao);
 		}
 
-		// GET api/v1/values
+		// GET api/v1/city
 		[HttpGet]
 		public ActionResult<string> Get()
 		{
@@ -35,15 +36,22 @@ namespace WebApplication1.Controllers
 			return m_cache.CachedJson;
 		}
 
-		// GET api/v1/values/5
+		// GET api/v1/city/5
 		[HttpGet("{id}")]
 		public ActionResult<string> Get(int id)
 		{
 			m_cache.updateCache();
+			if (!m_cache.citiesCache.ContainsKey(id))
+			{
+				JObject jObject = new JObject();
+				jObject["Value"] = null;
+				jObject["Error message"] = $"Can not find id {id}";
+				return jObject.ToString();
+			}
 			return m_cache.citiesCache[id];
 		}
 
-		// POST api/v1/values
+		// POST api/v1/city
 		[HttpPost]
 		public void Post([FromBody] JObject value)
 		{
@@ -52,13 +60,13 @@ namespace WebApplication1.Controllers
 			int id = m_storage.CityDao.insertEntity(city);
 		}
 
-		// POST api/values
+		// POST api/v1/city
 		[HttpPost("{id}")]
-		public void Post(int id, [FromBody] JObject jObject)
+		public void Post(int id, [FromBody] JObject value)
 		{
 			JsonConvertor jsonConvertor = new JsonConvertor();
 			City city = m_storage.CityDao.selectEntityById(id);
-			City cityTemp = jsonConvertor.fromJsonToCity(jObject);
+			City cityTemp = jsonConvertor.fromJsonToCity(value);
 			city.Name = cityTemp.Name;
 			m_storage.CityDao.updateEntity(city);
 		}
@@ -67,7 +75,7 @@ namespace WebApplication1.Controllers
 		[HttpDelete("{id}")]
 		public void Delete(int id)
 		{
-
+			m_storage.CityDao.deleteEntityById(id);
 		}
 	}
 }
