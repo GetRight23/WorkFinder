@@ -14,48 +14,48 @@ namespace WorkFinderAPI.Controllers
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-    public class AddressController : ControllerBase
+    public class FeedbackController : ControllerBase
     {
 		private DBContext m_context;
 		private Storage m_storage;
 		private JsonConvertor m_jsonConvertor = null;
 
-		public AddressController(DBContext dBContext, Storage storage)
+		public FeedbackController(DBContext dBContext, Storage storage)
 		{
 			m_context = dBContext;
 			m_storage = storage;
 			m_jsonConvertor = new JsonConvertor();
 		}
 
-		// GET: api/v1/Address - select all
+		// GET: api/v1/Feedback - select all
 		[HttpGet]
         public string Get()
         {
 			JsonHandler handler = new JsonHandler();
-			List<Address> addresses = m_storage.AddressDao.selectEntities();
+			List<Feedback> feedbacks = m_storage.FeedbackDao.selectEntities();
 
-			if (addresses == null)
+			if(feedbacks == null)
 			{
-				handler.appendError("Can not select Addresses");
+				handler.appendError("Can not select Feedbacks");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 				return handler.getJson();
 			}
 
 			JArray jArray = new JArray();
 
-			foreach (var item in addresses)
+			foreach (var item in feedbacks)
 			{
-				JObject address = m_jsonConvertor.toJson(item);
-				if (address != null)
+				JObject feedback = m_jsonConvertor.toJson(item);
+				if (feedback != null)
 				{
-					jArray.Add(address);
+					jArray.Add(feedback);
 				}
 			}
 
 			return jArray.ToString();
         }
 
-		// GET: api/v1/Address/5 - select by id
+		// GET: api/v1/Feedback/5 - select by id
 		[HttpGet("{id}")]
         public string Get(int id)
         {
@@ -68,9 +68,9 @@ namespace WorkFinderAPI.Controllers
 				return handler.getJson();
 			}
 
-			Address address = m_storage.AddressDao.selectEntityById(id);
-			
-			if(address == null)
+			Feedback feedback = m_storage.FeedbackDao.selectEntityById(id);
+
+			if(feedback == null)
 			{
 				handler.appendError($"Can not find id {id}");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
@@ -78,52 +78,52 @@ namespace WorkFinderAPI.Controllers
 			}
 
 			JObject jObject = new JObject();
-			jObject = m_jsonConvertor.toJson(address);
+			jObject = m_jsonConvertor.toJson(feedback);
 
-            return jObject.ToString();
+			return jObject.ToString();
         }
 
-		// POST: api/v1/Address - insert
+		// POST: api/v1/Feedback - insert
 		[HttpPost]
         public string Post([FromBody] JObject value)
         {
 			JsonHandler handler = new JsonHandler();
 
-			if(value == null)
+			if (value == null)
 			{
 				handler.appendError("JSON parametr is null");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
 				return handler.getJson();
 			}
 
-			Address newAddress = m_jsonConvertor.fromJsonToAddress(value);
+			Feedback newFeedback = m_jsonConvertor.fromJsonToFeedback(value);
 
-			if(newAddress == null)
+			if(newFeedback == null)
 			{
 				handler.appendError($"Unsuccessful convertaion from JSON");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 				return handler.getJson();
 			}
 
-			int id = m_storage.AddressDao.insertEntity(newAddress);
+			int id = m_storage.FeedbackDao.insertEntity(newFeedback);
 
-			if(id < 0)
+			if (id < 0)
 			{
-				handler.appendError($"Can not insert Address with id {id}");
+				handler.appendError($"Can not insert Feedback with id {id}");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 				return handler.getJson();
 			}
 
 			return null;
-        }
+		}
 
-		// POST: api/v1/Address/id - update by id
+		// POST: api/v1/Feedback/id - update by id
 		[HttpPost("{id}")]
 		public string Post(int id, [FromBody] JObject value)
 		{
 			JsonHandler handler = new JsonHandler();
 
-			if(id < 0)
+			if (id < 0)
 			{
 				handler.appendError($"Id is less than 0");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
@@ -137,34 +137,35 @@ namespace WorkFinderAPI.Controllers
 				return handler.getJson();
 			}
 
-			Address address = m_storage.AddressDao.selectEntityById(id);
+			Feedback feedback = m_storage.FeedbackDao.selectEntityById(id);
 
-			if(address == null)
+			if(feedback == null)
 			{
-				handler.appendError($"Can not find Address with id {id}");
+				handler.appendError($"Can not find Feedback with id {id}");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 				return handler.getJson();
 			}
 
-			Address newAddress = m_jsonConvertor.fromJsonToAddress(value);
+			Feedback newFeedback = m_jsonConvertor.fromJsonToFeedback(value);
 
-			if(newAddress == null)
+			if(newFeedback == null)
 			{
 				handler.appendError($"Unsuccessful convertaion from JSON");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 				return handler.getJson();
 			}
 
-			address.ApptNum = newAddress.ApptNum;
-			address.IdCity = newAddress.IdCity;
-			address.IdCityDistrict = newAddress.IdCityDistrict;
-			address.StreetName = newAddress.StreetName;
+			feedback.Name = newFeedback.Name;
+			feedback.Patronymic = newFeedback.Patronymic;
+			feedback.GradeValue = newFeedback.GradeValue;
+			feedback.Date = newFeedback.Date;
+			feedback.Text = newFeedback.Text;
 
-			bool result = m_storage.AddressDao.updateEntity(address);
+			bool result = m_storage.FeedbackDao.updateEntity(feedback);
 
 			if(result == false)
 			{
-				handler.appendError($"Can not update Address with id {id}");
+				handler.appendError($"Can not update Feedback with id {id}");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 				return handler.getJson();
 			}
@@ -172,7 +173,7 @@ namespace WorkFinderAPI.Controllers
 			return null;
 		}
 
-		// DELETE: api/v1/Address/5 - delete by id
+		// DELETE: api/v1/Feedback/5 - delete by id
 		[HttpDelete("{id}")]
         public string Delete(int id)
         {
@@ -185,11 +186,11 @@ namespace WorkFinderAPI.Controllers
 				return handler.getJson();
 			}
 
-			bool result = m_storage.AddressDao.deleteEntityById(id);
+			bool result = m_storage.FeedbackDao.deleteEntityById(id);
 
 			if(result == false)
 			{
-				handler.appendError($"Can not delete Address with id {id}");
+				handler.appendError($"Can not delete Feedback with id {id}");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 				return handler.getJson();
 			}
