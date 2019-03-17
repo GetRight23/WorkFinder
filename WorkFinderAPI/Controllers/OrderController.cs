@@ -14,49 +14,50 @@ namespace WorkFinderAPI.Controllers
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-    public class ProfessionController : ControllerBase
+    public class OrderController : ControllerBase
     {
 		private DBContext m_context;
 		private Storage m_storage;
 		private JsonConvertor m_jsonConvertor = null;
 
-		public ProfessionController(DBContext dBContext, Storage storage)
+		public OrderController(DBContext dBContext, Storage storage)
 		{
 			m_context = dBContext;
 			m_storage = storage;
 			m_jsonConvertor = new JsonConvertor();
 		}
 
-		// GET: api/v1/Profession - select all
+
+		// GET: api/v1/Order - select all
 		[HttpGet]
         public string Get()
         {
 			JsonHandler handler = new JsonHandler();
-			List<Profession> professions = m_storage.ProfessionDao.selectEntities();
+			List<Order> addresses = m_storage.OrderDao.selectEntities();
 
-			if (professions == null)
+			if (addresses == null)
 			{
-				handler.appendError("Can not select Professions");
+				handler.appendError("Can not select Orders");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 				return handler.getJson();
 			}
 
 			JArray jArray = new JArray();
 
-			foreach (var item in professions)
+			foreach (var item in addresses)
 			{
-				JObject profesion = m_jsonConvertor.toJson(item);
-				if (profesion != null)
+				JObject order = m_jsonConvertor.toJson(item);
+				if (order != null)
 				{
-					jArray.Add(profesion);
+					jArray.Add(order);
 				}
 			}
 
 			return jArray.ToString();
-        }
+		}
 
-		// GET: api/v1/Profession/5 - select by id
-		[HttpGet("{id}")]
+        // GET: api/v1/Order/5 - select by id
+        [HttpGet("{id}")]
         public string Get(int id)
         {
 			JsonHandler handler = new JsonHandler();
@@ -68,9 +69,9 @@ namespace WorkFinderAPI.Controllers
 				return handler.getJson();
 			}
 
-			Profession profession = m_storage.ProfessionDao.selectEntityById(id);
+			Order order = m_storage.OrderDao.selectEntityById(id);
 
-			if (profession == null)
+			if (order == null)
 			{
 				handler.appendError($"Can not find id {id}");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
@@ -78,12 +79,12 @@ namespace WorkFinderAPI.Controllers
 			}
 
 			JObject jObject = new JObject();
-			jObject = m_jsonConvertor.toJson(profession);
+			jObject = m_jsonConvertor.toJson(order);
 
 			return jObject.ToString();
-		}
+        }
 
-        // POST: api/v1/Profession - insert 
+        // POST: api/v1/Order - insert
         [HttpPost]
         public string Post([FromBody] JObject value)
         {
@@ -96,20 +97,20 @@ namespace WorkFinderAPI.Controllers
 				return handler.getJson();
 			}
 
-			Profession newProfession = m_jsonConvertor.fronJsonToProfession(value);
+			Order newOrder = m_jsonConvertor.fromJsonToOrderTable(value);
 
-			if(newProfession == null)
+			if (newOrder == null)
 			{
 				handler.appendError($"Unsuccessful convertaion from JSON");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 				return handler.getJson();
 			}
 
-			int id = m_storage.ProfessionDao.insertEntity(newProfession);
+			int id = m_storage.OrderDao.insertEntity(newOrder);
 
 			if (id < 0)
 			{
-				handler.appendError($"Can not insert Profession with id {id}");
+				handler.appendError($"Can not insert Order with id {id}");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 				return handler.getJson();
 			}
@@ -117,13 +118,13 @@ namespace WorkFinderAPI.Controllers
 			return null;
 		}
 
-        // PUT: api/v1/Profession/5 - update by id
+        // PUT: api/v1/Order/5 - update
         [HttpPost("{id}")]
         public string Post(int id, [FromBody] JObject value)
         {
 			JsonHandler handler = new JsonHandler();
 
-			if(id < 0)
+			if (id < 0)
 			{
 				handler.appendError($"Id is less than 0");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
@@ -137,32 +138,32 @@ namespace WorkFinderAPI.Controllers
 				return handler.getJson();
 			}
 
-			Profession profession = m_storage.ProfessionDao.selectEntityById(id);
+			Order order = m_storage.OrderDao.selectEntityById(id);
 
-			if(profession == null)
+			if (order == null)
 			{
-				handler.appendError($"Can not find Profession with id {id}");
+				handler.appendError($"Can not find Order with id {id}");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 				return handler.getJson();
 			}
 
-			Profession newProfession = m_jsonConvertor.fronJsonToProfession(value);
+			Order newOrder = m_jsonConvertor.fromJsonToOrderTable(value);
 
-			if(newProfession == null)
+			if (newOrder == null)
 			{
 				handler.appendError($"Unsuccessful convertaion from JSON");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 				return handler.getJson();
 			}
 
-			profession.Name = newProfession.Name;
-			profession.IdProfCategory = newProfession.IdProfCategory;
+			order.Info = newOrder.Info;
+			order.IdOrderList = newOrder.IdOrderList;
 
-			bool result = m_storage.ProfessionDao.updateEntity(profession);
+			bool result = m_storage.OrderDao.updateEntity(order);
 
-			if(result == false)
+			if (result == false)
 			{
-				handler.appendError($"Can not update Profession with id {id}");
+				handler.appendError($"Can not update Order with id {id}");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 				return handler.getJson();
 			}
@@ -170,8 +171,8 @@ namespace WorkFinderAPI.Controllers
 			return null;
         }
 
-		// DELETE: api/v1/Profession/5 - delete by id
-		[HttpDelete("{id}")]
+        // DELETE: api/v1/Delete/5 - delete by id
+        [HttpDelete("{id}")]
         public string Delete(int id)
         {
 			JsonHandler handler = new JsonHandler();
@@ -183,11 +184,11 @@ namespace WorkFinderAPI.Controllers
 				return handler.getJson();
 			}
 
-			bool result = m_storage.ProfessionDao.deleteEntityById(id);
+			bool result = m_storage.OrderDao.deleteEntityById(id);
 
 			if (result == false)
 			{
-				handler.appendError($"Can not delete Profession with id {id}");
+				handler.appendError($"Can not delete Order with id {id}");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 				return handler.getJson();
 			}
