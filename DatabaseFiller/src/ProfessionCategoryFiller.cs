@@ -15,7 +15,7 @@ namespace DatabaseFiller
 			{
 				List<ProfessionCategory> ProfessionCategories = new List<ProfessionCategory>();
 
-				List<string> professionCategories = FileLoader.load(@".\res\prof_categories.txt");
+				List<string> professionCategories = FileLoader.load(@".\res\profession_categories.txt");
 
 				for (int i = 0; i < professionCategories.Count; i++)
 				{
