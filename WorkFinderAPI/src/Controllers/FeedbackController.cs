@@ -13,13 +13,11 @@ namespace WorkFinderAPI.Controllers
     [ApiController]
     public class FeedbackController : ControllerBase
     {
-		private DBContext context;
 		private Storage storage;
 		private JsonConvertorEngine jsonConvertor;
 
-		public FeedbackController(DBContext context, Storage storage, JsonConvertorEngine jsonConvertor)
+		public FeedbackController(Storage storage, JsonConvertorEngine jsonConvertor)
 		{
-			this.context = context;
 			this.storage = storage;
 			this.jsonConvertor = jsonConvertor;
 		}
@@ -134,15 +132,6 @@ namespace WorkFinderAPI.Controllers
 				return wrapper.getJson();
 			}
 
-			Feedback feedback = storage.FeedbackDao.selectEntityById(id);
-
-			if(feedback == null)
-			{
-				wrapper.appendError($"Can not find Feedback with id {id}");
-				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-				return wrapper.getJson();
-			}
-
 			Feedback newFeedback = jsonConvertor.FeedbackConvertor.fromJson(value);
 
 			if(newFeedback == null)
@@ -152,13 +141,9 @@ namespace WorkFinderAPI.Controllers
 				return wrapper.getJson();
 			}
 
-			feedback.Name = newFeedback.Name;
-			feedback.Patronymic = newFeedback.Patronymic;
-			feedback.GradeValue = newFeedback.GradeValue;
-			feedback.Date = newFeedback.Date;
-			feedback.Text = newFeedback.Text;
+			newFeedback.Id = id;
 
-			bool result = storage.FeedbackDao.updateEntity(feedback);
+			bool result = storage.FeedbackDao.updateEntity(newFeedback);
 
 			if(result == false)
 			{

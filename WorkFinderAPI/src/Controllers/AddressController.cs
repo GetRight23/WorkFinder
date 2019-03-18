@@ -13,13 +13,11 @@ namespace WorkFinderAPI.Controllers
     [ApiController]
     public class AddressController : ControllerBase
     {
-		private DBContext context;
 		private Storage storage;
 		private JsonConvertorEngine jsonConvertor;
 
-		public AddressController(DBContext context, Storage storage, JsonConvertorEngine jsonConvertor)
+		public AddressController(Storage storage, JsonConvertorEngine jsonConvertor)
 		{
-			this.context = context;
 			this.storage = storage;
 			this.jsonConvertor = jsonConvertor;
 		}
@@ -134,15 +132,6 @@ namespace WorkFinderAPI.Controllers
 				return wrapper.getJson();
 			}
 
-			Address address = storage.AddressDao.selectEntityById(id);
-
-			if(address == null)
-			{
-                wrapper.appendError($"Can not find Address with id {id}");
-				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-				return wrapper.getJson();
-			}
-
 			Address newAddress = jsonConvertor.AddressJsonConvertor.fromJson(value);
 
 			if(newAddress == null)
@@ -152,12 +141,9 @@ namespace WorkFinderAPI.Controllers
 				return wrapper.getJson();
 			}
 
-			address.ApptNum = newAddress.ApptNum;
-			address.IdCity = newAddress.IdCity;
-			address.IdCityDistrict = newAddress.IdCityDistrict;
-			address.StreetName = newAddress.StreetName;
+			newAddress.Id = id;
 
-			bool result = storage.AddressDao.updateEntity(address);
+			bool result = storage.AddressDao.updateEntity(newAddress);
 
 			if(result == false)
 			{

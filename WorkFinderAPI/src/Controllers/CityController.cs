@@ -12,14 +12,12 @@ namespace WorkFinderAPI.Controllers
 	[ApiController]
 	public class CityController : ControllerBase
 	{
-		private DBContext context;
 		private Storage storage;
 		private JsonConvertorEngine jsonConvertor;
         private CityCache cache;
 
-        public CityController(DBContext context, Storage storage, JsonConvertorEngine jsonConvertor)
+        public CityController(Storage storage, JsonConvertorEngine jsonConvertor)
 		{
-			this.context = context;
 			this.storage = storage;
 			this.jsonConvertor = jsonConvertor;
             cache = new CityCache(storage, storage.CityDao);
@@ -103,15 +101,6 @@ namespace WorkFinderAPI.Controllers
 				return wrapper.getJson();
 			}
 
-			City city = storage.CityDao.selectEntityById(id);
-
-			if (city == null)
-			{
-				wrapper.appendError($"Can not find City with id {id}");
-				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-				return wrapper.getJson();
-			}
-
 			City newCity = jsonConvertor.CityJsonConvertor.fromJson(value);
 
 			if (newCity == null)
@@ -121,9 +110,9 @@ namespace WorkFinderAPI.Controllers
 				return wrapper.getJson();
 			}
 
-			city.Name = newCity.Name;
+			newCity.Id = id;
 
-			bool result = storage.CityDao.updateEntity(city);
+			bool result = storage.CityDao.updateEntity(newCity);
 
 			if(result == false)
 			{

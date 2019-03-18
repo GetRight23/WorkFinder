@@ -14,13 +14,11 @@ namespace WorkFinderAPI.Controllers
 	[ApiController]
 	public class ServiceController : ControllerBase
 	{
-		private DBContext context;
 		private Storage storage;
 		private JsonConvertorEngine jsonConvertor;
 
-		public ServiceController(DBContext context, Storage storage, JsonConvertorEngine jsonConvertor)
+		public ServiceController(Storage storage, JsonConvertorEngine jsonConvertor)
 		{
-			this.context = context;
 			this.storage = storage;
 			this.jsonConvertor = jsonConvertor;
 		}
@@ -135,15 +133,6 @@ namespace WorkFinderAPI.Controllers
 				return wrapper.getJson();
 			}
 
-			Service service = storage.ServiceDao.selectEntityById(id);
-
-			if (service == null)
-			{
-				wrapper.appendError($"Can not find Service with id {id}");
-				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-				return wrapper.getJson();
-			}
-
 			Service newService = jsonConvertor.ServiceConvertor.fromJson(value);
 
 			if (newService == null)
@@ -153,13 +142,9 @@ namespace WorkFinderAPI.Controllers
 				return wrapper.getJson();
 			}
 
-			service.Price = newService.Price;
-			service.Name = newService.Name;
-			service.IdProfession = newService.IdProfession;
-			//service = newService;
-			//service.Id = id;
+			newService.Id = id;
 
-			bool result = storage.ServiceDao.updateEntity(service);
+			bool result = storage.ServiceDao.updateEntity(newService);
 
 			if (result == false)
 			{

@@ -13,13 +13,11 @@ namespace WorkFinderAPI.Controllers
 	[ApiController]
 	public class WorkerController : ControllerBase
 	{
-		private DBContext context;
 		private Storage storage;
 		private JsonConvertorEngine jsonConvertor;
 
-		public WorkerController(DBContext context, Storage storage, JsonConvertorEngine jsonConvertor)
+		public WorkerController(Storage storage, JsonConvertorEngine jsonConvertor)
 		{
-			this.context = context;
 			this.storage = storage;
 			this.jsonConvertor = jsonConvertor;
 		}
@@ -134,15 +132,6 @@ namespace WorkFinderAPI.Controllers
 				return wrapper.getJson();
 			}
 
-			Worker worker = storage.WorkerDao.selectEntityById(id);
-
-			if (worker == null)
-			{
-				wrapper.appendError($"Can not find Worker with id {id}");
-				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-				return wrapper.getJson();
-			}
-
 			Worker newWorker= jsonConvertor.WorkerConvertor.fromJson(value);
 
 			if (newWorker== null)
@@ -152,14 +141,9 @@ namespace WorkFinderAPI.Controllers
 				return wrapper.getJson();
 			}
 
-			worker.Name = newWorker.Name;
-			worker.LastName = newWorker.LastName;
-			worker.PhoneNumber = newWorker.PhoneNumber;
-			worker.Info = newWorker.Info;
-			worker.IdAddress = newWorker.IdAddress;
-			worker.IdUser= newWorker.IdUser;
+			newWorker.Id = id;
 
-			bool result = storage.WorkerDao.updateEntity(worker);
+			bool result = storage.WorkerDao.updateEntity(newWorker);
 
 			if (result == false)
 			{

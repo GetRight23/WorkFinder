@@ -13,13 +13,11 @@ namespace WorkFinderAPI.Controllers
     [ApiController]
     public class ProfessionCategoryController : ControllerBase
     {
-		private DBContext context;
 		private Storage storage;
 		private JsonConvertorEngine jsonConvertor;
 
-		public ProfessionCategoryController(DBContext context, Storage storage, JsonConvertorEngine jsonConvertor)
+		public ProfessionCategoryController(Storage storage, JsonConvertorEngine jsonConvertor)
 		{
-			this.context = context;
 			this.storage = storage;
 			this.jsonConvertor = jsonConvertor;
 		}
@@ -134,15 +132,6 @@ namespace WorkFinderAPI.Controllers
 				return wrapper.getJson();
 			}
 
-			ProfessionCategory professionCategory = storage.ProfessionCategoryDao.selectEntityById(id);
-
-			if(professionCategory == null)
-			{
-				wrapper.appendError($"Can not find Profession Category with id {id}");
-				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-				return wrapper.getJson();
-			}
-
 			ProfessionCategory newProfessionCategory = jsonConvertor.ProfessionCategoryConvertor.fromJson(value);
 
 			if (newProfessionCategory == null)
@@ -152,9 +141,9 @@ namespace WorkFinderAPI.Controllers
 				return wrapper.getJson();
 			}
 
-			professionCategory.Name = newProfessionCategory.Name;
+			newProfessionCategory.Id = id;
 
-			bool result = storage.ProfessionCategoryDao.updateEntity(professionCategory);
+			bool result = storage.ProfessionCategoryDao.updateEntity(newProfessionCategory);
 
 			if(result == false)
 			{

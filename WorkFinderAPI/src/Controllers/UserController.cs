@@ -13,13 +13,11 @@ namespace WorkFinderAPI.Controllers
 	[ApiController]
 	public class UserController : ControllerBase
 	{
-		private DBContext context;
 		private Storage storage;
 		private JsonConvertorEngine jsonConvertor;
 
-		public UserController(DBContext context, Storage storage, JsonConvertorEngine jsonConvertor)
+		public UserController(Storage storage, JsonConvertorEngine jsonConvertor)
 		{
-			this.context = context;
 			this.storage = storage;
 			this.jsonConvertor = jsonConvertor;
 		}
@@ -134,16 +132,7 @@ namespace WorkFinderAPI.Controllers
 				return wrapper.getJson();
 			}
 
-			User user = storage.UserDao.selectEntityById(id);
-
-			if (user == null)
-			{
-				wrapper.appendError($"Can not find User with id {id}");
-				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-				return wrapper.getJson();
-			}
-
-			User newUser= jsonConvertor.UserConvertor.fromJson(value);
+			User newUser = jsonConvertor.UserConvertor.fromJson(value);
 
 			if (newUser == null)
 			{
@@ -152,10 +141,9 @@ namespace WorkFinderAPI.Controllers
 				return wrapper.getJson();
 			}
 
-			user.Login = newUser.Login;
-			user.Password = newUser.Password;
+			newUser.Id = id;
 
-			bool result = storage.UserDao.updateEntity(user);
+			bool result = storage.UserDao.updateEntity(newUser);
 
 			if (result == false)
 			{

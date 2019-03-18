@@ -13,13 +13,11 @@ namespace WorkFinderAPI.Controllers
     [ApiController]
     public class CityDistrictsController : ControllerBase
     {
-		private DBContext context;
 		private Storage storage;
 		private JsonConvertorEngine jsonConvertor;
 
-		public CityDistrictsController(DBContext context, Storage storage, JsonConvertorEngine jsonConvertor)
+		public CityDistrictsController(Storage storage, JsonConvertorEngine jsonConvertor)
 		{
-			this.context = context;
 			this.storage = storage;
 			this.jsonConvertor = jsonConvertor;
 		}
@@ -127,25 +125,18 @@ namespace WorkFinderAPI.Controllers
 				return wrapper.getJson();
 			}
 
-			CityDistricts cityDistrict = storage.CityDistrictsDao.selectEntityById(id);
-			if (cityDistrict == null)
-			{
-				wrapper.appendError($"Can not find City District with id {id}");
-				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-				return wrapper.getJson();
-			}
-
 			CityDistricts newCityDistrict = jsonConvertor.CityDistrictJsonConvertor.fromJson(value);
-			if(newCityDistrict == null)
+
+			if (newCityDistrict == null)
 			{
 				wrapper.appendError($"Unsuccessful convertaion from JSON");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 				return wrapper.getJson();
 			}
 
-			cityDistrict.Name = newCityDistrict.Name;
+			newCityDistrict.Id = id;
 
-			bool result = storage.CityDistrictsDao.updateEntity(cityDistrict);
+			bool result = storage.CityDistrictsDao.updateEntity(newCityDistrict);
 			if(result == false)
 			{
 				wrapper.appendError($"Can not update City District with id {id}");

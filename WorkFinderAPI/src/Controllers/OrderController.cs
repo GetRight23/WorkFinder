@@ -13,13 +13,11 @@ namespace WorkFinderAPI.Controllers
     [ApiController]
     public class OrderController : ControllerBase
     {
-		private DBContext context;
 		private Storage storage;
 		private JsonConvertorEngine jsonConvertor;
 
-		public OrderController(DBContext context, Storage storage, JsonConvertorEngine jsonConvertor)
+		public OrderController(Storage storage, JsonConvertorEngine jsonConvertor)
 		{
-			this.context = context;
 			this.storage = storage;
 			this.jsonConvertor = jsonConvertor;
 		}
@@ -135,15 +133,6 @@ namespace WorkFinderAPI.Controllers
 				return wrapper.getJson();
 			}
 
-			Order order = storage.OrderDao.selectEntityById(id);
-
-			if (order == null)
-			{
-				wrapper.appendError($"Can not find Order with id {id}");
-				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-				return wrapper.getJson();
-			}
-
 			Order newOrder = jsonConvertor.OrderConvertor.fromJson(value);
 
 			if (newOrder == null)
@@ -153,10 +142,9 @@ namespace WorkFinderAPI.Controllers
 				return wrapper.getJson();
 			}
 
-			order.Info = newOrder.Info;
-			order.IdOrderList = newOrder.IdOrderList;
+			newOrder.Id = id;
 
-			bool result = storage.OrderDao.updateEntity(order);
+			bool result = storage.OrderDao.updateEntity(newOrder);
 
 			if (result == false)
 			{
