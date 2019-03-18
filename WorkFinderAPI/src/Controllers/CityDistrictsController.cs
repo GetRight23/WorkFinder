@@ -3,7 +3,7 @@ using DatabaseDao;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Models;
-using JSONConvertor;
+using JsonConvertor;
 using Newtonsoft.Json.Linq;
 using System.Net;
 

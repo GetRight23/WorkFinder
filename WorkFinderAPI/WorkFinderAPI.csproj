@@ -25,7 +25,7 @@
     <ProjectReference Include="..\DatabaseCache\DatabaseCache.csproj" />
     <ProjectReference Include="..\DatabaseConfiguration\DatabaseConfiguration.csproj" />
     <ProjectReference Include="..\DatabaseDao\DatabaseDao.csproj" />
-    <ProjectReference Include="..\JSONConvertor\JSONConvertor.csproj" />
+    <ProjectReference Include="..\JSONConvertor\JsonConvertor.csproj" />
     <ProjectReference Include="..\Models\Models.csproj" />
   </ItemGroup>
 

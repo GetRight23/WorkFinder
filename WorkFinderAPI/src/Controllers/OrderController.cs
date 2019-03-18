@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Net;
 using DatabaseDao;
-using JSONConvertor;
+using JsonConvertor;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Models;

@@ -1,4 +1,4 @@
-﻿namespace JSONConvertor
+﻿namespace JsonConvertor
 {
     public class JsonConvertorEngine
     {

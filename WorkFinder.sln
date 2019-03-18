@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Models", "Models\Models.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DatabaseDao", "DatabaseDao\DatabaseDao.csproj", "{D4C0E615-70D4-4DF1-930E-36E9F1F4BC73}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JSONConvertor", "JSONConvertor\JSONConvertor.csproj", "{9AE7AA4D-31ED-4D68-BDF1-4D2BC0E1DE82}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JsonConvertor", "JsonConvertor\JsonConvertor.csproj", "{9AE7AA4D-31ED-4D68-BDF1-4D2BC0E1DE82}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DatabaseFiller", "DatabaseFiller\DatabaseFiller.csproj", "{93C7E967-47DE-42D3-B2F4-DC1B685FFD98}"
 EndProject

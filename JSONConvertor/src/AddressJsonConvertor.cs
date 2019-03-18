@@ -2,7 +2,7 @@
 using Models;
 using Newtonsoft.Json.Linq;
 
-namespace JSONConvertor
+namespace JsonConvertor
 {
     public class AddressJsonConvertor : JsonConvertor<Address>
     {

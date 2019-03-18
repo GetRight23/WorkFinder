@@ -2,7 +2,7 @@
 using Newtonsoft.Json.Linq;
 using System;
 
-namespace JSONConvertor
+namespace JsonConvertor
 {
     public class OrderConvertor : JsonConvertor<Order>
     {

@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using NLog;
 
-namespace JSONConvertor
+namespace JsonConvertor
 {
 	public abstract class JsonConvertor<Type>
 	{
