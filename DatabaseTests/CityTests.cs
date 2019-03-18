@@ -11,7 +11,7 @@ namespace DatabaseTests
 	{
 		private static Storage Storage { get; set; }
 		private static DbConnection Connection { get; set; }
-		private static DatabaseDao<City> CityDao { get; set; }
+		private static DatabaseDaoImpl<City> CityDao { get; set; }
 		private static City city = null;
 
 		[OneTimeSetUp]

@@ -10,23 +10,23 @@ namespace DatabaseDao
 {
 	public class OrderToServiceDao
 	{
-		private DBContext m_dbContext = null;
-		private DbSet<OrderToService> m_daoSet = null;
-		private Logger m_logger = null;
+		private DBContext dbContext = null;
+		private DbSet<OrderToService> daoSet = null;
+		private Logger logger = null;
 
 		public OrderToServiceDao(DBContext appContext, DbSet<OrderToService> daoSet)
 		{
-			m_dbContext = appContext;
-			m_logger = LogManager.GetCurrentClassLogger();
-			m_daoSet = daoSet;
+			dbContext = appContext;
+			logger = LogManager.GetCurrentClassLogger();
+			this.daoSet = daoSet;
 		}
 
 		public List<OrderToService> selectOrderToServicesByOrderId(int id)
 		{
 			try
 			{
-				List<OrderToService> ordersToServies = m_daoSet.Where(e => e.IdOrder == id).ToList();
-				m_logger.Trace($"Order to service selection by order id = {id} is done");
+				List<OrderToService> ordersToServies = daoSet.Where(e => e.IdOrder == id).ToList();
+				logger.Trace($"Order to service selection by order id = {id} is done");
 				return ordersToServies;
 			}
 			catch (TransactionException)
@@ -35,8 +35,8 @@ namespace DatabaseDao
 			}
 			catch (Exception ex)
 			{
-				m_logger.Error(ex.InnerException.Message);
-				m_logger.Error($"Cannot select Order to service entities by order id = {id}");
+				logger.Error(ex.InnerException.Message);
+				logger.Error($"Cannot select Order to service entities by order id = {id}");
 			}
 			return null;
 		}
@@ -45,8 +45,8 @@ namespace DatabaseDao
 		{
 			try
 			{
-				List<OrderToService> ordersToServies = m_daoSet.Where(e => e.IdService == id).ToList();
-				m_logger.Trace($"Order to service selection by service id = {id} is done");
+				List<OrderToService> ordersToServies = daoSet.Where(e => e.IdService == id).ToList();
+				logger.Trace($"Order to service selection by service id = {id} is done");
 				return ordersToServies;
 			}
 			catch (TransactionException)
@@ -55,8 +55,8 @@ namespace DatabaseDao
 			}
 			catch (Exception ex)
 			{
-				m_logger.Error(ex.InnerException.Message);
-				m_logger.Error($"Cannot select Order to service entities by service id = {id}");
+				logger.Error(ex.InnerException.Message);
+				logger.Error($"Cannot select Order to service entities by service id = {id}");
 			}
 			return null;
 		}
@@ -65,13 +65,13 @@ namespace DatabaseDao
 		{
 			try
 			{
-				List<OrderToService> services = m_daoSet.Where(e => e.IdOrder == id).ToList();
+				List<OrderToService> services = daoSet.Where(e => e.IdOrder == id).ToList();
 				List<int> serviceIds = new List<int>();
 				foreach (var elem in services)
 				{
 					serviceIds.Add(elem.IdService);
 				}
-				m_logger.Trace($"Order to service selection by order id = {id} is done");
+				logger.Trace($"Order to service selection by order id = {id} is done");
 				return serviceIds;
 			}
 			catch (TransactionException)
@@ -80,8 +80,8 @@ namespace DatabaseDao
 			}
 			catch (Exception ex)
 			{
-				m_logger.Error(ex.InnerException.Message);
-				m_logger.Error($"Cannot select Order to service by order id = {id} entities");
+				logger.Error(ex.InnerException.Message);
+				logger.Error($"Cannot select Order to service by order id = {id} entities");
 			}
 			return null;
 		}
@@ -90,13 +90,13 @@ namespace DatabaseDao
 		{
 			try
 			{
-				List<OrderToService> orders = m_daoSet.Where(e => e.IdService == id).ToList();
+				List<OrderToService> orders = daoSet.Where(e => e.IdService == id).ToList();
 				List<int> orderIds = new List<int>();
 				foreach (var elem in orders)
 				{
 					orderIds.Add(elem.IdOrder);
 				}
-				m_logger.Trace($"Order to service selection by service id = {id} is done");
+				logger.Trace($"Order to service selection by service id = {id} is done");
 				return orderIds;
 			}
 			catch (TransactionException)
@@ -105,8 +105,8 @@ namespace DatabaseDao
 			}
 			catch (Exception ex)
 			{
-				m_logger.Error(ex.InnerException.Message);
-				m_logger.Error($"Cannot select Order to service by service id = {id} entities");
+				logger.Error(ex.InnerException.Message);
+				logger.Error($"Cannot select Order to service by service id = {id} entities");
 			}
 			return null;
 		}
@@ -120,10 +120,10 @@ namespace DatabaseDao
 				foreach (var elem in ordersIds)
 				{
 					orderToService = elem;
-					m_daoSet.Remove(orderToService);
+					daoSet.Remove(orderToService);
 				}
-				m_dbContext.SaveChanges();
-				m_logger.Trace($"Orders to service relationship remove with service id = {id} is done");
+				dbContext.SaveChanges();
+				logger.Trace($"Orders to service relationship remove with service id = {id} is done");
 				return true;
 			}
 			catch (TransactionException)
@@ -132,8 +132,8 @@ namespace DatabaseDao
 			}
 			catch (Exception ex)
 			{
-				m_logger.Error(ex.InnerException.Message);
-				m_logger.Error($"Cannot remove relationship orders to service with service id = {id}");
+				logger.Error(ex.InnerException.Message);
+				logger.Error($"Cannot remove relationship orders to service with service id = {id}");
 			}
 			return false;
 		}
@@ -147,10 +147,10 @@ namespace DatabaseDao
 				foreach (var elem in servicesIds)
 				{
 					orderToService = elem;
-					m_daoSet.Remove(orderToService);
+					daoSet.Remove(orderToService);
 				}
-				m_dbContext.SaveChanges();
-				m_logger.Trace($"Orders to service relationship remove with order id = {id} is done");
+				dbContext.SaveChanges();
+				logger.Trace($"Orders to service relationship remove with order id = {id} is done");
 				return true;
 			}
 			catch (TransactionException)
@@ -159,8 +159,8 @@ namespace DatabaseDao
 			}
 			catch (Exception ex)
 			{
-				m_logger.Error(ex.InnerException.Message);
-				m_logger.Error($"Cannot remove relationship order to services with order id = {id}");
+				logger.Error(ex.InnerException.Message);
+				logger.Error($"Cannot remove relationship order to services with order id = {id}");
 			}
 			return false;
 		}
@@ -171,9 +171,9 @@ namespace DatabaseDao
 			{
 				OrderToService orderToService = new OrderToService() { IdOrder = orderId, IdService = serviceId };
 				int id = 0;
-				id = m_daoSet.Add(orderToService).Entity.Id;
-				m_dbContext.SaveChanges();
-				m_logger.Trace("Orders to service insert is done");
+				id = daoSet.Add(orderToService).Entity.Id;
+				dbContext.SaveChanges();
+				logger.Trace("Orders to service insert is done");
 				return id;
 			}
 			catch (TransactionException)
@@ -182,8 +182,8 @@ namespace DatabaseDao
 			}
 			catch (Exception ex)
 			{
-				m_logger.Error(ex.InnerException.Message);
-				m_logger.Error("Cannot insert Order to service relationship");
+				logger.Error(ex.InnerException.Message);
+				logger.Error("Cannot insert Order to service relationship");
 			}
 			return 0;
 		}
@@ -195,9 +195,9 @@ namespace DatabaseDao
 				if (orderToService != null)
 				{
 					int id = 0;
-					id = m_daoSet.Add(orderToService).Entity.Id;
-					m_dbContext.SaveChanges();
-					m_logger.Trace("Orders to service insert is done");
+					id = daoSet.Add(orderToService).Entity.Id;
+					dbContext.SaveChanges();
+					logger.Trace("Orders to service insert is done");
 					return id;
 				}
 			}
@@ -207,8 +207,8 @@ namespace DatabaseDao
 			}
 			catch (Exception ex)
 			{
-				m_logger.Error(ex.InnerException.Message);
-				m_logger.Error("Cannot insert Order to service relationship");
+				logger.Error(ex.InnerException.Message);
+				logger.Error("Cannot insert Order to service relationship");
 			}
 			return 0;
 		}
@@ -219,9 +219,9 @@ namespace DatabaseDao
 			{
 				if (entity != null)
 				{
-					m_daoSet.Update(entity);
-					m_dbContext.SaveChanges();
-					m_logger.Trace($"Order to service with id {entity.Id} updated");
+					daoSet.Update(entity);
+					dbContext.SaveChanges();
+					logger.Trace($"Order to service with id {entity.Id} updated");
 					return true;
 				}
 			}
@@ -231,8 +231,8 @@ namespace DatabaseDao
 			}
 			catch (Exception ex)
 			{
-				m_logger.Error(ex.InnerException.Message);
-				m_logger.Error($"Cannot update Order to service with id {entity.Id}");
+				logger.Error(ex.InnerException.Message);
+				logger.Error($"Cannot update Order to service with id {entity.Id}");
 			}
 			return false;
 		}
@@ -244,24 +244,24 @@ namespace DatabaseDao
 				if (ordersToServices != null && ordersToServices.Count != 0)
 				{
 					List<int> Ids = new List<int>();
-					m_dbContext.Database.BeginTransaction();
+					dbContext.Database.BeginTransaction();
 					for (int i = 0; i < ordersToServices.Count; i++)
 					{
 						int id = 0;
-						id = m_daoSet.Add(ordersToServices[i]).Entity.Id;
-						m_dbContext.SaveChanges();
+						id = daoSet.Add(ordersToServices[i]).Entity.Id;
+						dbContext.SaveChanges();
 						Ids.Add(id);
 					}
-					m_dbContext.Database.CommitTransaction();
-					m_logger.Trace($"Insert transaction Order to service is complited");
+					dbContext.Database.CommitTransaction();
+					logger.Trace($"Insert transaction Order to service is complited");
 					return Ids;
 				}
 			}
 			catch (TransactionException ex)
 			{
-				m_dbContext.Database.RollbackTransaction();
-				m_logger.Error(ex.Message);
-				m_logger.Error("Cannot begin insert Order to service transaction");
+				dbContext.Database.RollbackTransaction();
+				logger.Error(ex.Message);
+				logger.Error("Cannot begin insert Order to service transaction");
 			}
 			return null;
 		}
@@ -272,21 +272,21 @@ namespace DatabaseDao
 			{
 				if(entities != null && entities.Count != 0)
 				{
-					m_dbContext.Database.BeginTransaction();
+					dbContext.Database.BeginTransaction();
 					foreach (var entity in entities)
 					{
 						updateEntity(entity);
 					}
-					m_dbContext.Database.CommitTransaction();
-					m_logger.Trace($"Update transaction Order to service is complited");
+					dbContext.Database.CommitTransaction();
+					logger.Trace($"Update transaction Order to service is complited");
 					return true;
 				}
 			}
 			catch (TransactionException ex)
 			{
-				m_dbContext.Database.RollbackTransaction();
-				m_logger.Error(ex.Message);
-				m_logger.Error("Cannot begin update Order to service transaction");
+				dbContext.Database.RollbackTransaction();
+				logger.Error(ex.Message);
+				logger.Error("Cannot begin update Order to service transaction");
 			}
 			return false;
 		}

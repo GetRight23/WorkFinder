@@ -2,7 +2,7 @@
 
 namespace DatabaseDao
 {
-	public interface IDatabaseDao<Type>
+	public interface DatabaseDao<Type>
 	{
 		Type selectEntityById(int id);
 		List<Type> selectEntities();

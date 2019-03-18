@@ -18,25 +18,25 @@ namespace WorkFinderAPI.Controllers
 	[ApiController]
 	public class CityController : ControllerBase
 	{
-		private DBContext m_context;
-		private Storage m_storage;
-		private CityCache m_cache = null;
-		private JsonConvertorEngine m_jsonConvertor;
+		private DBContext context;
+		private Storage storage;
+		private JsonConvertorEngine jsonConvertor;
+        private CityCache cache;
 
-		public CityController(DBContext dBContext, Storage storage, JsonConvertorEngine jsonConvertor)
+        public CityController(DBContext context, Storage storage, JsonConvertorEngine jsonConvertor)
 		{
-			m_context = dBContext;
-			m_storage = storage;
-			m_cache = new CityCache(storage, storage.CityDao);
-			m_jsonConvertor = jsonConvertor;
-		}
+			this.context = context;
+			this.storage = storage;
+			this.jsonConvertor = jsonConvertor;
+            cache = new CityCache(storage, storage.CityDao);
+        }
 
 		// GET api/v1/city
 		[HttpGet]
 		public string Get()
 		{
-			m_cache.updateCache();
-			return m_cache.CachedJson;
+			cache.updateCache();
+			return cache.CachedJson;
 		}
 
 		//TODO: сделать проверки во всех методах
@@ -44,46 +44,46 @@ namespace WorkFinderAPI.Controllers
 		[HttpGet("{id}")]
 		public string Get(int id)
 		{
-			m_cache.updateCache();
-			if (!m_cache.citiesCache.ContainsKey(id))
+			cache.updateCache();
+			if (!cache.citiesCache.ContainsKey(id))
 			{
 				JObject jObject = new JObject();
 				jObject["Value"] = null;
 				jObject["Error message"] = $"Can not find id {id}";
 				return jObject.ToString();
 			}
-			return m_cache.citiesCache[id];
+			return cache.citiesCache[id];
 		}
 
 		// POST api/v1/city
 		[HttpPost]
 		public string Post([FromBody] JObject value)
 		{
-			JsonHandler handler = new JsonHandler();
+			JsonWrapper wrapper = new JsonWrapper();
 
 			if(value == null)
 			{
-				handler.appendError("JSON parametr is null");
+				wrapper.appendError("JSON parametr is null");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
-				return handler.getJson();
+				return wrapper.getJson();
 			}
 
-			City city = m_jsonConvertor.CityJsonConvertor.fromJson(value);
+			City city = jsonConvertor.CityJsonConvertor.fromJson(value);
 
 			if(city == null)
 			{
-				handler.appendError($"Unsuccessful convertaion from JSON");
+				wrapper.appendError($"Unsuccessful convertaion from JSON");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-				return handler.getJson();
+				return wrapper.getJson();
 			}
 
-			int id = m_storage.CityDao.insertEntity(city);
+			int id = storage.CityDao.insertEntity(city);
 
 			if(id < 0)
 			{
-				handler.appendError($"Can not insert City with id {id}");
+				wrapper.appendError($"Can not insert City with id {id}");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-				return handler.getJson();
+				return wrapper.getJson();
 			}
 
 			return null;
@@ -93,49 +93,49 @@ namespace WorkFinderAPI.Controllers
 		[HttpPost("{id}")]
 		public string Post(int id, [FromBody] JObject value)
 		{
-			JsonHandler handler = new JsonHandler();
+			JsonWrapper wrapper = new JsonWrapper();
 
 			if (id < 0)
 			{
-				handler.appendError($"Id is less than 0");
+				wrapper.appendError($"Id is less than 0");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
-				return handler.getJson();
+				return wrapper.getJson();
 			}
 
 			if (value == null)
 			{
-				handler.appendError($"JSON parametr is null");
+				wrapper.appendError($"JSON parametr is null");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
-				return handler.getJson();
+				return wrapper.getJson();
 			}
 
-			City city = m_storage.CityDao.selectEntityById(id);
+			City city = storage.CityDao.selectEntityById(id);
 
 			if (city == null)
 			{
-				handler.appendError($"Can not find City with id {id}");
+				wrapper.appendError($"Can not find City with id {id}");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-				return handler.getJson();
+				return wrapper.getJson();
 			}
 
-			City newCity = m_jsonConvertor.CityJsonConvertor.fromJson(value);
+			City newCity = jsonConvertor.CityJsonConvertor.fromJson(value);
 
 			if (newCity == null)
 			{
-				handler.appendError($"Unsuccessful convertaion from JSON");
+				wrapper.appendError($"Unsuccessful convertaion from JSON");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-				return handler.getJson();
+				return wrapper.getJson();
 			}
 
 			city.Name = newCity.Name;
 
-			bool result = m_storage.CityDao.updateEntity(city);
+			bool result = storage.CityDao.updateEntity(city);
 
 			if(result == false)
 			{
-				handler.appendError($"Can not update City with id {id}");
+				wrapper.appendError($"Can not update City with id {id}");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-				return handler.getJson();
+				return wrapper.getJson();
 			}
 
 			return null;
@@ -145,22 +145,22 @@ namespace WorkFinderAPI.Controllers
 		[HttpDelete("{id}")]
 		public string Delete(int id)
 		{
-			JsonHandler handler = new JsonHandler();
+			JsonWrapper wrapper = new JsonWrapper();
 
 			if (id < 0)
 			{
-				handler.appendError($"Id is less than 0");
+				wrapper.appendError($"Id is less than 0");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-				return handler.getJson();
+				return wrapper.getJson();
 			}
 
-			bool result = m_storage.CityDao.deleteEntityById(id);
+			bool result = storage.CityDao.deleteEntityById(id);
 
 			if (result == false)
 			{
-				handler.appendError($"Can not delete City with id {id}");
+				wrapper.appendError($"Can not delete City with id {id}");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-				return handler.getJson();
+				return wrapper.getJson();
 			}
 
 			return null;

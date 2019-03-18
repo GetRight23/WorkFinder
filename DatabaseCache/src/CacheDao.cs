@@ -7,19 +7,19 @@ using Newtonsoft.Json.Linq;
 
 namespace DatabaseCache
 {
-	public abstract class CacheDao<Type> : IDatabaseDao<Type> where Type : DBObject
+	public abstract class CacheDao<Type> : DatabaseDao<Type> where Type : DBObject
 	{
 		public static Storage Storage { get; private set; }
-		protected List<Type> m_entities = null;
-		protected DatabaseDao<Type> m_entitiesDao = null;
-		protected JsonConvertorEngine m_jsonConvertor = null;
+		protected List<Type> entities = null;
+		protected DatabaseDaoImpl<Type> entitiesDao = null;
+		protected JsonConvertorEngine jsonConvertor = null;
 		public string CachedJson { get; protected set; }
 
-		public CacheDao(Storage storage, DatabaseDao<Type> entitiesDao)
+		public CacheDao(Storage storage, DatabaseDaoImpl<Type> entitiesDao)
 		{
 			Storage = storage;
-			m_entitiesDao = entitiesDao;
-			m_jsonConvertor = new JsonConvertorEngine();
+			this.entitiesDao = entitiesDao;
+			jsonConvertor = new JsonConvertorEngine();
 			CachedJson = null;
 		}
 
@@ -27,36 +27,36 @@ namespace DatabaseCache
 
 		public Type selectEntityById(int id)
 		{
-			if (m_entities == null)
+			if (entities == null)
 			{
 				updateCache();
 			}
 
-			return m_entities.Where(e => e.getId() == id).Single();
+			return entities.Where(e => e.getId() == id).Single();
 		}
 
 		public List<Type> selectEntities()
 		{
-			if (m_entities == null)
+			if (entities == null)
 			{
 				updateCache();
 			}
 
-			return m_entities;
+			return entities;
 		}
 
 		public List<Type> selectEntitiesByIds(List<int> ids)
 		{
 			List<Type> result = new List<Type>();
 
-			if(m_entities == null)
+			if(entities == null)
 			{
 				updateCache();
 			}
 			
 			foreach (var item in ids)
 			{
-				result.Add(m_entities.Where(e => e.getId() == item).Single());
+				result.Add(entities.Where(e => e.getId() == item).Single());
 			}
 
 			return result;
@@ -64,7 +64,7 @@ namespace DatabaseCache
 
 		public bool deleteEntityById(int id)
 		{
-			bool result = m_entitiesDao.deleteEntityById(id);
+			bool result = entitiesDao.deleteEntityById(id);
 			if (result == true)
 			{
 				updateCache();
@@ -75,7 +75,7 @@ namespace DatabaseCache
 
 		public bool deleteEntitiesByIds(List<int> ids)
 		{
-			bool result = m_entitiesDao.deleteEntitiesByIds(ids);
+			bool result = entitiesDao.deleteEntitiesByIds(ids);
 			if (result == true)
 			{
 				updateCache();
@@ -89,7 +89,7 @@ namespace DatabaseCache
 			int insertedId = 0;
 			if(entity != null)
 			{				
-				insertedId = m_entitiesDao.insertEntity(entity);
+				insertedId = entitiesDao.insertEntity(entity);
 				if(insertedId != 0)
 				{
 					updateCache();
@@ -105,10 +105,10 @@ namespace DatabaseCache
 
 			foreach (var item in entities)
 			{
-				Type entity = m_entities.Where(e => e.getId() == item.getId()).Single();
+				Type entity = this.entities.Where(e => e.getId() == item.getId()).Single();
 				if(entity != null)
 				{
-					m_entitiesDao.insertEntity(entity);
+					entitiesDao.insertEntity(entity);
 					insertedIds.Add(entity.getId());
 				}			
 			}
@@ -120,7 +120,7 @@ namespace DatabaseCache
 
 		public bool updateEntity(Type entity)
 		{
-			bool result = m_entitiesDao.updateEntity(entity);
+			bool result = entitiesDao.updateEntity(entity);
 			
 			if(result != false)
 			{
@@ -132,7 +132,7 @@ namespace DatabaseCache
 
 		public bool updateEntities(List<Type> entities)
 		{
-			bool result = m_entitiesDao.updateEntities(entities);
+			bool result = entitiesDao.updateEntities(entities);
 
 			if (result != false)
 			{

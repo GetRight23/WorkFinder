@@ -16,36 +16,36 @@ namespace WorkFinderAPI.Controllers
     [ApiController]
     public class AddressController : ControllerBase
     {
-		private DBContext m_context;
-		private Storage m_storage;
-		private JsonConvertorEngine m_jsonConvertor;
+		private DBContext context;
+		private Storage storage;
+		private JsonConvertorEngine jsonConvertor;
 
-		public AddressController(DBContext dBContext, Storage storage, JsonConvertorEngine jsonConvertor)
+		public AddressController(DBContext context, Storage storage, JsonConvertorEngine jsonConvertor)
 		{
-			m_context = dBContext;
-			m_storage = storage;
-			m_jsonConvertor = jsonConvertor;
+			this.context = context;
+			this.storage = storage;
+			this.jsonConvertor = jsonConvertor;
 		}
 
 		// GET: api/v1/Address - select all
 		[HttpGet]
         public string Get()
         {
-			JsonHandler handler = new JsonHandler();
-			List<Address> addresses = m_storage.AddressDao.selectEntities();
+			JsonWrapper wrapper = new JsonWrapper();
+			List<Address> addresses = storage.AddressDao.selectEntities();
 
 			if (addresses == null)
 			{
-				handler.appendError("Can not select Addresses");
+                wrapper.appendError("Can not select Addresses");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-				return handler.getJson();
+				return wrapper.getJson();
 			}
 
 			JArray jArray = new JArray();
 
 			foreach (var item in addresses)
 			{
-				JObject address = m_jsonConvertor.AddressJsonConvertor.toJson(item);
+				JObject address = jsonConvertor.AddressJsonConvertor.toJson(item);
 				if (address != null)
 				{
 					jArray.Add(address);
@@ -59,26 +59,26 @@ namespace WorkFinderAPI.Controllers
 		[HttpGet("{id}")]
         public string Get(int id)
         {
-			JsonHandler handler = new JsonHandler();
+			JsonWrapper wrapper = new JsonWrapper();
 
 			if(id < 0)
 			{
-				handler.appendError($"Id is less then 0");
+                wrapper.appendError($"Id is less then 0");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
-				return handler.getJson();
+				return wrapper.getJson();
 			}
 
-			Address address = m_storage.AddressDao.selectEntityById(id);
+			Address address = storage.AddressDao.selectEntityById(id);
 			
 			if(address == null)
 			{
-				handler.appendError($"Can not find id {id}");
+                wrapper.appendError($"Can not find id {id}");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
-				return handler.getJson();
+				return wrapper.getJson();
 			}
 
 			JObject jObject = new JObject();
-			jObject = m_jsonConvertor.AddressJsonConvertor.toJson(address);
+			jObject = jsonConvertor.AddressJsonConvertor.toJson(address);
 
             return jObject.ToString();
         }
@@ -87,31 +87,31 @@ namespace WorkFinderAPI.Controllers
 		[HttpPost]
         public string Post([FromBody] JObject value)
         {
-			JsonHandler handler = new JsonHandler();
+			JsonWrapper wrapper = new JsonWrapper();
 
 			if(value == null)
 			{
-				handler.appendError("JSON parametr is null");
+                wrapper.appendError("JSON parametr is null");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
-				return handler.getJson();
+				return wrapper.getJson();
 			}
 
-			Address newAddress = m_jsonConvertor.AddressJsonConvertor.fromJson(value);
+			Address newAddress = jsonConvertor.AddressJsonConvertor.fromJson(value);
 
 			if(newAddress == null)
 			{
-				handler.appendError($"Unsuccessful convertaion from JSON");
+                wrapper.appendError($"Unsuccessful convertaion from JSON");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-				return handler.getJson();
+				return wrapper.getJson();
 			}
 
-			int id = m_storage.AddressDao.insertEntity(newAddress);
+			int id = storage.AddressDao.insertEntity(newAddress);
 
 			if(id < 0)
 			{
-				handler.appendError($"Can not insert Address with id {id}");
+                wrapper.appendError($"Can not insert Address with id {id}");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-				return handler.getJson();
+				return wrapper.getJson();
 			}
 
 			return null;
@@ -121,38 +121,38 @@ namespace WorkFinderAPI.Controllers
 		[HttpPost("{id}")]
 		public string Post(int id, [FromBody] JObject value)
 		{
-			JsonHandler handler = new JsonHandler();
+			JsonWrapper wrapper = new JsonWrapper();
 
 			if(id < 0)
 			{
-				handler.appendError($"Id is less than 0");
+                wrapper.appendError($"Id is less than 0");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
-				return handler.getJson();
+				return wrapper.getJson();
 			}
 
 			if (value == null)
 			{
-				handler.appendError($"JSON parametr is null");
+                wrapper.appendError($"JSON parametr is null");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
-				return handler.getJson();
+				return wrapper.getJson();
 			}
 
-			Address address = m_storage.AddressDao.selectEntityById(id);
+			Address address = storage.AddressDao.selectEntityById(id);
 
 			if(address == null)
 			{
-				handler.appendError($"Can not find Address with id {id}");
+                wrapper.appendError($"Can not find Address with id {id}");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-				return handler.getJson();
+				return wrapper.getJson();
 			}
 
-			Address newAddress = m_jsonConvertor.AddressJsonConvertor.fromJson(value);
+			Address newAddress = jsonConvertor.AddressJsonConvertor.fromJson(value);
 
 			if(newAddress == null)
 			{
-				handler.appendError($"Unsuccessful convertaion from JSON");
+                wrapper.appendError($"Unsuccessful convertaion from JSON");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-				return handler.getJson();
+				return wrapper.getJson();
 			}
 
 			address.ApptNum = newAddress.ApptNum;
@@ -160,13 +160,13 @@ namespace WorkFinderAPI.Controllers
 			address.IdCityDistrict = newAddress.IdCityDistrict;
 			address.StreetName = newAddress.StreetName;
 
-			bool result = m_storage.AddressDao.updateEntity(address);
+			bool result = storage.AddressDao.updateEntity(address);
 
 			if(result == false)
 			{
-				handler.appendError($"Can not update Address with id {id}");
+                wrapper.appendError($"Can not update Address with id {id}");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-				return handler.getJson();
+				return wrapper.getJson();
 			}
 
 			return null;
@@ -176,22 +176,22 @@ namespace WorkFinderAPI.Controllers
 		[HttpDelete("{id}")]
         public string Delete(int id)
         {
-			JsonHandler handler = new JsonHandler();
+			JsonWrapper wrapper = new JsonWrapper();
 
 			if(id < 0)
 			{
-				handler.appendError($"Id is less than 0");
+                wrapper.appendError($"Id is less than 0");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-				return handler.getJson();
+				return wrapper.getJson();
 			}
 
-			bool result = m_storage.AddressDao.deleteEntityById(id);
+			bool result = storage.AddressDao.deleteEntityById(id);
 
 			if(result == false)
 			{
-				handler.appendError($"Can not delete Address with id {id}");
+                wrapper.appendError($"Can not delete Address with id {id}");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-				return handler.getJson();
+				return wrapper.getJson();
 			}
 
 			return null;

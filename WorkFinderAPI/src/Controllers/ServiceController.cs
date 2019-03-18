@@ -16,36 +16,36 @@ namespace WorkFinderAPI.Controllers
 	[ApiController]
 	public class ServiceController : ControllerBase
 	{
-		private DBContext m_context;
-		private Storage m_storage;
-		private JsonConvertorEngine m_jsonConvertor;
+		private DBContext context;
+		private Storage storage;
+		private JsonConvertorEngine jsonConvertor;
 
-		public ServiceController(DBContext dBContext, Storage storage, JsonConvertorEngine jsonConvertor)
+		public ServiceController(DBContext context, Storage storage, JsonConvertorEngine jsonConvertor)
 		{
-			m_context = dBContext;
-			m_storage = storage;
-			m_jsonConvertor = jsonConvertor;
+			this.context = context;
+			this.storage = storage;
+			this.jsonConvertor = jsonConvertor;
 		}
 
 		// GET: api/v1/Service - select all
 		[HttpGet]
 		public string Get()
 		{
-			JsonHandler handler = new JsonHandler();
-			List<Service> services = m_storage.ServiceDao.selectEntities();
+			JsonWrapper wrapper = new JsonWrapper();
+			List<Service> services = storage.ServiceDao.selectEntities();
 
 			if (services == null)
 			{
-				handler.appendError("Can not select Service");
+				wrapper.appendError("Can not select Service");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-				return handler.getJson();
+				return wrapper.getJson();
 			}
 
 			JArray jArray = new JArray();
 
 			foreach (var item in services)
 			{
-				JObject service = m_jsonConvertor.ServiceConvertor.toJson(item);
+				JObject service = jsonConvertor.ServiceConvertor.toJson(item);
 				if (service != null)
 				{
 					jArray.Add(service);
@@ -59,26 +59,26 @@ namespace WorkFinderAPI.Controllers
 		[HttpGet("{id}")]
 		public string Get(int id)
 		{
-			JsonHandler handler = new JsonHandler();
+			JsonWrapper wrapper = new JsonWrapper();
 
 			if (id < 0)
 			{
-				handler.appendError($"Id is less then 0");
+				wrapper.appendError($"Id is less then 0");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
-				return handler.getJson();
+				return wrapper.getJson();
 			}
 
-			Service service = m_storage.ServiceDao.selectEntityById(id);
+			Service service = storage.ServiceDao.selectEntityById(id);
 
 			if (service == null)
 			{
-				handler.appendError($"Can not find id {id}");
+				wrapper.appendError($"Can not find id {id}");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
-				return handler.getJson();
+				return wrapper.getJson();
 			}
 
 			JObject jObject = new JObject();
-			jObject = m_jsonConvertor.ServiceConvertor.toJson(service);
+			jObject = jsonConvertor.ServiceConvertor.toJson(service);
 
 			return jObject.ToString();
 		}
@@ -87,31 +87,31 @@ namespace WorkFinderAPI.Controllers
 		[HttpPost]
 		public string Post([FromBody] JObject value)
 		{
-			JsonHandler handler = new JsonHandler();
+			JsonWrapper wrapper = new JsonWrapper();
 
 			if (value == null)
 			{
-				handler.appendError("JSON parametr is null");
+				wrapper.appendError("JSON parametr is null");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
-				return handler.getJson();
+				return wrapper.getJson();
 			}
 
-			Service newService= m_jsonConvertor.ServiceConvertor.fromJson(value);
+			Service newService= jsonConvertor.ServiceConvertor.fromJson(value);
 
 			if (newService== null)
 			{
-				handler.appendError($"Unsuccessful convertaion from JSON");
+				wrapper.appendError($"Unsuccessful convertaion from JSON");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-				return handler.getJson();
+				return wrapper.getJson();
 			}
 
-			int id = m_storage.ServiceDao.insertEntity(newService);
+			int id = storage.ServiceDao.insertEntity(newService);
 
 			if (id < 0)
 			{
-				handler.appendError($"Can not insert Service with id {id}");
+				wrapper.appendError($"Can not insert Service with id {id}");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-				return handler.getJson();
+				return wrapper.getJson();
 			}
 
 			return null;
@@ -121,51 +121,51 @@ namespace WorkFinderAPI.Controllers
 		[HttpPost("{id}")]
 		public string Post(int id, [FromBody] JObject value)
 		{
-			JsonHandler handler = new JsonHandler();
+			JsonWrapper wrapper = new JsonWrapper();
 
 			if (id < 0)
 			{
-				handler.appendError($"Id is less than 0");
+				wrapper.appendError($"Id is less than 0");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
-				return handler.getJson();
+				return wrapper.getJson();
 			}
 
 			if (value == null)
 			{
-				handler.appendError($"JSON parametr is null");
+				wrapper.appendError($"JSON parametr is null");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
-				return handler.getJson();
+				return wrapper.getJson();
 			}
 
-			Service service = m_storage.ServiceDao.selectEntityById(id);
+			Service service = storage.ServiceDao.selectEntityById(id);
 
 			if (service == null)
 			{
-				handler.appendError($"Can not find Service with id {id}");
+				wrapper.appendError($"Can not find Service with id {id}");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-				return handler.getJson();
+				return wrapper.getJson();
 			}
 
-			Service newService = m_jsonConvertor.ServiceConvertor.fromJson(value);
+			Service newService = jsonConvertor.ServiceConvertor.fromJson(value);
 
 			if (newService == null)
 			{
-				handler.appendError($"Unsuccessful convertaion from JSON");
+				wrapper.appendError($"Unsuccessful convertaion from JSON");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-				return handler.getJson();
+				return wrapper.getJson();
 			}
 
 			service.Price = newService.Price;
 			service.Name = newService.Name;
 			service.IdProfession = newService.IdProfession;
 
-			bool result = m_storage.ServiceDao.updateEntity(service);
+			bool result = storage.ServiceDao.updateEntity(service);
 
 			if (result == false)
 			{
-				handler.appendError($"Can not update Service with id {id}");
+				wrapper.appendError($"Can not update Service with id {id}");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-				return handler.getJson();
+				return wrapper.getJson();
 			}
 
 			return null;
@@ -175,22 +175,22 @@ namespace WorkFinderAPI.Controllers
 		[HttpDelete("{id}")]
 		public string Delete(int id)
 		{
-			JsonHandler handler = new JsonHandler();
+			JsonWrapper wrapper = new JsonWrapper();
 
 			if (id < 0)
 			{
-				handler.appendError($"Id is less than 0");
+				wrapper.appendError($"Id is less than 0");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-				return handler.getJson();
+				return wrapper.getJson();
 			}
 
-			bool result = m_storage.ServiceDao.deleteEntityById(id);
+			bool result = storage.ServiceDao.deleteEntityById(id);
 
 			if (result == false)
 			{
-				handler.appendError($"Can not delete Worker with id {id}");
+				wrapper.appendError($"Can not delete Worker with id {id}");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-				return handler.getJson();
+				return wrapper.getJson();
 			}
 
 			return null;

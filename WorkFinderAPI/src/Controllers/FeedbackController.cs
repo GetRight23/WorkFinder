@@ -16,36 +16,36 @@ namespace WorkFinderAPI.Controllers
     [ApiController]
     public class FeedbackController : ControllerBase
     {
-		private DBContext m_context;
-		private Storage m_storage;
-		private JsonConvertorEngine m_jsonConvertor;
+		private DBContext context;
+		private Storage storage;
+		private JsonConvertorEngine jsonConvertor;
 
-		public FeedbackController(DBContext dBContext, Storage storage, JsonConvertorEngine jsonConvertor)
+		public FeedbackController(DBContext context, Storage storage, JsonConvertorEngine jsonConvertor)
 		{
-			m_context = dBContext;
-			m_storage = storage;
-			m_jsonConvertor = jsonConvertor;
+			this.context = context;
+			this.storage = storage;
+			this.jsonConvertor = jsonConvertor;
 		}
 
 		// GET: api/v1/Feedback - select all
 		[HttpGet]
         public string Get()
         {
-			JsonHandler handler = new JsonHandler();
-			List<Feedback> feedbacks = m_storage.FeedbackDao.selectEntities();
+			JsonWrapper wrapper = new JsonWrapper();
+			List<Feedback> feedbacks = storage.FeedbackDao.selectEntities();
 
 			if(feedbacks == null)
 			{
-				handler.appendError("Can not select Feedbacks");
+				wrapper.appendError("Can not select Feedbacks");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-				return handler.getJson();
+				return wrapper.getJson();
 			}
 
 			JArray jArray = new JArray();
 
 			foreach (var item in feedbacks)
 			{
-				JObject feedback = m_jsonConvertor.FeedbackConvertor.toJson(item);
+				JObject feedback = jsonConvertor.FeedbackConvertor.toJson(item);
 				if (feedback != null)
 				{
 					jArray.Add(feedback);
@@ -59,26 +59,26 @@ namespace WorkFinderAPI.Controllers
 		[HttpGet("{id}")]
         public string Get(int id)
         {
-			JsonHandler handler = new JsonHandler();
+			JsonWrapper wrapper = new JsonWrapper();
 
 			if(id < 0)
 			{
-				handler.appendError($"Id is less then 0");
+				wrapper.appendError($"Id is less then 0");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
-				return handler.getJson();
+				return wrapper.getJson();
 			}
 
-			Feedback feedback = m_storage.FeedbackDao.selectEntityById(id);
+			Feedback feedback = storage.FeedbackDao.selectEntityById(id);
 
 			if(feedback == null)
 			{
-				handler.appendError($"Can not find id {id}");
+				wrapper.appendError($"Can not find id {id}");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
-				return handler.getJson();
+				return wrapper.getJson();
 			}
 
 			JObject jObject = new JObject();
-			jObject = m_jsonConvertor.FeedbackConvertor.toJson(feedback);
+			jObject = jsonConvertor.FeedbackConvertor.toJson(feedback);
 
 			return jObject.ToString();
         }
@@ -87,31 +87,31 @@ namespace WorkFinderAPI.Controllers
 		[HttpPost]
         public string Post([FromBody] JObject value)
         {
-			JsonHandler handler = new JsonHandler();
+			JsonWrapper wrapper = new JsonWrapper();
 
 			if (value == null)
 			{
-				handler.appendError("JSON parametr is null");
+				wrapper.appendError("JSON parametr is null");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
-				return handler.getJson();
+				return wrapper.getJson();
 			}
 
-			Feedback newFeedback = m_jsonConvertor.FeedbackConvertor.fromJson(value);
+			Feedback newFeedback = jsonConvertor.FeedbackConvertor.fromJson(value);
 
 			if(newFeedback == null)
 			{
-				handler.appendError($"Unsuccessful convertaion from JSON");
+				wrapper.appendError($"Unsuccessful convertaion from JSON");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-				return handler.getJson();
+				return wrapper.getJson();
 			}
 
-			int id = m_storage.FeedbackDao.insertEntity(newFeedback);
+			int id = storage.FeedbackDao.insertEntity(newFeedback);
 
 			if (id < 0)
 			{
-				handler.appendError($"Can not insert Feedback with id {id}");
+				wrapper.appendError($"Can not insert Feedback with id {id}");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-				return handler.getJson();
+				return wrapper.getJson();
 			}
 
 			return null;
@@ -121,38 +121,38 @@ namespace WorkFinderAPI.Controllers
 		[HttpPost("{id}")]
 		public string Post(int id, [FromBody] JObject value)
 		{
-			JsonHandler handler = new JsonHandler();
+			JsonWrapper wrapper = new JsonWrapper();
 
 			if (id < 0)
 			{
-				handler.appendError($"Id is less than 0");
+				wrapper.appendError($"Id is less than 0");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
-				return handler.getJson();
+				return wrapper.getJson();
 			}
 
 			if (value == null)
 			{
-				handler.appendError($"JSON parametr is null");
+				wrapper.appendError($"JSON parametr is null");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
-				return handler.getJson();
+				return wrapper.getJson();
 			}
 
-			Feedback feedback = m_storage.FeedbackDao.selectEntityById(id);
+			Feedback feedback = storage.FeedbackDao.selectEntityById(id);
 
 			if(feedback == null)
 			{
-				handler.appendError($"Can not find Feedback with id {id}");
+				wrapper.appendError($"Can not find Feedback with id {id}");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-				return handler.getJson();
+				return wrapper.getJson();
 			}
 
-			Feedback newFeedback = m_jsonConvertor.FeedbackConvertor.fromJson(value);
+			Feedback newFeedback = jsonConvertor.FeedbackConvertor.fromJson(value);
 
 			if(newFeedback == null)
 			{
-				handler.appendError($"Unsuccessful convertaion from JSON");
+				wrapper.appendError($"Unsuccessful convertaion from JSON");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-				return handler.getJson();
+				return wrapper.getJson();
 			}
 
 			feedback.Name = newFeedback.Name;
@@ -161,13 +161,13 @@ namespace WorkFinderAPI.Controllers
 			feedback.Date = newFeedback.Date;
 			feedback.Text = newFeedback.Text;
 
-			bool result = m_storage.FeedbackDao.updateEntity(feedback);
+			bool result = storage.FeedbackDao.updateEntity(feedback);
 
 			if(result == false)
 			{
-				handler.appendError($"Can not update Feedback with id {id}");
+				wrapper.appendError($"Can not update Feedback with id {id}");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-				return handler.getJson();
+				return wrapper.getJson();
 			}
 
 			return null;
@@ -177,22 +177,22 @@ namespace WorkFinderAPI.Controllers
 		[HttpDelete("{id}")]
         public string Delete(int id)
         {
-			JsonHandler handler = new JsonHandler();
+			JsonWrapper wrapper = new JsonWrapper();
 
 			if(id < 0)
 			{
-				handler.appendError($"Id is less than 0");
+				wrapper.appendError($"Id is less than 0");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-				return handler.getJson();
+				return wrapper.getJson();
 			}
 
-			bool result = m_storage.FeedbackDao.deleteEntityById(id);
+			bool result = storage.FeedbackDao.deleteEntityById(id);
 
 			if(result == false)
 			{
-				handler.appendError($"Can not delete Feedback with id {id}");
+				wrapper.appendError($"Can not delete Feedback with id {id}");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-				return handler.getJson();
+				return wrapper.getJson();
 			}
 
 			return null;

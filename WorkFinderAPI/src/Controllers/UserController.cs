@@ -16,36 +16,36 @@ namespace WorkFinderAPI.Controllers
 	[ApiController]
 	public class UserController : ControllerBase
 	{
-		private DBContext m_context;
-		private Storage m_storage;
-		private JsonConvertorEngine m_jsonConvertor;
+		private DBContext context;
+		private Storage storage;
+		private JsonConvertorEngine jsonConvertor;
 
-		public UserController(DBContext dBContext, Storage storage, JsonConvertorEngine jsonConvertor)
+		public UserController(DBContext context, Storage storage, JsonConvertorEngine jsonConvertor)
 		{
-			m_context = dBContext;
-			m_storage = storage;
-			m_jsonConvertor = jsonConvertor;
+			this.context = context;
+			this.storage = storage;
+			this.jsonConvertor = jsonConvertor;
 		}
 
 		// GET: api/v1/User - select all
 		[HttpGet]
 		public string Get()
 		{
-			JsonHandler handler = new JsonHandler();
-			List<User> users = m_storage.UserDao.selectEntities();
+			JsonWrapper wrapper = new JsonWrapper();
+			List<User> users = storage.UserDao.selectEntities();
 
 			if (users == null)
 			{
-				handler.appendError("Can not select Users");
+				wrapper.appendError("Can not select Users");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-				return handler.getJson();
+				return wrapper.getJson();
 			}
 
 			JArray jArray = new JArray();
 
 			foreach (var item in users)
 			{
-				JObject user = m_jsonConvertor.UserConvertor.toJson(item);
+				JObject user = jsonConvertor.UserConvertor.toJson(item);
 				if (user != null)
 				{
 					jArray.Add(user);
@@ -59,26 +59,26 @@ namespace WorkFinderAPI.Controllers
 		[HttpGet("{id}")]
 		public string Get(int id)
 		{
-			JsonHandler handler = new JsonHandler();
+			JsonWrapper wrapper = new JsonWrapper();
 
 			if (id < 0)
 			{
-				handler.appendError($"Id is less then 0");
+				wrapper.appendError($"Id is less then 0");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
-				return handler.getJson();
+				return wrapper.getJson();
 			}
 
-			User user = m_storage.UserDao.selectEntityById(id);
+			User user = storage.UserDao.selectEntityById(id);
 
 			if (user == null)
 			{
-				handler.appendError($"Can not find id {id}");
+				wrapper.appendError($"Can not find id {id}");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
-				return handler.getJson();
+				return wrapper.getJson();
 			}
 
 			JObject jObject = new JObject();
-			jObject = m_jsonConvertor.UserConvertor.toJson(user);
+			jObject = jsonConvertor.UserConvertor.toJson(user);
 
 			return jObject.ToString();
 		}
@@ -87,31 +87,31 @@ namespace WorkFinderAPI.Controllers
 		[HttpPost]
 		public string Post([FromBody] JObject value)
 		{
-			JsonHandler handler = new JsonHandler();
+			JsonWrapper wrapper = new JsonWrapper();
 
 			if (value == null)
 			{
-				handler.appendError("JSON parametr is null");
+				wrapper.appendError("JSON parametr is null");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
-				return handler.getJson();
+				return wrapper.getJson();
 			}
 
-			User newUser = m_jsonConvertor.UserConvertor.fromJson(value);
+			User newUser = jsonConvertor.UserConvertor.fromJson(value);
 
 			if (newUser== null)
 			{
-				handler.appendError($"Unsuccessful convertaion from JSON");
+				wrapper.appendError($"Unsuccessful convertaion from JSON");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-				return handler.getJson();
+				return wrapper.getJson();
 			}
 
-			int id = m_storage.UserDao.insertEntity(newUser);
+			int id = storage.UserDao.insertEntity(newUser);
 
 			if (id < 0)
 			{
-				handler.appendError($"Can not insert User with id {id}");
+				wrapper.appendError($"Can not insert User with id {id}");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-				return handler.getJson();
+				return wrapper.getJson();
 			}
 
 			return null;
@@ -121,50 +121,50 @@ namespace WorkFinderAPI.Controllers
 		[HttpPost("{id}")]
 		public string Post(int id, [FromBody] JObject value)
 		{
-			JsonHandler handler = new JsonHandler();
+			JsonWrapper wrapper = new JsonWrapper();
 
 			if (id < 0)
 			{
-				handler.appendError($"Id is less than 0");
+				wrapper.appendError($"Id is less than 0");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
-				return handler.getJson();
+				return wrapper.getJson();
 			}
 
 			if (value == null)
 			{
-				handler.appendError($"JSON parametr is null");
+				wrapper.appendError($"JSON parametr is null");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
-				return handler.getJson();
+				return wrapper.getJson();
 			}
 
-			User user = m_storage.UserDao.selectEntityById(id);
+			User user = storage.UserDao.selectEntityById(id);
 
 			if (user == null)
 			{
-				handler.appendError($"Can not find User with id {id}");
+				wrapper.appendError($"Can not find User with id {id}");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-				return handler.getJson();
+				return wrapper.getJson();
 			}
 
-			User newUser= m_jsonConvertor.UserConvertor.fromJson(value);
+			User newUser= jsonConvertor.UserConvertor.fromJson(value);
 
 			if (newUser == null)
 			{
-				handler.appendError($"Unsuccessful convertaion from JSON");
+				wrapper.appendError($"Unsuccessful convertaion from JSON");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-				return handler.getJson();
+				return wrapper.getJson();
 			}
 
 			user.Login = newUser.Login;
 			user.Password = newUser.Password;
 
-			bool result = m_storage.UserDao.updateEntity(user);
+			bool result = storage.UserDao.updateEntity(user);
 
 			if (result == false)
 			{
-				handler.appendError($"Can not update User with id {id}");
+				wrapper.appendError($"Can not update User with id {id}");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-				return handler.getJson();
+				return wrapper.getJson();
 			}
 
 			return null;
@@ -174,22 +174,22 @@ namespace WorkFinderAPI.Controllers
 		[HttpDelete("{id}")]
 		public string Delete(int id)
 		{
-			JsonHandler handler = new JsonHandler();
+			JsonWrapper wrapper = new JsonWrapper();
 
 			if (id < 0)
 			{
-				handler.appendError($"Id is less than 0");
+				wrapper.appendError($"Id is less than 0");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-				return handler.getJson();
+				return wrapper.getJson();
 			}
 
-			bool result = m_storage.UserDao.deleteEntityById(id);
+			bool result = storage.UserDao.deleteEntityById(id);
 
 			if (result == false)
 			{
-				handler.appendError($"Can not delete User with id {id}");
+				wrapper.appendError($"Can not delete User with id {id}");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-				return handler.getJson();
+				return wrapper.getJson();
 			}
 
 			return null;

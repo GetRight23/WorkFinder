@@ -11,9 +11,9 @@ namespace DatabaseTests
 	{
 		private static Storage Storage { get; set; }
 		private static DbConnection Connection { get; set; }
-		private static DatabaseDao<City> CityDao { get; set; }
-		private static DatabaseDao<CityDistricts> CityDistrictsDao { get; set; }
-		private static DatabaseDao<Address> AddressDao { get; set; }
+		private static DatabaseDaoImpl<City> CityDao { get; set; }
+		private static DatabaseDaoImpl<CityDistricts> CityDistrictsDao { get; set; }
+		private static DatabaseDaoImpl<Address> AddressDao { get; set; }
 		private static City city = null;
 		private static CityDistricts district = null;
 		private static Address address = null;

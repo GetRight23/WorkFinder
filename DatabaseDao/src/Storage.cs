@@ -6,7 +6,7 @@ namespace DatabaseDao
 {
 	public abstract class Storage
 	{
-		private DBContext m_dbContext = null;
+		private DBContext dbContext = null;
 
 		public DbConnection Connection { get; private set; }
 
@@ -15,23 +15,23 @@ namespace DatabaseDao
 		public Storage(DbConnection connection)
 		{
 			Connection = connection;
-			m_dbContext = new DBContext(connection.ConnectionString);
-			Database = m_dbContext.Database;
+			dbContext = new DBContext(connection.ConnectionString);
+			Database = dbContext.Database;
 
-			AddressDao = new DatabaseDao<Address>(m_dbContext, m_dbContext.Address);
-			CityDao = new DatabaseDao<City>(m_dbContext, m_dbContext.City);
-			CityDistrictsDao = new DatabaseDao<CityDistricts>(m_dbContext, m_dbContext.CityDistricts);
-			FeedbackDao = new DatabaseDao<Feedback>(m_dbContext, m_dbContext.Feedback);
-			OrderListDao = new DatabaseDao<OrdersList>(m_dbContext, m_dbContext.OrdersList);
-			OrderDao = new DatabaseDao<Order>(m_dbContext, m_dbContext.Order);
-			ProfessionCategoryDao = new DatabaseDao<ProfessionCategory>(m_dbContext, m_dbContext.ProfCategory);
-			ProfessionDao = new DatabaseDao<Profession>(m_dbContext, m_dbContext.Profession);
-			ServiceDao = new DatabaseDao<Service>(m_dbContext, m_dbContext.Service);
-			WorkerDao = new DatabaseDao<Worker>(m_dbContext, m_dbContext.Worker);
-			OrderToServiceDao = new OrderToServiceDao(m_dbContext, m_dbContext.OrderToService);
-			ProfessionToWorkerDao = new ProfessionToWorkerDao(m_dbContext, m_dbContext.ProfessionToWorker);
-			UserDao = new DatabaseDao<User>(m_dbContext, m_dbContext.User);
-			PhotoDao = new DatabaseDao<Photo>(m_dbContext, m_dbContext.Photo);
+			AddressDao = new DatabaseDaoImpl<Address>(dbContext, dbContext.Address);
+			CityDao = new DatabaseDaoImpl<City>(dbContext, dbContext.City);
+			CityDistrictsDao = new DatabaseDaoImpl<CityDistricts>(dbContext, dbContext.CityDistricts);
+			FeedbackDao = new DatabaseDaoImpl<Feedback>(dbContext, dbContext.Feedback);
+			OrderListDao = new DatabaseDaoImpl<OrdersList>(dbContext, dbContext.OrdersList);
+			OrderDao = new DatabaseDaoImpl<Order>(dbContext, dbContext.Order);
+			ProfessionCategoryDao = new DatabaseDaoImpl<ProfessionCategory>(dbContext, dbContext.ProfCategory);
+			ProfessionDao = new DatabaseDaoImpl<Profession>(dbContext, dbContext.Profession);
+			ServiceDao = new DatabaseDaoImpl<Service>(dbContext, dbContext.Service);
+			WorkerDao = new DatabaseDaoImpl<Worker>(dbContext, dbContext.Worker);
+			OrderToServiceDao = new OrderToServiceDao(dbContext, dbContext.OrderToService);
+			ProfessionToWorkerDao = new ProfessionToWorkerDao(dbContext, dbContext.ProfessionToWorker);
+			UserDao = new DatabaseDaoImpl<User>(dbContext, dbContext.User);
+			PhotoDao = new DatabaseDaoImpl<Photo>(dbContext, dbContext.Photo);
 		}
 
 		public void createTables()
@@ -69,18 +69,18 @@ namespace DatabaseDao
 		public abstract void createProfessionToWorker();
 
 
-		public DatabaseDao<Address> AddressDao { get; private set; }
-		public DatabaseDao<City> CityDao { get; private set; }
-		public DatabaseDao<CityDistricts> CityDistrictsDao { get; private set; }
-		public DatabaseDao<Feedback> FeedbackDao { get; private set; }
-		public DatabaseDao<OrdersList> OrderListDao { get; private set; }
-		public DatabaseDao<Order> OrderDao { get; private set; }
-		public DatabaseDao<ProfessionCategory> ProfessionCategoryDao { get; private set; }
-		public DatabaseDao<Profession> ProfessionDao { get; private set; }
-		public DatabaseDao<Service> ServiceDao { get; private set; }
-		public DatabaseDao<Worker> WorkerDao { get; private set; }
-		public DatabaseDao<User> UserDao { get; private set; }
-		public DatabaseDao<Photo> PhotoDao { get; private set; }
+		public DatabaseDaoImpl<Address> AddressDao { get; private set; }
+		public DatabaseDaoImpl<City> CityDao { get; private set; }
+		public DatabaseDaoImpl<CityDistricts> CityDistrictsDao { get; private set; }
+		public DatabaseDaoImpl<Feedback> FeedbackDao { get; private set; }
+		public DatabaseDaoImpl<OrdersList> OrderListDao { get; private set; }
+		public DatabaseDaoImpl<Order> OrderDao { get; private set; }
+		public DatabaseDaoImpl<ProfessionCategory> ProfessionCategoryDao { get; private set; }
+		public DatabaseDaoImpl<Profession> ProfessionDao { get; private set; }
+		public DatabaseDaoImpl<Service> ServiceDao { get; private set; }
+		public DatabaseDaoImpl<Worker> WorkerDao { get; private set; }
+		public DatabaseDaoImpl<User> UserDao { get; private set; }
+		public DatabaseDaoImpl<Photo> PhotoDao { get; private set; }
 		public OrderToServiceDao OrderToServiceDao { get; set; }
 		public ProfessionToWorkerDao ProfessionToWorkerDao { get; set; }
 
