@@ -1,115 +1,87 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 using DatabaseDao;
-using JSONConvertor;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using DatabaseConfiguration;
+using JSONConvertor;
 using Models;
 using Newtonsoft.Json.Linq;
+using DatabaseCache;
+using NLog;
+using System.Net;
 
 namespace WorkFinderAPI.Controllers
 {
 	[Route("api/v1/[controller]")]
 	[ApiController]
-	public class ServiceController : ControllerBase
+	public class CityController : ControllerBase
 	{
 		private DBContext m_context;
 		private Storage m_storage;
-		private JsonConvertor m_jsonConvertor = null;
+		private CityCache m_cache = null;
+		private JsonConvertorEngine m_jsonConvertor;
 
-		public ServiceController(DBContext dBContext, Storage storage)
+		public CityController(DBContext dBContext, Storage storage, JsonConvertorEngine jsonConvertor)
 		{
 			m_context = dBContext;
 			m_storage = storage;
-			m_jsonConvertor = new JsonConvertor();
+			m_cache = new CityCache(storage, storage.CityDao);
+			m_jsonConvertor = jsonConvertor;
 		}
 
-		// GET: api/v1/Service - select all
+		// GET api/v1/city
 		[HttpGet]
 		public string Get()
 		{
-			JsonHandler handler = new JsonHandler();
-			List<Service> services = m_storage.ServiceDao.selectEntities();
-
-			if (services == null)
-			{
-				handler.appendError("Can not select Service");
-				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-				return handler.getJson();
-			}
-
-			JArray jArray = new JArray();
-
-			foreach (var item in services)
-			{
-				JObject service = m_jsonConvertor.toJson(item);
-				if (service != null)
-				{
-					jArray.Add(service);
-				}
-			}
-
-			return jArray.ToString();
+			m_cache.updateCache();
+			return m_cache.CachedJson;
 		}
 
-		// GET: api/v1/Serivce/5 - select by id
+		//TODO: сделать проверки во всех методах
+		// GET api/v1/city/5
 		[HttpGet("{id}")]
 		public string Get(int id)
 		{
-			JsonHandler handler = new JsonHandler();
-
-			if (id < 0)
+			m_cache.updateCache();
+			if (!m_cache.citiesCache.ContainsKey(id))
 			{
-				handler.appendError($"Id is less then 0");
-				HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
-				return handler.getJson();
+				JObject jObject = new JObject();
+				jObject["Value"] = null;
+				jObject["Error message"] = $"Can not find id {id}";
+				return jObject.ToString();
 			}
-
-			Service service = m_storage.ServiceDao.selectEntityById(id);
-
-			if (service == null)
-			{
-				handler.appendError($"Can not find id {id}");
-				HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
-				return handler.getJson();
-			}
-
-			JObject jObject = new JObject();
-			jObject = m_jsonConvertor.toJson(service);
-
-			return jObject.ToString();
+			return m_cache.citiesCache[id];
 		}
 
-		// POST: api/v1/Service - insert
+		// POST api/v1/city
 		[HttpPost]
 		public string Post([FromBody] JObject value)
 		{
 			JsonHandler handler = new JsonHandler();
 
-			if (value == null)
+			if(value == null)
 			{
 				handler.appendError("JSON parametr is null");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
 				return handler.getJson();
 			}
 
-			Service newService= m_jsonConvertor.fromJsonToService(value);
+			City city = m_jsonConvertor.CityJsonConvertor.fromJson(value);
 
-			if (newService== null)
+			if(city == null)
 			{
 				handler.appendError($"Unsuccessful convertaion from JSON");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 				return handler.getJson();
 			}
 
-			int id = m_storage.ServiceDao.insertEntity(newService);
+			int id = m_storage.CityDao.insertEntity(city);
 
-			if (id < 0)
+			if(id < 0)
 			{
-				handler.appendError($"Can not insert Service with id {id}");
+				handler.appendError($"Can not insert City with id {id}");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 				return handler.getJson();
 			}
@@ -117,7 +89,7 @@ namespace WorkFinderAPI.Controllers
 			return null;
 		}
 
-		// POST: api/v1/Service/id - update by id
+		// POST api/v1/city
 		[HttpPost("{id}")]
 		public string Post(int id, [FromBody] JObject value)
 		{
@@ -137,33 +109,31 @@ namespace WorkFinderAPI.Controllers
 				return handler.getJson();
 			}
 
-			Service service = m_storage.ServiceDao.selectEntityById(id);
+			City city = m_storage.CityDao.selectEntityById(id);
 
-			if (service == null)
+			if (city == null)
 			{
-				handler.appendError($"Can not find Service with id {id}");
+				handler.appendError($"Can not find City with id {id}");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 				return handler.getJson();
 			}
 
-			Service newService = m_jsonConvertor.fromJsonToService(value);
+			City newCity = m_jsonConvertor.CityJsonConvertor.fromJson(value);
 
-			if (newService == null)
+			if (newCity == null)
 			{
 				handler.appendError($"Unsuccessful convertaion from JSON");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 				return handler.getJson();
 			}
 
-			service.Price = newService.Price;
-			service.Name = newService.Name;
-			service.IdProfession = newService.IdProfession;
+			city.Name = newCity.Name;
 
-			bool result = m_storage.ServiceDao.updateEntity(service);
+			bool result = m_storage.CityDao.updateEntity(city);
 
-			if (result == false)
+			if(result == false)
 			{
-				handler.appendError($"Can not update Service with id {id}");
+				handler.appendError($"Can not update City with id {id}");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 				return handler.getJson();
 			}
@@ -171,7 +141,7 @@ namespace WorkFinderAPI.Controllers
 			return null;
 		}
 
-		// DELETE: api/v1/Service/5 - delete by id
+		// DELETE api/values/5 - delete by id
 		[HttpDelete("{id}")]
 		public string Delete(int id)
 		{
@@ -184,11 +154,11 @@ namespace WorkFinderAPI.Controllers
 				return handler.getJson();
 			}
 
-			bool result = m_storage.ServiceDao.deleteEntityById(id);
+			bool result = m_storage.CityDao.deleteEntityById(id);
 
 			if (result == false)
 			{
-				handler.appendError($"Can not delete Worker with id {id}");
+				handler.appendError($"Can not delete City with id {id}");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 				return handler.getJson();
 			}

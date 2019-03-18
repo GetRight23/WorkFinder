@@ -19,7 +19,7 @@ namespace DatabaseCache
 			JArray jArray = new JArray();
 			foreach (var item in m_entities)
 			{
-				JObject json = m_jsonConvertor.toJson(item);
+				JObject json = m_jsonConvertor.CityJsonConvertor.toJson(item);
 				jArray.Add(json);
 				citiesCache.Add(item.Id, json.ToString());
 			}

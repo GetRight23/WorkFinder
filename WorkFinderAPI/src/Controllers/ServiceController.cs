@@ -12,54 +12,53 @@ using Newtonsoft.Json.Linq;
 
 namespace WorkFinderAPI.Controllers
 {
-    [Route("api/v1/[controller]")]
-    [ApiController]
-    public class OrderController : ControllerBase
-    {
+	[Route("api/v1/[controller]")]
+	[ApiController]
+	public class ServiceController : ControllerBase
+	{
 		private DBContext m_context;
 		private Storage m_storage;
-		private JsonConvertor m_jsonConvertor = null;
+		private JsonConvertorEngine m_jsonConvertor;
 
-		public OrderController(DBContext dBContext, Storage storage)
+		public ServiceController(DBContext dBContext, Storage storage, JsonConvertorEngine jsonConvertor)
 		{
 			m_context = dBContext;
 			m_storage = storage;
-			m_jsonConvertor = new JsonConvertor();
+			m_jsonConvertor = jsonConvertor;
 		}
 
-
-		// GET: api/v1/Order - select all
+		// GET: api/v1/Service - select all
 		[HttpGet]
-        public string Get()
-        {
+		public string Get()
+		{
 			JsonHandler handler = new JsonHandler();
-			List<Order> addresses = m_storage.OrderDao.selectEntities();
+			List<Service> services = m_storage.ServiceDao.selectEntities();
 
-			if (addresses == null)
+			if (services == null)
 			{
-				handler.appendError("Can not select Orders");
+				handler.appendError("Can not select Service");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 				return handler.getJson();
 			}
 
 			JArray jArray = new JArray();
 
-			foreach (var item in addresses)
+			foreach (var item in services)
 			{
-				JObject order = m_jsonConvertor.toJson(item);
-				if (order != null)
+				JObject service = m_jsonConvertor.ServiceConvertor.toJson(item);
+				if (service != null)
 				{
-					jArray.Add(order);
+					jArray.Add(service);
 				}
 			}
 
 			return jArray.ToString();
 		}
 
-        // GET: api/v1/Order/5 - select by id
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
+		// GET: api/v1/Serivce/5 - select by id
+		[HttpGet("{id}")]
+		public string Get(int id)
+		{
 			JsonHandler handler = new JsonHandler();
 
 			if (id < 0)
@@ -69,9 +68,9 @@ namespace WorkFinderAPI.Controllers
 				return handler.getJson();
 			}
 
-			Order order = m_storage.OrderDao.selectEntityById(id);
+			Service service = m_storage.ServiceDao.selectEntityById(id);
 
-			if (order == null)
+			if (service == null)
 			{
 				handler.appendError($"Can not find id {id}");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
@@ -79,15 +78,15 @@ namespace WorkFinderAPI.Controllers
 			}
 
 			JObject jObject = new JObject();
-			jObject = m_jsonConvertor.toJson(order);
+			jObject = m_jsonConvertor.ServiceConvertor.toJson(service);
 
 			return jObject.ToString();
-        }
+		}
 
-        // POST: api/v1/Order - insert
-        [HttpPost]
-        public string Post([FromBody] JObject value)
-        {
+		// POST: api/v1/Service - insert
+		[HttpPost]
+		public string Post([FromBody] JObject value)
+		{
 			JsonHandler handler = new JsonHandler();
 
 			if (value == null)
@@ -97,20 +96,20 @@ namespace WorkFinderAPI.Controllers
 				return handler.getJson();
 			}
 
-			Order newOrder = m_jsonConvertor.fromJsonToOrderTable(value);
+			Service newService= m_jsonConvertor.ServiceConvertor.fromJson(value);
 
-			if (newOrder == null)
+			if (newService== null)
 			{
 				handler.appendError($"Unsuccessful convertaion from JSON");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 				return handler.getJson();
 			}
 
-			int id = m_storage.OrderDao.insertEntity(newOrder);
+			int id = m_storage.ServiceDao.insertEntity(newService);
 
 			if (id < 0)
 			{
-				handler.appendError($"Can not insert Order with id {id}");
+				handler.appendError($"Can not insert Service with id {id}");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 				return handler.getJson();
 			}
@@ -118,10 +117,10 @@ namespace WorkFinderAPI.Controllers
 			return null;
 		}
 
-        // PUT: api/v1/Order/5 - update
-        [HttpPost("{id}")]
-        public string Post(int id, [FromBody] JObject value)
-        {
+		// POST: api/v1/Service/id - update by id
+		[HttpPost("{id}")]
+		public string Post(int id, [FromBody] JObject value)
+		{
 			JsonHandler handler = new JsonHandler();
 
 			if (id < 0)
@@ -138,43 +137,44 @@ namespace WorkFinderAPI.Controllers
 				return handler.getJson();
 			}
 
-			Order order = m_storage.OrderDao.selectEntityById(id);
+			Service service = m_storage.ServiceDao.selectEntityById(id);
 
-			if (order == null)
+			if (service == null)
 			{
-				handler.appendError($"Can not find Order with id {id}");
+				handler.appendError($"Can not find Service with id {id}");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 				return handler.getJson();
 			}
 
-			Order newOrder = m_jsonConvertor.fromJsonToOrderTable(value);
+			Service newService = m_jsonConvertor.ServiceConvertor.fromJson(value);
 
-			if (newOrder == null)
+			if (newService == null)
 			{
 				handler.appendError($"Unsuccessful convertaion from JSON");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 				return handler.getJson();
 			}
 
-			order.Info = newOrder.Info;
-			order.IdOrderList = newOrder.IdOrderList;
+			service.Price = newService.Price;
+			service.Name = newService.Name;
+			service.IdProfession = newService.IdProfession;
 
-			bool result = m_storage.OrderDao.updateEntity(order);
+			bool result = m_storage.ServiceDao.updateEntity(service);
 
 			if (result == false)
 			{
-				handler.appendError($"Can not update Order with id {id}");
+				handler.appendError($"Can not update Service with id {id}");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 				return handler.getJson();
 			}
 
 			return null;
-        }
+		}
 
-        // DELETE: api/v1/Delete/5 - delete by id
-        [HttpDelete("{id}")]
-        public string Delete(int id)
-        {
+		// DELETE: api/v1/Service/5 - delete by id
+		[HttpDelete("{id}")]
+		public string Delete(int id)
+		{
 			JsonHandler handler = new JsonHandler();
 
 			if (id < 0)
@@ -184,16 +184,16 @@ namespace WorkFinderAPI.Controllers
 				return handler.getJson();
 			}
 
-			bool result = m_storage.OrderDao.deleteEntityById(id);
+			bool result = m_storage.ServiceDao.deleteEntityById(id);
 
 			if (result == false)
 			{
-				handler.appendError($"Can not delete Order with id {id}");
+				handler.appendError($"Can not delete Worker with id {id}");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 				return handler.getJson();
 			}
 
 			return null;
 		}
-    }
+	}
 }

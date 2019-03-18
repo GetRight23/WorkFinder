@@ -12,53 +12,53 @@ using Newtonsoft.Json.Linq;
 
 namespace WorkFinderAPI.Controllers
 {
-    [Route("api/v1/[controller]")]
-    [ApiController]
-    public class ProfessionCategoryController : ControllerBase
-    {
+	[Route("api/v1/[controller]")]
+	[ApiController]
+	public class WorkerController : ControllerBase
+	{
 		private DBContext m_context;
 		private Storage m_storage;
-		private JsonConvertor m_jsonConvertor = null;
+		private JsonConvertorEngine m_jsonConvertor;
 
-		public ProfessionCategoryController(DBContext dBContext, Storage storage)
+		public WorkerController(DBContext dBContext, Storage storage, JsonConvertorEngine jsonConvertor)
 		{
 			m_context = dBContext;
 			m_storage = storage;
-			m_jsonConvertor = new JsonConvertor();
+			m_jsonConvertor = jsonConvertor;
 		}
 
-		// GET: api/v1/ProfessionCategory - select all
+		// GET: api/v1/Worker - select all
 		[HttpGet]
-        public string Get()
-        {
+		public string Get()
+		{
 			JsonHandler handler = new JsonHandler();
-			List<ProfessionCategory> professions = m_storage.ProfessionCategoryDao.selectEntities();
+			List<Worker> workers = m_storage.WorkerDao.selectEntities();
 
-			if (professions == null)
+			if (workers == null)
 			{
-				handler.appendError("Can not select Profession categories");
+				handler.appendError("Can not select Workers");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 				return handler.getJson();
 			}
 
 			JArray jArray = new JArray();
 
-			foreach (var item in professions)
+			foreach (var item in workers)
 			{
-				JObject profesionCategory = m_jsonConvertor.toJson(item);
-				if (profesionCategory != null)
+				JObject worker = m_jsonConvertor.WorkerConvertor.toJson(item);
+				if (worker != null)
 				{
-					jArray.Add(profesionCategory);
+					jArray.Add(worker);
 				}
 			}
 
 			return jArray.ToString();
-        }
+		}
 
-		// GET: api/v1/ProfessionCategory/5 - select by id
+		// GET: api/v1/Worker/5 - select by id
 		[HttpGet("{id}")]
-        public string Get(int id)
-        {
+		public string Get(int id)
+		{
 			JsonHandler handler = new JsonHandler();
 
 			if (id < 0)
@@ -68,9 +68,9 @@ namespace WorkFinderAPI.Controllers
 				return handler.getJson();
 			}
 
-			ProfessionCategory professionCategory = m_storage.ProfessionCategoryDao.selectEntityById(id);
+			Worker worker= m_storage.WorkerDao.selectEntityById(id);
 
-			if (professionCategory == null)
+			if (worker == null)
 			{
 				handler.appendError($"Can not find id {id}");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
@@ -78,15 +78,15 @@ namespace WorkFinderAPI.Controllers
 			}
 
 			JObject jObject = new JObject();
-			jObject = m_jsonConvertor.toJson(professionCategory);
+			jObject = m_jsonConvertor.WorkerConvertor.toJson(worker);
 
 			return jObject.ToString();
 		}
 
-		// POST: api/v1/ProfessionCategory - insert 
+		// POST: api/v1/Worker - insert
 		[HttpPost]
-        public string Post([FromBody] JObject value)
-        {
+		public string Post([FromBody] JObject value)
+		{
 			JsonHandler handler = new JsonHandler();
 
 			if (value == null)
@@ -96,31 +96,31 @@ namespace WorkFinderAPI.Controllers
 				return handler.getJson();
 			}
 
-			ProfessionCategory newProfessionCategory = m_jsonConvertor.fromJsonToProfCategory(value);
+			Worker newWorker = m_jsonConvertor.WorkerConvertor.fromJson(value);
 
-			if (newProfessionCategory == null)
+			if (newWorker == null)
 			{
 				handler.appendError($"Unsuccessful convertaion from JSON");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 				return handler.getJson();
 			}
 
-			int id = m_storage.ProfessionCategoryDao.insertEntity(newProfessionCategory);
+			int id = m_storage.WorkerDao.insertEntity(newWorker);
 
-			if(id < 0)
+			if (id < 0)
 			{
-				handler.appendError($"Can not insert Profession Category with id {id}");
+				handler.appendError($"Can not insert Worker with id {id}");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 				return handler.getJson();
 			}
 
 			return null;
-        }
+		}
 
-		// PUT:api/v1/ProfessionCategory/5
+		// POST: api/v1/Worker/id - update by id
 		[HttpPost("{id}")]
-        public string Post(int id, [FromBody] JObject value)
-        {
+		public string Post(int id, [FromBody] JObject value)
+		{
 			JsonHandler handler = new JsonHandler();
 
 			if (id < 0)
@@ -137,42 +137,47 @@ namespace WorkFinderAPI.Controllers
 				return handler.getJson();
 			}
 
-			ProfessionCategory professionCategory = m_storage.ProfessionCategoryDao.selectEntityById(id);
+			Worker worker = m_storage.WorkerDao.selectEntityById(id);
 
-			if(professionCategory == null)
+			if (worker == null)
 			{
-				handler.appendError($"Can not find Profession Category with id {id}");
+				handler.appendError($"Can not find Worker with id {id}");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 				return handler.getJson();
 			}
 
-			ProfessionCategory newProfessionCategory = m_jsonConvertor.fromJsonToProfCategory(value);
+			Worker newWorker= m_jsonConvertor.WorkerConvertor.fromJson(value);
 
-			if (newProfessionCategory == null)
+			if (newWorker== null)
 			{
 				handler.appendError($"Unsuccessful convertaion from JSON");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 				return handler.getJson();
 			}
 
-			professionCategory.Name = newProfessionCategory.Name;
+			worker.Name = newWorker.Name;
+			worker.LastName = newWorker.LastName;
+			worker.PhoneNumber = newWorker.PhoneNumber;
+			worker.Info = newWorker.Info;
+			worker.IdAddress = newWorker.IdAddress;
+			worker.IdUser= newWorker.IdUser;
 
-			bool result = m_storage.ProfessionCategoryDao.updateEntity(professionCategory);
+			bool result = m_storage.WorkerDao.updateEntity(worker);
 
-			if(result == false)
+			if (result == false)
 			{
-				handler.appendError($"Can not update Profession Category with id {id}");
+				handler.appendError($"Can not update Worker with id {id}");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 				return handler.getJson();
 			}
 
 			return null;
-        }
+		}
 
-		// DELETE: api/v1/ProfessionCategory/5
+		// DELETE: api/v1/Worker/5 - delete by id
 		[HttpDelete("{id}")]
-        public string Delete(int id)
-        {
+		public string Delete(int id)
+		{
 			JsonHandler handler = new JsonHandler();
 
 			if (id < 0)
@@ -182,16 +187,16 @@ namespace WorkFinderAPI.Controllers
 				return handler.getJson();
 			}
 
-			bool result = m_storage.ProfessionCategoryDao.deleteEntityById(id);
+			bool result = m_storage.WorkerDao.deleteEntityById(id);
 
 			if (result == false)
 			{
-				handler.appendError($"Can not delete Profession Category with id {id}");
+				handler.appendError($"Can not delete Worker with id {id}");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 				return handler.getJson();
 			}
 
 			return null;
-        }
-    }
+		}
+	}
 }

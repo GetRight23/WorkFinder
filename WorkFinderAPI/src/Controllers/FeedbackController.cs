@@ -1,155 +1,115 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using DatabaseDao;
+using JSONConvertor;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Models;
-using JSONConvertor;
 using Newtonsoft.Json.Linq;
-using DatabaseCache;
-using System.Net;
 
 namespace WorkFinderAPI.Controllers
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-    public class CityDistrictsController : ControllerBase
+    public class FeedbackController : ControllerBase
     {
 		private DBContext m_context;
 		private Storage m_storage;
-		private JsonConvertor m_jsonConvertor = null;
+		private JsonConvertorEngine m_jsonConvertor;
 
-		public CityDistrictsController(DBContext dBContext, Storage storage)
+		public FeedbackController(DBContext dBContext, Storage storage, JsonConvertorEngine jsonConvertor)
 		{
 			m_context = dBContext;
 			m_storage = storage;
-			m_jsonConvertor = new JsonConvertor();
+			m_jsonConvertor = jsonConvertor;
 		}
 
-		// GET: api/v1/CityDistricts
+		// GET: api/v1/Feedback - select all
 		[HttpGet]
         public string Get()
         {
 			JsonHandler handler = new JsonHandler();
-			List<CityDistricts> cityDistricts = m_storage.CityDistrictsDao.selectEntities();
-			if(cityDistricts == null)
+			List<Feedback> feedbacks = m_storage.FeedbackDao.selectEntities();
+
+			if(feedbacks == null)
 			{
-				handler.appendError("Can not select City Districts");
+				handler.appendError("Can not select Feedbacks");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 				return handler.getJson();
 			}
 
 			JArray jArray = new JArray();
-			foreach (var item in cityDistricts)
-			{
-				JObject cityDistrict = m_jsonConvertor.toJson(item);
-				if(cityDistrict != null)
-				{
-					jArray.Add(cityDistrict);
-				}				
-			}
-			return jArray.ToString();
-		}
 
-		// GET: api/v1/CityDistricts/5
+			foreach (var item in feedbacks)
+			{
+				JObject feedback = m_jsonConvertor.FeedbackConvertor.toJson(item);
+				if (feedback != null)
+				{
+					jArray.Add(feedback);
+				}
+			}
+
+			return jArray.ToString();
+        }
+
+		// GET: api/v1/Feedback/5 - select by id
 		[HttpGet("{id}")]
         public string Get(int id)
         {
 			JsonHandler handler = new JsonHandler();
-			if (id < 0)
+
+			if(id < 0)
 			{
 				handler.appendError($"Id is less then 0");
-				HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;				
+				HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
 				return handler.getJson();
 			}
 
-			CityDistricts cityDistrict = m_storage.CityDistrictsDao.selectEntityById(id);
-			JObject jObject = new JObject();
+			Feedback feedback = m_storage.FeedbackDao.selectEntityById(id);
 
-			if (cityDistrict == null)
+			if(feedback == null)
 			{
 				handler.appendError($"Can not find id {id}");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
 				return handler.getJson();
 			}
-			jObject = m_jsonConvertor.toJson(cityDistrict);
+
+			JObject jObject = new JObject();
+			jObject = m_jsonConvertor.FeedbackConvertor.toJson(feedback);
 
 			return jObject.ToString();
         }
 
-		// POST:api/v1/CityDistricts
+		// POST: api/v1/Feedback - insert
 		[HttpPost]
         public string Post([FromBody] JObject value)
         {
 			JsonHandler handler = new JsonHandler();
+
 			if (value == null)
 			{
-				handler.appendError($"JSON parametr is null");
+				handler.appendError("JSON parametr is null");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
 				return handler.getJson();
 			}
 
-			CityDistricts newCityDistrict = m_jsonConvertor.fromJsonToCityDistricts(value);
-			if (newCityDistrict == null)
+			Feedback newFeedback = m_jsonConvertor.FeedbackConvertor.fromJson(value);
+
+			if(newFeedback == null)
 			{
 				handler.appendError($"Unsuccessful convertaion from JSON");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 				return handler.getJson();
 			}
 
-			int id = m_storage.CityDistrictsDao.insertEntity(newCityDistrict);
-			if(id < 0)
-			{
-				handler.appendError($"Can not insert City District with id {id}");
-				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-				return handler.getJson();
-			}
+			int id = m_storage.FeedbackDao.insertEntity(newFeedback);
 
-			return null;
-        }
-
-		[HttpPost("{id}")]
-		public string Post(int id, [FromBody] JObject value)
-		{
-			JsonHandler handler = new JsonHandler();
 			if (id < 0)
 			{
-				handler.appendError($"Id is less than 0");
-				HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
-				return handler.getJson();
-			}
-
-			if (value == null)
-			{
-				handler.appendError($"JSON parametr is null");
-				HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
-				return handler.getJson();
-			}
-
-			CityDistricts cityDistrict = m_storage.CityDistrictsDao.selectEntityById(id);
-			if (cityDistrict == null)
-			{
-				handler.appendError($"Can not find City District with id {id}");
-				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-				return handler.getJson();
-			}
-
-			CityDistricts newCityDistrict = m_jsonConvertor.fromJsonToCityDistricts(value);
-			if(newCityDistrict == null)
-			{
-				handler.appendError($"Unsuccessful convertaion from JSON");
-				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-				return handler.getJson();
-			}
-
-			cityDistrict.Name = newCityDistrict.Name;
-
-			bool result = m_storage.CityDistrictsDao.updateEntity(cityDistrict);
-			if(result == false)
-			{
-				handler.appendError($"Can not update City District with id {id}");
+				handler.appendError($"Can not insert Feedback with id {id}");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 				return handler.getJson();
 			}
@@ -157,11 +117,12 @@ namespace WorkFinderAPI.Controllers
 			return null;
 		}
 
-		// DELETE: api/v1/ApiWithActions/5
-		[HttpDelete("{id}")]
-        public string Delete(int id)
-        {
+		// POST: api/v1/Feedback/id - update by id
+		[HttpPost("{id}")]
+		public string Post(int id, [FromBody] JObject value)
+		{
 			JsonHandler handler = new JsonHandler();
+
 			if (id < 0)
 			{
 				handler.appendError($"Id is less than 0");
@@ -169,11 +130,67 @@ namespace WorkFinderAPI.Controllers
 				return handler.getJson();
 			}
 
-			bool result = m_storage.CityDistrictsDao.deleteEntityById(id);
+			if (value == null)
+			{
+				handler.appendError($"JSON parametr is null");
+				HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
+				return handler.getJson();
+			}
+
+			Feedback feedback = m_storage.FeedbackDao.selectEntityById(id);
+
+			if(feedback == null)
+			{
+				handler.appendError($"Can not find Feedback with id {id}");
+				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+				return handler.getJson();
+			}
+
+			Feedback newFeedback = m_jsonConvertor.FeedbackConvertor.fromJson(value);
+
+			if(newFeedback == null)
+			{
+				handler.appendError($"Unsuccessful convertaion from JSON");
+				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+				return handler.getJson();
+			}
+
+			feedback.Name = newFeedback.Name;
+			feedback.Patronymic = newFeedback.Patronymic;
+			feedback.GradeValue = newFeedback.GradeValue;
+			feedback.Date = newFeedback.Date;
+			feedback.Text = newFeedback.Text;
+
+			bool result = m_storage.FeedbackDao.updateEntity(feedback);
 
 			if(result == false)
 			{
-				handler.appendError($"Can not delete City District with id {id}");
+				handler.appendError($"Can not update Feedback with id {id}");
+				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+				return handler.getJson();
+			}
+
+			return null;
+		}
+
+		// DELETE: api/v1/Feedback/5 - delete by id
+		[HttpDelete("{id}")]
+        public string Delete(int id)
+        {
+			JsonHandler handler = new JsonHandler();
+
+			if(id < 0)
+			{
+				handler.appendError($"Id is less than 0");
+				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+				return handler.getJson();
+			}
+
+			bool result = m_storage.FeedbackDao.deleteEntityById(id);
+
+			if(result == false)
+			{
+				handler.appendError($"Can not delete Feedback with id {id}");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 				return handler.getJson();
 			}

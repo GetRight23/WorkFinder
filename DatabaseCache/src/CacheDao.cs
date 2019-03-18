@@ -12,14 +12,14 @@ namespace DatabaseCache
 		public static Storage Storage { get; private set; }
 		protected List<Type> m_entities = null;
 		protected DatabaseDao<Type> m_entitiesDao = null;
-		protected JsonConvertor m_jsonConvertor = null;
+		protected JsonConvertorEngine m_jsonConvertor = null;
 		public string CachedJson { get; protected set; }
 
 		public CacheDao(Storage storage, DatabaseDao<Type> entitiesDao)
 		{
 			Storage = storage;
 			m_entitiesDao = entitiesDao;
-			m_jsonConvertor = new JsonConvertor();
+			m_jsonConvertor = new JsonConvertorEngine();
 			CachedJson = null;
 		}
 

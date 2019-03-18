@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using DatabaseCache;
 using DatabaseDao;
+using JSONConvertor;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -32,7 +33,8 @@ namespace WorkFinderAPI
 		{
 			services.AddScoped<DBContext>(_ => new DBContext(DatabaseConfiguration.Configuration.TestConnection));
 			services.AddScoped<Storage>(_ => new PostgreStorage(DatabaseConfiguration.Configuration.TestConnection));
-			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddScoped<JsonConvertorEngine>(_ => new JsonConvertorEngine());
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
