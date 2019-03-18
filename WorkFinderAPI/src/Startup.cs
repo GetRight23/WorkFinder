@@ -20,8 +20,8 @@ namespace WorkFinderAPI
 
 		public void ConfigureServices(IServiceCollection services)
 		{
-			services.AddScoped<DBContext>(_ => new DBContext(DatabaseConfiguration.Configuration.TestConnection));
-			services.AddScoped<Storage>(_ => new PostgreStorage(DatabaseConfiguration.Configuration.TestConnection));
+            services.AddScoped<DBContext>(_ => new DBContext(DatabaseConfiguration.Configuration.TestConnection));
+            services.AddScoped<Storage>(_ => new PostgreStorage(DatabaseConfiguration.Configuration.TestConnection));
             services.AddScoped<JsonConvertorEngine>(_ => new JsonConvertorEngine());
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 		}
