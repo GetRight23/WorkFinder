@@ -80,6 +80,7 @@ namespace WorkFinderAPI.Controllers
         public string Post([FromBody] JObject value)
         {
 			JsonWrapper wrapper = new JsonWrapper();
+
 			if (value == null)
 			{
 				wrapper.appendError($"JSON parametr is null");
@@ -88,6 +89,7 @@ namespace WorkFinderAPI.Controllers
 			}
 
 			CityDistricts newCityDistrict = jsonConvertor.CityDistrictJsonConvertor.fromJson(value);
+
 			if (newCityDistrict == null)
 			{
 				wrapper.appendError($"Unsuccessful convertaion from JSON");
@@ -96,7 +98,8 @@ namespace WorkFinderAPI.Controllers
 			}
 
 			int id = storage.CityDistrictsDao.insertEntity(newCityDistrict);
-			if(id < 0)
+
+			if(id == 0)
 			{
 				wrapper.appendError($"Can not insert City District with id {id}");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;

@@ -105,7 +105,7 @@ namespace WorkFinderAPI.Controllers
 
 			int id = storage.OrderDao.insertEntity(newOrder);
 
-			if (id < 0)
+			if (id == 0)
 			{
 				wrapper.appendError($"Can not insert Order with id {id}");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;

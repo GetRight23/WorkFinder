@@ -73,7 +73,7 @@ namespace WorkFinderAPI.Controllers
 
 			int id = storage.CityDao.insertEntity(city);
 
-			if(id < 0)
+			if(id == 0)
 			{
 				wrapper.appendError($"Can not insert City with id {id}");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;

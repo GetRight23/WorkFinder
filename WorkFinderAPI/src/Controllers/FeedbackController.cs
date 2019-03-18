@@ -104,7 +104,7 @@ namespace WorkFinderAPI.Controllers
 
 			int id = storage.FeedbackDao.insertEntity(newFeedback);
 
-			if (id < 0)
+			if (id == 0)
 			{
 				wrapper.appendError($"Can not insert Feedback with id {id}");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;

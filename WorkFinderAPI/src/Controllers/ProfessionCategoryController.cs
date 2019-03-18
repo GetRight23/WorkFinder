@@ -104,7 +104,7 @@ namespace WorkFinderAPI.Controllers
 
 			int id = storage.ProfessionCategoryDao.insertEntity(newProfessionCategory);
 
-			if(id < 0)
+			if(id == 0)
 			{
 				wrapper.appendError($"Can not insert Profession Category with id {id}");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;

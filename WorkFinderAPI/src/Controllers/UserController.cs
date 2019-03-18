@@ -104,7 +104,7 @@ namespace WorkFinderAPI.Controllers
 
 			int id = storage.UserDao.insertEntity(newUser);
 
-			if (id < 0)
+			if (id == 0)
 			{
 				wrapper.appendError($"Can not insert User with id {id}");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;

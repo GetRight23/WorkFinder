@@ -104,7 +104,7 @@ namespace WorkFinderAPI.Controllers
 
 			int id = storage.WorkerDao.insertEntity(newWorker);
 
-			if (id < 0)
+			if (id <= 0)
 			{
 				wrapper.appendError($"Can not insert Worker with id {id}");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;

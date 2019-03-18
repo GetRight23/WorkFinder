@@ -4,6 +4,7 @@ using DatabaseDao;
 using JsonConvertor;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Models;
 using Newtonsoft.Json.Linq;
 
@@ -104,7 +105,7 @@ namespace WorkFinderAPI.Controllers
 
 			int id = storage.ServiceDao.insertEntity(newService);
 
-			if (id < 0)
+			if (id == 0)
 			{
 				wrapper.appendError($"Can not insert Service with id {id}");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
@@ -155,6 +156,8 @@ namespace WorkFinderAPI.Controllers
 			service.Price = newService.Price;
 			service.Name = newService.Name;
 			service.IdProfession = newService.IdProfession;
+			//service = newService;
+			//service.Id = id;
 
 			bool result = storage.ServiceDao.updateEntity(service);
 
