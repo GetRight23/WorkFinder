@@ -10,13 +10,13 @@ namespace DatabaseDao
 {
 	public class OrderToServiceDao
 	{
-		private DBContext dbContext = null;
+		private DBContext context = null;
 		private DbSet<OrderToService> daoSet = null;
 		private Logger logger = null;
 
-		public OrderToServiceDao(DBContext appContext, DbSet<OrderToService> daoSet)
+		public OrderToServiceDao(DBContext context, DbSet<OrderToService> daoSet)
 		{
-			dbContext = appContext;
+			this.context = context;
 			logger = LogManager.GetCurrentClassLogger();
 			this.daoSet = daoSet;
 		}
@@ -122,7 +122,7 @@ namespace DatabaseDao
 					orderToService = elem;
 					daoSet.Remove(orderToService);
 				}
-				dbContext.SaveChanges();
+				context.SaveChanges();
 				logger.Trace($"Orders to service relationship remove with service id = {id} is done");
 				return true;
 			}
@@ -149,7 +149,7 @@ namespace DatabaseDao
 					orderToService = elem;
 					daoSet.Remove(orderToService);
 				}
-				dbContext.SaveChanges();
+				context.SaveChanges();
 				logger.Trace($"Orders to service relationship remove with order id = {id} is done");
 				return true;
 			}
@@ -172,7 +172,7 @@ namespace DatabaseDao
 				OrderToService orderToService = new OrderToService() { IdOrder = orderId, IdService = serviceId };
 				int id = 0;
 				id = daoSet.Add(orderToService).Entity.Id;
-				dbContext.SaveChanges();
+				context.SaveChanges();
 				logger.Trace("Orders to service insert is done");
 				return id;
 			}
@@ -196,7 +196,7 @@ namespace DatabaseDao
 				{
 					int id = 0;
 					id = daoSet.Add(orderToService).Entity.Id;
-					dbContext.SaveChanges();
+					context.SaveChanges();
 					logger.Trace("Orders to service insert is done");
 					return id;
 				}
@@ -220,7 +220,7 @@ namespace DatabaseDao
 				if (entity != null)
 				{
 					daoSet.Update(entity);
-					dbContext.SaveChanges();
+					context.SaveChanges();
 					logger.Trace($"Order to service with id {entity.Id} updated");
 					return true;
 				}
@@ -244,22 +244,22 @@ namespace DatabaseDao
 				if (ordersToServices != null && ordersToServices.Count != 0)
 				{
 					List<int> Ids = new List<int>();
-					dbContext.Database.BeginTransaction();
+					context.Database.BeginTransaction();
 					for (int i = 0; i < ordersToServices.Count; i++)
 					{
 						int id = 0;
 						id = daoSet.Add(ordersToServices[i]).Entity.Id;
-						dbContext.SaveChanges();
+						context.SaveChanges();
 						Ids.Add(id);
 					}
-					dbContext.Database.CommitTransaction();
+					context.Database.CommitTransaction();
 					logger.Trace($"Insert transaction Order to service is complited");
 					return Ids;
 				}
 			}
 			catch (TransactionException ex)
 			{
-				dbContext.Database.RollbackTransaction();
+				context.Database.RollbackTransaction();
 				logger.Error(ex.Message);
 				logger.Error("Cannot begin insert Order to service transaction");
 			}
@@ -272,19 +272,19 @@ namespace DatabaseDao
 			{
 				if(entities != null && entities.Count != 0)
 				{
-					dbContext.Database.BeginTransaction();
+					context.Database.BeginTransaction();
 					foreach (var entity in entities)
 					{
 						updateEntity(entity);
 					}
-					dbContext.Database.CommitTransaction();
+					context.Database.CommitTransaction();
 					logger.Trace($"Update transaction Order to service is complited");
 					return true;
 				}
 			}
 			catch (TransactionException ex)
 			{
-				dbContext.Database.RollbackTransaction();
+				context.Database.RollbackTransaction();
 				logger.Error(ex.Message);
 				logger.Error("Cannot begin update Order to service transaction");
 			}

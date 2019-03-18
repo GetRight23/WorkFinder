@@ -10,14 +10,14 @@ namespace DatabaseDao
 {
 	public class DatabaseDaoImpl<Type> : DatabaseDao<Type> where Type : DBObject
 	{
-		private DBContext dbContext = null;
+		private DBContext context = null;
 		private DbSet<Type> daoSet = null;
 		private Logger logger = null;
 
-		public DatabaseDaoImpl(DBContext appContext, DbSet<Type> daoSet)
+		public DatabaseDaoImpl(DBContext context, DbSet<Type> daoSet)
 		{
 			logger = LogManager.GetCurrentClassLogger();
-			dbContext = appContext;
+			this.context = context;
 			this.daoSet = daoSet;
 		}
 
@@ -69,7 +69,7 @@ namespace DatabaseDao
 				if (entity != null)
 				{
 					daoSet.Remove(entity);
-					dbContext.SaveChanges();
+					context.SaveChanges();
 					logger.Trace($"{typeof(Type).Name} with id {id} is deleted");
 					return true;
 				}
@@ -93,7 +93,7 @@ namespace DatabaseDao
 				if (entity != null)
 				{
 					daoSet.Add(entity);
-					dbContext.SaveChanges();
+					context.SaveChanges();
 					logger.Trace($"{typeof(Type).Name} with id = {entity.getId()} is added");
 					return entity.getId();
 				}
@@ -117,7 +117,7 @@ namespace DatabaseDao
 				if (entity != null)
 				{
 					daoSet.Update(entity);
-					dbContext.SaveChanges();
+					context.SaveChanges();
 					logger.Trace($"{typeof(Type).Name} with id {entity.getId()} is updated");
 					return true;
 				}
@@ -141,15 +141,15 @@ namespace DatabaseDao
 				if (entities != null && entities.Count != 0)
 				{
 					List<int> Ids = new List<int>();
-					dbContext.Database.BeginTransaction();
+					context.Database.BeginTransaction();
 					foreach (var entity in entities)
 					{
 						daoSet.Add(entity);
-						dbContext.SaveChanges();
+						context.SaveChanges();
 
 						Ids.Add(entity.getId());
 					}
-					dbContext.Database.CommitTransaction();
+					context.Database.CommitTransaction();
 
 					logger.Trace($"Insert transaction {typeof(Type).Name} is complited");
 					return Ids;
@@ -157,7 +157,7 @@ namespace DatabaseDao
 			}
 			catch (TransactionException ex)
 			{
-				dbContext.Database.RollbackTransaction();
+				context.Database.RollbackTransaction();
 				logger.Error(ex.Message);
 				logger.Error($"Cannot begin insert {typeof(Type).Name} transaction");
 			}
@@ -170,12 +170,12 @@ namespace DatabaseDao
 			{
 				if (entities != null && entities.Count != 0)
 				{
-					dbContext.Database.BeginTransaction();
+					context.Database.BeginTransaction();
 					foreach (var entity in entities)
 					{
 						updateEntity(entity);
 					}
-					dbContext.Database.CommitTransaction();
+					context.Database.CommitTransaction();
 
 					logger.Trace($"Update transaction {typeof(Type).Name} is complited");
 					return true;
@@ -183,7 +183,7 @@ namespace DatabaseDao
 			}
 			catch (TransactionException ex)
 			{
-				dbContext.Database.RollbackTransaction();
+				context.Database.RollbackTransaction();
 				logger.Error(ex.Message);
 				logger.Error($"Cannot begin update {typeof(Type).Name} transaction");
 			}
@@ -197,12 +197,12 @@ namespace DatabaseDao
 				if (ids != null && ids.Count != 0)
 				{
 					List<Type> entities = new List<Type>();
-					dbContext.Database.BeginTransaction();
+					context.Database.BeginTransaction();
 					foreach (var id in ids)
 					{
 						entities.Add(selectEntityById(id));
 					}
-					dbContext.Database.CommitTransaction();
+					context.Database.CommitTransaction();
 
 					logger.Trace($"Select by ids transaction {typeof(Type).Name} is complited");
 					return entities;
@@ -210,7 +210,7 @@ namespace DatabaseDao
 			}
 			catch (TransactionException ex)
 			{
-				dbContext.Database.RollbackTransaction();
+				context.Database.RollbackTransaction();
 				logger.Error(ex.Message);
 				logger.Error($"Cannot begin select by ids {typeof(Type).Name} transaction");
 			}
@@ -224,12 +224,12 @@ namespace DatabaseDao
 				if (ids != null && ids.Count != 0)
 				{
 					bool state = true;
-					dbContext.Database.BeginTransaction();
+					context.Database.BeginTransaction();
 					foreach (var id in ids)
 					{
 						state = deleteEntityById(id);
 					}
-					dbContext.Database.CommitTransaction();
+					context.Database.CommitTransaction();
 
 					logger.Trace($"Delete by ids transaction {typeof(Type).Name} is complited");
 					return state;
@@ -237,7 +237,7 @@ namespace DatabaseDao
 			}
 			catch (TransactionException ex)
 			{
-				dbContext.Database.RollbackTransaction();
+				context.Database.RollbackTransaction();
 				logger.Error(ex.Message);
 				logger.Error($"Cannot begin delete by ids {typeof(Type).Name} transaction");
 			}

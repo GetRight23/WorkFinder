@@ -6,7 +6,7 @@ namespace DatabaseDao
 {
 	public abstract class Storage
 	{
-		private DBContext dbContext = null;
+		private DBContext context = null;
 
 		public DbConnection Connection { get; private set; }
 
@@ -15,23 +15,23 @@ namespace DatabaseDao
 		public Storage(DbConnection connection)
 		{
 			Connection = connection;
-			dbContext = new DBContext(connection.ConnectionString);
-			Database = dbContext.Database;
+			context = new DBContext(connection.ConnectionString);
+			Database = context.Database;
 
-			AddressDao = new DatabaseDaoImpl<Address>(dbContext, dbContext.Address);
-			CityDao = new DatabaseDaoImpl<City>(dbContext, dbContext.City);
-			CityDistrictsDao = new DatabaseDaoImpl<CityDistricts>(dbContext, dbContext.CityDistricts);
-			FeedbackDao = new DatabaseDaoImpl<Feedback>(dbContext, dbContext.Feedback);
-			OrderListDao = new DatabaseDaoImpl<OrdersList>(dbContext, dbContext.OrdersList);
-			OrderDao = new DatabaseDaoImpl<Order>(dbContext, dbContext.Order);
-			ProfessionCategoryDao = new DatabaseDaoImpl<ProfessionCategory>(dbContext, dbContext.ProfCategory);
-			ProfessionDao = new DatabaseDaoImpl<Profession>(dbContext, dbContext.Profession);
-			ServiceDao = new DatabaseDaoImpl<Service>(dbContext, dbContext.Service);
-			WorkerDao = new DatabaseDaoImpl<Worker>(dbContext, dbContext.Worker);
-			OrderToServiceDao = new OrderToServiceDao(dbContext, dbContext.OrderToService);
-			ProfessionToWorkerDao = new ProfessionToWorkerDao(dbContext, dbContext.ProfessionToWorker);
-			UserDao = new DatabaseDaoImpl<User>(dbContext, dbContext.User);
-			PhotoDao = new DatabaseDaoImpl<Photo>(dbContext, dbContext.Photo);
+			AddressDao = new DatabaseDaoImpl<Address>(context, context.Address);
+			CityDao = new DatabaseDaoImpl<City>(context, context.City);
+			CityDistrictsDao = new DatabaseDaoImpl<CityDistricts>(context, context.CityDistricts);
+			FeedbackDao = new DatabaseDaoImpl<Feedback>(context, context.Feedback);
+			OrderListDao = new DatabaseDaoImpl<OrdersList>(context, context.OrdersList);
+			OrderDao = new DatabaseDaoImpl<Order>(context, context.Order);
+			ProfessionCategoryDao = new DatabaseDaoImpl<ProfessionCategory>(context, context.ProfCategory);
+			ProfessionDao = new DatabaseDaoImpl<Profession>(context, context.Profession);
+			ServiceDao = new DatabaseDaoImpl<Service>(context, context.Service);
+			WorkerDao = new DatabaseDaoImpl<Worker>(context, context.Worker);
+			OrderToServiceDao = new OrderToServiceDao(context, context.OrderToService);
+			ProfessionToWorkerDao = new ProfessionToWorkerDao(context, context.ProfessionToWorker);
+			UserDao = new DatabaseDaoImpl<User>(context, context.User);
+			PhotoDao = new DatabaseDaoImpl<Photo>(context, context.Photo);
 		}
 
 		public void createTables()

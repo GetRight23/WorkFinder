@@ -10,13 +10,13 @@ namespace DatabaseDao
 {
 	public class ProfessionToWorkerDao
 	{
-		private DBContext dbContext = null;
+		private DBContext context = null;
 		private DbSet<ProfessionToWorker> daoSet = null;
 		private Logger logger = null;
 
-		public ProfessionToWorkerDao(DBContext appContext, DbSet<ProfessionToWorker> daoSet)
+		public ProfessionToWorkerDao(DBContext context, DbSet<ProfessionToWorker> daoSet)
 		{
-			dbContext = appContext;
+			this.context = context;
 			logger = LogManager.GetCurrentClassLogger();
 			this.daoSet = daoSet;
 		}
@@ -120,7 +120,7 @@ namespace DatabaseDao
 				{
 					daoSet.Remove(elem);
 				}
-				dbContext.SaveChanges();
+				context.SaveChanges();
 				logger.Trace($"Profession to worker relationship remove with worker id = {id} is done");
 				return true;
 			}
@@ -145,7 +145,7 @@ namespace DatabaseDao
 				{
 					daoSet.Remove(elem);
 				}
-				dbContext.SaveChanges();
+				context.SaveChanges();
 				logger.Trace($"Profession to worker relationship remove with profession id = {id} is done");
 				return true;
 			}
@@ -169,7 +169,7 @@ namespace DatabaseDao
 				ProfessionToWorker professionToWorker = new ProfessionToWorker() { IdProfession = professionId, IdWorker = workerId };
 				int id = 0;
 				id = daoSet.Add(professionToWorker).Entity.Id;
-				dbContext.SaveChanges();
+				context.SaveChanges();
 				logger.Trace("Profession to worker insert is done");
 				return id;
 			}
@@ -193,7 +193,7 @@ namespace DatabaseDao
 				{
 					int id = 0;
 					id = daoSet.Add(professionToWorker).Entity.Id;
-					dbContext.SaveChanges();
+					context.SaveChanges();
 					logger.Trace("Profession to worker insert is done");
 					return id;
 				}
@@ -217,7 +217,7 @@ namespace DatabaseDao
 				if (entity != null)
 				{
 					daoSet.Update(entity);
-					dbContext.SaveChanges();
+					context.SaveChanges();
 					logger.Trace($"Profession to worker with id {entity.Id} updated");
 					return true;
 				}
@@ -237,22 +237,22 @@ namespace DatabaseDao
 				if (professionToWorkers != null && professionToWorkers.Count != 0)
 				{
 					List<int> Ids = new List<int>();
-					dbContext.Database.BeginTransaction();
+					context.Database.BeginTransaction();
 					for (int i = 0; i < professionToWorkers.Count; i++)
 					{
 						int id = 0;
 						id = daoSet.Add(professionToWorkers[i]).Entity.Id;
-						dbContext.SaveChanges();
+						context.SaveChanges();
 						Ids.Add(id);
 					}
-					dbContext.Database.CommitTransaction();
+					context.Database.CommitTransaction();
 					logger.Trace($"Insert transaction Profession to worker is complited");
 					return Ids;
 				}
 			}
 			catch (TransactionException ex)
 			{
-				dbContext.Database.RollbackTransaction();
+				context.Database.RollbackTransaction();
 				logger.Error(ex.Message);
 				logger.Error("Cannot begin insert Profession to worker transaction");
 			}
@@ -265,19 +265,19 @@ namespace DatabaseDao
 			{
 				if (entities != null && entities.Count != 0)
 				{
-					dbContext.Database.BeginTransaction();
+					context.Database.BeginTransaction();
 					foreach (var entity in entities)
 					{
 						updateEntity(entity);
 					}
-					dbContext.Database.CommitTransaction();
+					context.Database.CommitTransaction();
 					logger.Trace($"Update transaction Profession to worker is complited");
 					return true;
 				}
 			}
 			catch (TransactionException ex)
 			{
-				dbContext.Database.RollbackTransaction();
+				context.Database.RollbackTransaction();
 				logger.Error(ex.InnerException.Message);
 				logger.Error($"Cannot begin update Profession to worker transaction");
 			}
