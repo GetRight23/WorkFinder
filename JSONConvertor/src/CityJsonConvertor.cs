@@ -11,8 +11,8 @@ namespace JSONConvertor
             if (cityJson == null)
             {
                 Logger.Error("Cannot convert city from json, value is null");
-                throw new ArgumentNullException();
-            }
+				return null;
+			}
 
             City city = new City()
             {
@@ -28,8 +28,8 @@ namespace JSONConvertor
             if (city == null)
             {
                 Logger.Error("Cannot convert city to json, value is null");
-                throw new ArgumentNullException();
-            }
+				return null;
+			}
 
             JObject cityJson = new JObject();
             cityJson["Id"] = city.Id;

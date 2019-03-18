@@ -11,7 +11,7 @@ namespace JSONConvertor
             if (addressJson == null)
             {
                 Logger.Error("Cannot convert address from json, value is null");
-                throw new ArgumentNullException();
+				return null;
             }
 
             Address address = new Address()
@@ -31,8 +31,8 @@ namespace JSONConvertor
             if (address == null)
             {
                 Logger.Error("Cannot convert city to json, value is null");
-                throw new ArgumentNullException();
-            }
+				return null;
+			}
 
             JObject addressJson = new JObject();
             addressJson["Id"] = address.Id;

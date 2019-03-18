@@ -11,8 +11,8 @@ namespace JSONConvertor
             if (feedbackJson == null)
             {
                 Logger.Error("Cannot convert feedback from json, value is null");
-                throw new ArgumentNullException();
-            }
+				return null;
+			}
 
             Feedback feedback = new Feedback()
             {
@@ -33,8 +33,8 @@ namespace JSONConvertor
             if (feedback == null)
             {
                 Logger.Error("Cannot convert feedback to json, value is null");
-                throw new ArgumentNullException();
-            }
+				return null;
+			}
 
             JObject feedbackJson = new JObject();
             feedbackJson["Id"] = feedback.Id;

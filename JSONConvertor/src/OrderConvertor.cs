@@ -11,8 +11,8 @@ namespace JSONConvertor
             if (orderJson == null)
             {
                 Logger.Error("Cannot convert order from json, value is null");
-                throw new ArgumentNullException();
-            }
+				return null;
+			}
 
             Order order = new Order()
             {
@@ -29,8 +29,8 @@ namespace JSONConvertor
             if (order == null)
             {
                 Logger.Error("Cannot convert order to json, value is null");
-                throw new ArgumentNullException();
-            }
+				return null;
+			}
 
             JObject orderJson = new JObject();
             orderJson["Id"] = order.Id;

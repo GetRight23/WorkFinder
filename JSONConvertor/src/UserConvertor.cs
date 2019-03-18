@@ -11,8 +11,8 @@ namespace JSONConvertor
             if (userJson == null)
             {
                 Logger.Error("Cannot convert user from json, value is null");
-                throw new ArgumentNullException();
-            }
+				return null;
+			}
 
             User user = new User()
             {
@@ -29,8 +29,8 @@ namespace JSONConvertor
             if (user == null)
             {
                 Logger.Error("Cannot convert user to json, value is null");
-                throw new ArgumentNullException();
-            }
+				return null;
+			}
 
             JObject userJson = new JObject();
             userJson["Id"] = user.Id;

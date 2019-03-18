@@ -11,8 +11,8 @@ namespace JSONConvertor
             if (photoJson == null)
             {
                 Logger.Error("Cannot convert photo from json, value is null");
-                throw new ArgumentNullException();
-            }
+				return null;
+			}
 
             Photo photo = new Photo()
             {
@@ -29,8 +29,8 @@ namespace JSONConvertor
             if (photo == null)
             {
                 Logger.Error("Cannot convert photo to json, value is null");
-                throw new ArgumentNullException();
-            }
+				return null;
+			}
 
             JObject photoJson = new JObject();
             photoJson["Id"] = photo.Id;

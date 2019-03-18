@@ -11,8 +11,8 @@ namespace JSONConvertor
             if (serviceJson == null)
             {
                 Logger.Error("Cannot convert service from json, value is null");
-                throw new ArgumentNullException();
-            }
+				return null;
+			}
 
             Service service = new Service()
             {
@@ -30,8 +30,8 @@ namespace JSONConvertor
             if (service == null)
             {
                 Logger.Error("Cannot convert service to json, value is null");
-                throw new ArgumentNullException();
-            }
+				return null;
+			}
 
             JObject serviceJson = new JObject();
             serviceJson["Id"] = service.Id;

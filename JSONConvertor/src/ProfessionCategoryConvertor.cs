@@ -11,8 +11,8 @@ namespace JSONConvertor
             if (professionCategoryJson == null)
             {
                 Logger.Error("Cannot convert profession category from json, value is null");
-                throw new ArgumentNullException();
-            }
+				return null;
+			}
 
             ProfessionCategory professionCategory = new ProfessionCategory()
             {
@@ -28,8 +28,8 @@ namespace JSONConvertor
             if (professionCategory == null)
             {
                 Logger.Error("Cannot convert profession category to json, value is null");
-                throw new ArgumentNullException();
-            }
+				return null;
+			}
 
             JObject professionCategoryJson = new JObject();
             professionCategoryJson["Id"] = professionCategory.Id;

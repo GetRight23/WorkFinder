@@ -11,8 +11,8 @@ namespace JSONConvertor
             if (cityDistrictJson == null)
             {
                 Logger.Error("Cannot convert city district from json, value is null");
-                throw new ArgumentNullException();
-            }
+				return null;
+			}
 
             CityDistricts cityDistrict = new CityDistricts()
             {
@@ -29,8 +29,8 @@ namespace JSONConvertor
             if (cityDistrict == null)
             {
                 Logger.Error("Cannot convert city district to json, value is null");
-                throw new ArgumentNullException();
-            }
+				return null;
+			}
 
             JObject cityDistrictJson = new JObject();
             cityDistrictJson["Id"] = cityDistrict.Id;

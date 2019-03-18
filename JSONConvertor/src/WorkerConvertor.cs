@@ -11,8 +11,8 @@ namespace JSONConvertor
             if (workerJson == null)
             {
                 Logger.Error("Cannot convert worker from json, value is null");
-                throw new ArgumentNullException();
-            }
+				return null;
+			}
 
             Worker worker = new Worker()
             {
@@ -33,8 +33,8 @@ namespace JSONConvertor
             if (worker == null)
             {
                 Logger.Error("Cannot convert worker to json, value is null");
-                throw new ArgumentNullException();
-            }
+				return null;
+			}
 
             JObject workerJson = new JObject();
             workerJson["Id"] = worker.Id;
