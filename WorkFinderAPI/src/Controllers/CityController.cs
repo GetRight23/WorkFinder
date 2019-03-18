@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using DatabaseDao;
+﻿using DatabaseDao;
 using Microsoft.AspNetCore.Mvc;
-using DatabaseConfiguration;
 using JSONConvertor;
 using Models;
 using Newtonsoft.Json.Linq;
 using DatabaseCache;
-using NLog;
 using System.Net;
 
 namespace WorkFinderAPI.Controllers

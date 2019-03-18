@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Net;
-using System.Threading.Tasks;
 using DatabaseDao;
 using JSONConvertor;
 using Microsoft.AspNetCore.Http;
