@@ -30,7 +30,7 @@ namespace DatabaseFiller
 			}
 			catch (Exception ex)
 			{
-				Logger.Error(ex.InnerException.Message);
+				Logger.Error(ex.Message);
 				Logger.Error("Professsion category filler filling failed");
 			}			
 		}

@@ -30,7 +30,7 @@ namespace DatabaseFiller
 			}
 			catch (FileNotFoundException ex)
 			{
-				Logger.Error(ex.InnerException.Message);
+				Logger.Error(ex.Message);
 				Logger.Error("Cannot open file");
 			}
 			return null;
