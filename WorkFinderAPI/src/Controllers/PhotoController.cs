@@ -50,7 +50,7 @@ namespace WorkFinderAPI.src.Controllers
 				}
 			}
 
-			return jArray.ToString();
+			return wrapper.getJson(jArray);
 		}
 
         // GET: api/Photo/5
@@ -81,8 +81,8 @@ namespace WorkFinderAPI.src.Controllers
 			return jObject.ToString();
 		}
 
-        // POST: api/Photo
-        [HttpPost]
+		// POST: api/Photo
+		[HttpPost]
         public string Post([FromBody] JObject value)
         {
 			JsonWrapper wrapper = new JsonWrapper();

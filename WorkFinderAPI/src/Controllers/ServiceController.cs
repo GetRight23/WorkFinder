@@ -48,7 +48,7 @@ namespace WorkFinderAPI.Controllers
 				}
 			}
 
-			return jArray.ToString();
+			return wrapper.getJson(jArray);
 		}
 
 		// GET: api/v1/Serivce/5 - select by id
@@ -76,7 +76,44 @@ namespace WorkFinderAPI.Controllers
 			JObject jObject = new JObject();
 			jObject = jsonConvertor.ServiceConvertor.toJson(service);
 
-			return jObject.ToString();
+			return wrapper.getJson(jObject);
+		}
+
+		// GET: api/v1/Service/{id}/profession - get profession by service id
+		[HttpGet("{id}/Profession")]
+		public string GetProfessionByServiceId(int id)
+		{
+			JsonWrapper wrapper = new JsonWrapper();
+
+			if (id < 0)
+			{
+				wrapper.appendError($"Id is less then 0");
+				HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
+				return wrapper.getJson();
+			}
+
+			Service service = storage.ServiceDao.selectEntityById(id);
+
+			if (service == null)
+			{
+				wrapper.appendError($"Can not find id {id}");
+				HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
+				return wrapper.getJson();
+			}
+
+			Profession profession = storage.ProfessionDao.selectEntityById(service.IdProfession);
+
+			if (profession == null)
+			{
+				wrapper.appendError($"Can not find profession id {id}");
+				HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
+				return wrapper.getJson();
+			}
+
+			JObject jObject = new JObject();
+			jObject = jsonConvertor.ProfessionConvertor.toJson(profession);
+
+			return wrapper.getJson(jObject);
 		}
 
 		// POST: api/v1/Service - insert

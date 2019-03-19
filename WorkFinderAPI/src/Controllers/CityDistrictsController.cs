@@ -44,7 +44,7 @@ namespace WorkFinderAPI.Controllers
 					jArray.Add(cityDistrict);
 				}				
 			}
-			return jArray.ToString();
+			return wrapper.getJson(jArray);
 		}
 
 		// GET: api/v1/CityDistricts/5

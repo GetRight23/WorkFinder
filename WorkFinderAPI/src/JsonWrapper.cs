@@ -20,6 +20,13 @@ namespace WorkFinderAPI
 			return json.ToString();
 		}
 
+		public string getJson(JArray jArray)
+		{
+			json["Value"] = jArray;
+			json["Errors"] = errorArray;
+			return json.ToString();
+		}
+
 		public string getJson()
 		{
 			json["Value"] = new JObject();

@@ -48,7 +48,7 @@ namespace WorkFinderAPI.Controllers
 				}
 			}
 
-			return jArray.ToString();
+			return wrapper.getJson(jArray);
 		}
 
         // GET: api/v1/Order/5 - select by id
