@@ -78,6 +78,80 @@ namespace WorkFinderAPI.Controllers
 			return jObject.ToString();
 		}
 
+		// GET: api/v1/Worker/5/Address - select address by worker id
+		[HttpGet("{id}/Address")]
+		public string GetAddressByWorkerId(int id)
+		{
+			JsonWrapper wrapper = new JsonWrapper();
+
+			if (id < 0)
+			{
+				wrapper.appendError("Id is less than 0");
+				HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
+				return wrapper.getJson();
+			}
+
+			Worker worker = storage.WorkerDao.selectEntityById(id);
+
+			if(worker == null)
+			{
+				wrapper.appendError($"Can not find id {id}");
+				HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
+				return wrapper.getJson();
+			}
+
+			Address address = storage.AddressDao.selectEntityById(worker.IdAddress);
+
+			if(address == null)
+			{
+				wrapper.appendError($"Can not find address id {id}");
+				HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
+				return wrapper.getJson();
+			}
+
+			JObject jObject = new JObject();
+			jObject = jsonConvertor.AddressJsonConvertor.toJson(address);
+
+			return wrapper.getJson(jObject);
+		}
+
+		// GET: api/v1/Worker/5/Address - select user by worker id
+		[HttpGet("{id}/User")]
+		public string GetUserByWorkerId(int id)
+		{
+			JsonWrapper wrapper = new JsonWrapper();
+
+			if (id < 0)
+			{
+				wrapper.appendError("Id is less than 0");
+				HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
+				return wrapper.getJson();
+			}
+
+			Worker worker = storage.WorkerDao.selectEntityById(id);
+
+			if (worker == null)
+			{
+				wrapper.appendError($"Can not find id {id}");
+				HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
+				return wrapper.getJson();
+			}
+
+			User user = storage.UserDao.selectEntityById(worker.IdUser);
+
+			if (user == null)
+			{
+				wrapper.appendError($"Can not find user id {id}");
+				HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
+				return wrapper.getJson();
+			}
+
+			JObject jObject = new JObject();
+			jObject = jsonConvertor.UserConvertor.toJson(user);
+
+			return wrapper.getJson(jObject);
+		}
+
 		// POST: api/v1/Worker - insert
 		[HttpPost]
 		public string Post([FromBody] JObject value)
