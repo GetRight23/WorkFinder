@@ -80,7 +80,7 @@ namespace WorkFinderAPI.Controllers
 
 		// GET: api/v1/Profession/5/ProfessionCategory - select profession by ProfessionCategory
 		[HttpGet("{id}/ProfessionCategory")]
-		public string GetProfessionByProfessionCategoryId(int id)
+		public string GetProfessionCategoryByProfessionId(int id)
 		{
 			JsonWrapper wrapper = new JsonWrapper();
 
@@ -100,7 +100,9 @@ namespace WorkFinderAPI.Controllers
 				return wrapper.getJson();
 			}
 
-			ProfessionCategory professionCategory = storage.ProfessionCategoryDao.selectEntityById(profession.IdProfCategory);
+			ProfessionCategory professionCategory = storage
+													.ProfessionCategoryDao
+													.selectEntityById(profession.IdProfCategory);
 
 			if (professionCategory == null)
 			{
@@ -110,7 +112,7 @@ namespace WorkFinderAPI.Controllers
 			}
 
 			JObject jObject = new JObject();
-			jObject = jsonConvertor.ProfessionConvertor.toJson(profession);
+			jObject = jsonConvertor.ProfessionCategoryConvertor.toJson(professionCategory);
 
 			return wrapper.getJson(jObject);
 		}
