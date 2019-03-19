@@ -78,6 +78,78 @@ namespace WorkFinderAPI.Controllers
             return jObject.ToString();
         }
 
+		[HttpGet("{id}/District")]
+		public string GetDistrictByAddressId(int id)
+		{
+			JsonWrapper wrapper = new JsonWrapper();
+
+			if (id < 0)
+			{
+				wrapper.appendError("Id is less than 0");
+				HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
+				return wrapper.getJson();
+			}
+
+			Address address = this.storage.AddressDao.selectEntityById(id);
+
+			if (address == null)
+			{
+				wrapper.appendError($"Can not find id {id}");
+				HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
+				return wrapper.getJson();
+			}
+
+			CityDistricts district = storage.CityDistrictsDao.selectEntityById(address.IdCityDistrict);
+
+			if (district == null)
+			{
+				wrapper.appendError($"Can not find district id {id}");
+				HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
+				return wrapper.getJson();
+			}
+
+			JObject jObject = new JObject();
+			jObject = jsonConvertor.CityDistrictJsonConvertor.toJson(district);
+
+			return wrapper.getJson(jObject);
+		}
+
+		[HttpGet("{id}/City")]
+		public string GetCityByAddressId(int id)
+		{
+			JsonWrapper wrapper = new JsonWrapper();
+
+			if (id < 0)
+			{
+				wrapper.appendError("Id is less than 0");
+				HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
+				return wrapper.getJson();
+			}
+
+			Address address = this.storage.AddressDao.selectEntityById(id);
+
+			if (address == null)
+			{
+				wrapper.appendError($"Can not find id {id}");
+				HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
+				return wrapper.getJson();
+			}
+
+			City city = storage.CityDao.selectEntityById(address.IdCity);
+
+			if (city == null)
+			{
+				wrapper.appendError($"Can not find city id {id}");
+				HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
+				return wrapper.getJson();
+			}
+
+			JObject jObject = new JObject();
+			jObject = jsonConvertor.CityJsonConvertor.toJson(city);
+
+			return wrapper.getJson(jObject);
+		}
+
 		// POST: api/v1/Address - insert
 		[HttpPost]
         public string Post([FromBody] JObject value)
