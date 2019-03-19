@@ -73,6 +73,8 @@ namespace WorkFinderAPI.Controllers
 			return jObject.ToString();
         }
 
+
+		// GET: api/v1/CityDistricts/5/City - select city by district id
 		[HttpGet("{id}/City")]
 		public string GetCityByDistrictId(int id)
 		{
