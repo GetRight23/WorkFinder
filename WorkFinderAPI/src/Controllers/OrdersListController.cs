@@ -9,52 +9,51 @@ using Newtonsoft.Json.Linq;
 
 namespace WorkFinderAPI.Controllers
 {
-    [Route("api/v1/[controller]")]
-    [ApiController]
-    public class OrderController : ControllerBase
-    {
+	[Route("api/v1/[controller]")]
+	[ApiController]
+	public class OrdersListController : ControllerBase
+	{
 		private Storage storage;
 		private JsonConvertorEngine jsonConvertor;
 
-		public OrderController(Storage storage, JsonConvertorEngine jsonConvertor)
+		public OrdersListController(Storage storage, JsonConvertorEngine jsonConvertor)
 		{
 			this.storage = storage;
 			this.jsonConvertor = jsonConvertor;
 		}
 
-
-		// GET: api/v1/Order - select all
+		// GET: api/v1/OrdersList - select all
 		[HttpGet]
-        public string Get()
-        {
+		public string Get()
+		{
 			JsonWrapper wrapper = new JsonWrapper();
-			List<Order> addresses = storage.OrderDao.selectEntities();
+			List<OrdersList> ordersLists = storage.OrderListDao.selectEntities();
 
-			if (addresses == null)
+			if (ordersLists == null)
 			{
-				wrapper.appendError("Can not select Orders");
+				wrapper.appendError("Can not select Orders Lists");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 				return wrapper.getJson();
 			}
 
 			JArray jArray = new JArray();
 
-			foreach (var item in addresses)
+			foreach (var item in ordersLists)
 			{
-				JObject order = jsonConvertor.OrderConvertor.toJson(item);
-				if (order != null)
+				JObject ordersList = jsonConvertor.OrdersListConvertor.toJson(item);
+				if (ordersList != null)
 				{
-					jArray.Add(order);
+					jArray.Add(ordersList);
 				}
 			}
 
 			return wrapper.getJson(jArray);
 		}
 
-        // GET: api/v1/Order/5 - select by id
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
+		// GET: api/v1/OrdersList/5 - select by id
+		[HttpGet("{id}")]
+		public string Get(int id)
+		{
 			JsonWrapper wrapper = new JsonWrapper();
 
 			if (id < 0)
@@ -64,9 +63,9 @@ namespace WorkFinderAPI.Controllers
 				return wrapper.getJson();
 			}
 
-			Order order = storage.OrderDao.selectEntityById(id);
+			OrdersList ordersList = storage.OrderListDao.selectEntityById(id);
 
-			if (order == null)
+			if (ordersList == null)
 			{
 				wrapper.appendError($"Can not find id {id}");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
@@ -74,13 +73,13 @@ namespace WorkFinderAPI.Controllers
 			}
 
 			JObject jObject = new JObject();
-			jObject = jsonConvertor.OrderConvertor.toJson(order);
+			jObject = jsonConvertor.OrdersListConvertor.toJson(ordersList);
 
 			return jObject.ToString();
-        }
+		}
 
-		[HttpGet("{id}/OrdersList")]
-		public string GetOrdersListByOrderId(int id)
+		[HttpGet("{id}/Worker")]
+		public string GetWorkerByOrdersListId(int id)
 		{
 			JsonWrapper wrapper = new JsonWrapper();
 
@@ -91,34 +90,34 @@ namespace WorkFinderAPI.Controllers
 				return wrapper.getJson();
 			}
 
-			Order order = this.storage.OrderDao.selectEntityById(id);
+			OrdersList ordersList = this.storage.OrderListDao.selectEntityById(id);
 
-			if (order == null)
+			if (ordersList == null)
 			{
 				wrapper.appendError($"Can not find id {id}");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
 				return wrapper.getJson();
 			}
 
-			OrdersList ordersList = storage.OrderListDao.selectEntityById(order.IdOrderList);
+			Worker worker = storage.WorkerDao.selectEntityById(ordersList.IdWorker);
 
-			if (ordersList == null)
+			if (worker == null)
 			{
-				wrapper.appendError($"Can not find Orders List id {id}");
+				wrapper.appendError($"Can not find worker id {id}");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
 				return wrapper.getJson();
 			}
 
 			JObject jObject = new JObject();
-			jObject = jsonConvertor.OrdersListConvertor.toJson(ordersList);
+			jObject = jsonConvertor.WorkerConvertor.toJson(worker);
 
 			return wrapper.getJson(jObject);
 		}
 
-		// POST: api/v1/Order - insert
+		// POST: api/v1/OrdersList - insert
 		[HttpPost]
-        public string Post([FromBody] JObject value)
-        {
+		public string Post([FromBody] JObject value)
+		{
 			JsonWrapper wrapper = new JsonWrapper();
 
 			if (value == null)
@@ -128,20 +127,20 @@ namespace WorkFinderAPI.Controllers
 				return wrapper.getJson();
 			}
 
-			Order newOrder = jsonConvertor.OrderConvertor.fromJson(value);
+			OrdersList newOrdersList = jsonConvertor.OrdersListConvertor.fromJson(value);
 
-			if (newOrder == null)
+			if (newOrdersList == null)
 			{
 				wrapper.appendError($"Unsuccessful convertaion from JSON");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 				return wrapper.getJson();
 			}
 
-			int id = storage.OrderDao.insertEntity(newOrder);
+			int id = storage.OrderListDao.insertEntity(newOrdersList);
 
 			if (id == 0)
 			{
-				wrapper.appendError($"Can not insert Order with id {id}");
+				wrapper.appendError($"Can not insert Orders List with id {id}");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 				return wrapper.getJson();
 			}
@@ -149,10 +148,10 @@ namespace WorkFinderAPI.Controllers
 			return null;
 		}
 
-        // PUT: api/v1/Order/5 - update
-        [HttpPost("{id}")]
-        public string Post(int id, [FromBody] JObject value)
-        {
+		// POST: api/v1/OrdersList/id - update by id
+		[HttpPost("{id}")]
+		public string Post(int id, [FromBody] JObject value)
+		{
 			JsonWrapper wrapper = new JsonWrapper();
 
 			if (id < 0)
@@ -169,33 +168,33 @@ namespace WorkFinderAPI.Controllers
 				return wrapper.getJson();
 			}
 
-			Order newOrder = jsonConvertor.OrderConvertor.fromJson(value);
+			OrdersList newOrdersList= jsonConvertor.OrdersListConvertor.fromJson(value);
 
-			if (newOrder == null)
+			if (newOrdersList == null)
 			{
 				wrapper.appendError($"Unsuccessful convertaion from JSON");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 				return wrapper.getJson();
 			}
 
-			newOrder.Id = id;
+			newOrdersList.Id = id;
 
-			bool result = storage.OrderDao.updateEntity(newOrder);
+			bool result = storage.OrderListDao.updateEntity(newOrdersList);
 
 			if (result == false)
 			{
-				wrapper.appendError($"Can not update Order with id {id}");
+				wrapper.appendError($"Can not update Orders List with id {id}");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 				return wrapper.getJson();
 			}
 
 			return null;
-        }
+		}
 
-        // DELETE: api/v1/Delete/5 - delete by id
-        [HttpDelete("{id}")]
-        public string Delete(int id)
-        {
+		// DELETE: api/v1/OrdersList/5 - delete by id
+		[HttpDelete("{id}")]
+		public string Delete(int id)
+		{
 			JsonWrapper wrapper = new JsonWrapper();
 
 			if (id < 0)
@@ -205,16 +204,16 @@ namespace WorkFinderAPI.Controllers
 				return wrapper.getJson();
 			}
 
-			bool result = storage.OrderDao.deleteEntityById(id);
+			bool result = storage.OrderListDao.deleteEntityById(id);
 
 			if (result == false)
 			{
-				wrapper.appendError($"Can not delete Order with id {id}");
+				wrapper.appendError($"Can not delete Orders List with id {id}");
 				HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 				return wrapper.getJson();
 			}
 
 			return null;
 		}
-    }
+	}
 }

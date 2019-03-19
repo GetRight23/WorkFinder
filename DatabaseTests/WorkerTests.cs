@@ -31,14 +31,16 @@ namespace DatabaseTests
 			Assert.IsNotNull(Storage.Database);
 			Assert.IsNotNull(Storage.CityDao);
 			Assert.IsNotNull(Storage.CityDistrictsDao);
+			Assert.IsNotNull(Storage.WorkerDao);
+			Assert.IsNotNull(Storage.UserDao);
 			Assert.IsNotNull(Storage);
 
 			Connection = Storage.Connection;
 			CityDao = Storage.CityDao;
 			CityDistrictsDao = Storage.CityDistrictsDao;
 			AddressDao = Storage.AddressDao;
-			WorkerDao = Storage.WorkerDao;
 			UserDao = Storage.UserDao;
+			WorkerDao = Storage.WorkerDao;
 
 			Connection.Open();
 			Storage.createCityTable();
@@ -67,8 +69,12 @@ namespace DatabaseTests
 			city = new City() { Name = "Kyiv" };
 			int cityId = CityDao.insertEntity(city);
 
+			Assert.IsTrue(cityId != 0);
+
 			district = new CityDistricts() { IdCity = cityId, Name = "South" };
 			int districtId = CityDistrictsDao.insertEntity(district);
+
+			Assert.IsTrue(districtId != 0);
 
 			address = new Address()
 			{
@@ -80,12 +86,16 @@ namespace DatabaseTests
 
 			int addressId = AddressDao.insertEntity(address);
 
+			Assert.IsTrue(addressId != 0);
+
 			user = new User()
 			{
 				Login = "yakrut",
 				Password = "124124124",
 			};
 			int userId = UserDao.insertEntity(user);
+
+			Assert.IsTrue(userId != 0);
 
 			worker = new Worker()
 			{
