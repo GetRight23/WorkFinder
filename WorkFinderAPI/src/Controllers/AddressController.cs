@@ -78,6 +78,7 @@ namespace WorkFinderAPI.Controllers
             return jObject.ToString();
         }
 
+		// GET: api/v1/Address/5/District - select district by address id
 		[HttpGet("{id}/District")]
 		public string GetDistrictByAddressId(int id)
 		{
@@ -114,6 +115,7 @@ namespace WorkFinderAPI.Controllers
 			return wrapper.getJson(jObject);
 		}
 
+		// GET: api/v1/Address/5/City - select city by address id
 		[HttpGet("{id}/City")]
 		public string GetCityByAddressId(int id)
 		{
