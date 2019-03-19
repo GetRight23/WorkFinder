@@ -11,9 +11,9 @@ namespace DatabaseTests
     {
         private static Storage Storage { get; set; }
         private static DbConnection Connection { get; set; }
-        private static DatabaseDao<Profession> ProfessionDao { get; set; }
-        private static DatabaseDao<ProfessionCategory> ProfCategoryDao { get; set; }
-        private static ProfessionCategory professionCategory = null;
+		private static DatabaseDaoImpl<ProfessionCategory> ProfessionCategoryDao { get; set; }
+		private static DatabaseDaoImpl<Profession> ProfessionDao { get; set; }
+		private static ProfessionCategory professionCategory = null;
         private static Profession profession = null;
 
         [OneTimeSetUp]
@@ -28,10 +28,10 @@ namespace DatabaseTests
             Assert.IsNotNull(Storage);
 
             Connection = Storage.Connection;
-            ProfCategoryDao = Storage.ProfessionCategoryDao;
-            ProfessionDao = Storage.ProfessionDao;
+			ProfessionCategoryDao = Storage.ProfessionCategoryDao;
+			ProfessionDao = Storage.ProfessionDao;
 
-            Connection.Open();
+			Connection.Open();
             Storage.createProfCategoryTable();
             Storage.createProfessionTable();
         }
@@ -40,26 +40,53 @@ namespace DatabaseTests
         public void CleanUp()
         {
             var command = Connection.CreateCommand();
-            command.CommandText = "drop table if exists profession" +
-                                    "drop table if exists prof_category;";
+            command.CommandText = "drop table if exists prof_category cascade;" +
+								  "drop table if exists profession cascade;";
             command.ExecuteNonQuery();
             Connection.Close();
         }
 
         [Test, Order(1)]
-        public void insertCityTest()
+        public void insertTest()
         {
             professionCategory = new ProfessionCategory() { Name = "Teacher" };
-            Assert.IsNotNull(professionCategory);
+            int professionCategoryId = ProfessionCategoryDao.insertEntity(professionCategory);
 
-            int profCategoryId = Storage.ProfessionCategoryDao.insertEntity(professionCategory);
+			Assert.IsTrue(professionCategoryId != 0);
 
-            profession = new Profession() { Name = "Math", IdProfCategory = profCategoryId };
-            Assert.IsNotNull(profession);
+			profession = new Profession() { Name = "Math", IdProfCategory = professionCategoryId };
+            int professionId = ProfessionDao.insertEntity(profession);
 
-            int profId = Storage.ProfessionDao.insertEntity(profession);
-
-            Assert.IsTrue(profId != 0);
+            Assert.IsTrue(professionId != 0);
         }
-    }
+
+		[Test, Order(2)]
+		public void selectTest()
+		{
+			List<Profession> professions = ProfessionDao.selectEntities();
+			Assert.IsTrue(professions.Count == 1);
+		}
+
+		[Test, Order(3)]
+		public void updateTest()
+		{
+			Assert.IsNotNull(profession);
+			profession.Name = "Engigneer";
+
+			bool result = ProfessionDao.updateEntity(profession);
+
+			Assert.IsTrue(result);
+			Assert.IsTrue(ProfessionDao.selectEntityById(profession.Id).Name == "Engigneer");
+		}
+
+		[Test, Order(4)]
+		public void deleteTest()
+		{
+			Assert.IsNotNull(profession);
+			bool result = ProfessionDao.deleteEntityById(profession.Id);
+
+			Assert.IsTrue(result);
+			Assert.IsTrue(ProfessionDao.selectEntities().Count == 0);
+		}
+	}
 }

@@ -4,5 +4,5 @@
   "Username": "test",
   "Password": "test",
   "DefaultDatabase": "main_db",
-  "TestDatabase": "main_db"
+  "TestDatabase": "test_db"
 }

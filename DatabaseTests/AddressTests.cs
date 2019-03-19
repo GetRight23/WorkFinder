@@ -27,6 +27,7 @@ namespace DatabaseTests
 			Assert.IsNotNull(Storage.Database);
 			Assert.IsNotNull(Storage.CityDao);
 			Assert.IsNotNull(Storage.CityDistrictsDao);
+			Assert.IsNotNull(Storage.AddressDao);
 			Assert.IsNotNull(Storage);
 
 			Connection = Storage.Connection;
@@ -57,8 +58,12 @@ namespace DatabaseTests
 			city = new City() { Name = "Kyiv" };
 			int cityId = CityDao.insertEntity(city);
 
+			Assert.IsTrue(cityId != 0);
+
 			district = new CityDistricts() { IdCity = cityId, Name = "South" };
 			int districtId = CityDistrictsDao.insertEntity(district);
+
+			Assert.IsTrue(districtId != 0);
 
 			address = new Address() { IdCity = cityId, IdCityDistrict = districtId, ApptNum = "5", StreetName = "Lenina" };
 			int addressId = AddressDao.insertEntity(address);

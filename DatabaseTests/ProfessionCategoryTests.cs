@@ -7,11 +7,12 @@ using System.Collections.Generic;
 
 namespace DatabaseTests
 {
-    class ProfCategoryTests
+    class ProfessionCategoryTests
     {
         private static Storage Storage { get; set; }
         private static DbConnection Connection { get; set; }
-        private static ProfessionCategory professionCategory = null;
+		private static DatabaseDaoImpl<ProfessionCategory> ProfessionCategoryDao { get; set; }
+		private static ProfessionCategory professionCategory = null;
 
         [OneTimeSetUp]
         public void Setup()
@@ -24,8 +25,9 @@ namespace DatabaseTests
             Assert.IsNotNull(Storage);
 
             Connection = Storage.Connection;
+			ProfessionCategoryDao = Storage.ProfessionCategoryDao;
 
-            Connection.Open();
+			Connection.Open();
             Storage.createProfCategoryTable();
         }
 
@@ -39,43 +41,43 @@ namespace DatabaseTests
         }
 
         [Test, Order(1)]
-        public void insertProffesionCategoryTest()
+        public void insertTest()
         {
             professionCategory = new ProfessionCategory() { Name = "Teacher" };
             Assert.IsNotNull(professionCategory);
 
-            int id = Storage.ProfessionCategoryDao.insertEntity(professionCategory);
+            int id = ProfessionCategoryDao.insertEntity(professionCategory);
 
             Assert.IsTrue(id != 0);
         }
 
         [Test, Order(2)]
-        public void selectProffesionCategoryTest()
+        public void selectTest()
         {
-            List<ProfessionCategory> cities = Storage.ProfessionCategoryDao.selectEntities();
+            List<ProfessionCategory> cities = ProfessionCategoryDao.selectEntities();
             Assert.IsTrue(cities.Count == 1);
         }
 
         [Test, Order(3)]
-        public void updateProffesionCategoryTest()
+        public void updateTest()
         {
             Assert.IsNotNull(professionCategory);
             professionCategory.Name = "Engigneer";
 
-            bool result = Storage.ProfessionCategoryDao.updateEntity(professionCategory);
+            bool result = ProfessionCategoryDao.updateEntity(professionCategory);
 
             Assert.IsTrue(result);
-            Assert.IsTrue(Storage.ProfessionCategoryDao.selectEntityById(professionCategory.Id).Name == "Engigneer");
+            Assert.IsTrue(ProfessionCategoryDao.selectEntityById(professionCategory.Id).Name == "Engigneer");
         }
 
         [Test, Order(4)]
-        public void deleteProffesionCategorytest()
+        public void deleteTest()
         {
             Assert.IsNotNull(professionCategory);
-            bool result = Storage.ProfessionCategoryDao.deleteEntityById(professionCategory.Id);
+            bool result = ProfessionCategoryDao.deleteEntityById(professionCategory.Id);
 
             Assert.IsTrue(result);
-            Assert.IsTrue(Storage.ProfessionCategoryDao.selectEntities().Count == 0);
+            Assert.IsTrue(ProfessionCategoryDao.selectEntities().Count == 0);
         }
     }
 }

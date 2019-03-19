@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace DatabaseTests
 {
-	class CityDistrictsTests
+	class CityDistrictTests
 	{
 		private static Storage Storage { get; set; }
 		private static DbConnection Connection { get; set; }
@@ -47,7 +47,7 @@ namespace DatabaseTests
 		}
 
 		[Test, Order(1)]
-		public void insertCityDistrictsTest()
+		public void insertTest()
 		{
 			city = new City() { Name = "Kyiv" };
 			int cityId = CityDao.insertEntity(city);
@@ -59,14 +59,14 @@ namespace DatabaseTests
 		}
 
 		[Test, Order(2)]
-		public void selectCityDistrictsTest()
+		public void selectTest()
 		{
 			List<CityDistricts> districts = CityDistrictsDao.selectEntities();
 			Assert.IsTrue(districts.Count == 1);
 		}
 
 		[Test, Order(3)]
-		public void updateCityDistrictsTest()
+		public void updateTest()
 		{
 			Assert.IsNotNull(district);
 			district.Name = "North";
@@ -78,7 +78,7 @@ namespace DatabaseTests
 		}
 
 		[Test, Order(4)]
-		public void deleteCityDistrictstest()
+		public void deleteTest()
 		{
 			Assert.IsNotNull(district);
 			bool result = CityDistrictsDao.deleteEntityById(district.Id);

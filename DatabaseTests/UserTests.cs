@@ -1,4 +1,4 @@
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Models;
 using DatabaseDao;
 using DatabaseConfiguration;
@@ -7,12 +7,12 @@ using System.Collections.Generic;
 
 namespace DatabaseTests
 {
-	class CityTests
+	class UserTest
 	{
 		private static Storage Storage { get; set; }
 		private static DbConnection Connection { get; set; }
-		private static DatabaseDaoImpl<City> CityDao { get; set; }
-		private static City city = null;
+		private static DatabaseDaoImpl<User> UserDao { get; set; }
+		private static User user = null;
 
 		[OneTimeSetUp]
 		public void Setup()
@@ -21,21 +21,21 @@ namespace DatabaseTests
 
 			Assert.IsNotNull(Storage.Connection);
 			Assert.IsNotNull(Storage.Database);
-			Assert.IsNotNull(Storage.CityDao);
+			Assert.IsNotNull(Storage.UserDao);
 			Assert.IsNotNull(Storage);
 
 			Connection = Storage.Connection;
-			CityDao = Storage.CityDao;
+			UserDao = Storage.UserDao;
 
 			Connection.Open();
-			Storage.createCityTable();
+			Storage.createUserTable();
 		}
 
 		[OneTimeTearDown]
 		public void CleanUp()
 		{
 			var command = Connection.CreateCommand();
-			command.CommandText = "drop table if exists city";
+			command.CommandText = "drop table if exists user_table;";
 			command.ExecuteNonQuery();
 			Connection.Close();
 		}
@@ -43,41 +43,39 @@ namespace DatabaseTests
 		[Test, Order(1)]
 		public void insertTest()
 		{
-			city = new City() { Name = "Kyiv" };
-			Assert.IsNotNull(city);
+			user = new User() { Login = "oleg", Password = "test" };
+			int userId = UserDao.insertEntity(user);
 
-			int id = CityDao.insertEntity(city);
-
-			Assert.IsTrue(id != 0);
+			Assert.IsTrue(userId != 0);
 		}
 
 		[Test, Order(2)]
 		public void selectTest()
 		{
-			List<City> cities = CityDao.selectEntities();
-			Assert.IsTrue(cities.Count == 1);
+			List<User> users = UserDao.selectEntities();
+			Assert.IsTrue(users.Count == 1);
 		}
 
 		[Test, Order(3)]
 		public void updateTest()
 		{
-			Assert.IsNotNull(city);
-			city.Name = "London";
+			Assert.IsNotNull(user);
+			user.Login = "vlad";
 
-			bool result = CityDao.updateEntity(city);
+			bool result = UserDao.updateEntity(user);
 
 			Assert.IsTrue(result);
-			Assert.IsTrue(CityDao.selectEntityById(city.Id).Name == "London");
+			Assert.IsTrue(UserDao.selectEntityById(user.Id).Login == "vlad");
 		}
 
 		[Test, Order(4)]
 		public void deleteTest()
 		{
-			Assert.IsNotNull(city);
-			bool result = CityDao.deleteEntityById(city.Id);
+			Assert.IsNotNull(user);
+			bool result = UserDao.deleteEntityById(user.Id);
 
 			Assert.IsTrue(result);
-			Assert.IsTrue(CityDao.selectEntities().Count == 0);
+			Assert.IsTrue(UserDao.selectEntities().Count == 0);
 		}
 	}
 }
