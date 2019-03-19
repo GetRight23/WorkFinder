@@ -79,8 +79,44 @@ namespace WorkFinderAPI.Controllers
 			return jObject.ToString();
         }
 
-        // POST: api/v1/Order - insert
-        [HttpPost]
+		[HttpGet("{id}/OrdersList")]
+		public string GetOrdersListByOrderId(int id)
+		{
+			JsonWrapper wrapper = new JsonWrapper();
+
+			if (id < 0)
+			{
+				wrapper.appendError("Id is less than 0");
+				HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
+				return wrapper.getJson();
+			}
+
+			Order order = this.storage.OrderDao.selectEntityById(id);
+
+			if (order == null)
+			{
+				wrapper.appendError($"Can not find id {id}");
+				HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
+				return wrapper.getJson();
+			}
+
+			OrdersList ordersList = storage.OrderListDao.selectEntityById(order.IdOrderList);
+
+			if (ordersList == null)
+			{
+				wrapper.appendError($"Can not find Orders List id {id}");
+				HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
+				return wrapper.getJson();
+			}
+
+			JObject jObject = new JObject();
+			jObject = jsonConvertor.OrdersListConvertor.toJson(ordersList);
+
+			return wrapper.getJson(jObject);
+		}
+
+		// POST: api/v1/Order - insert
+		[HttpPost]
         public string Post([FromBody] JObject value)
         {
 			JsonWrapper wrapper = new JsonWrapper();
