@@ -78,6 +78,43 @@ namespace WorkFinderAPI.Controllers
 			return jObject.ToString();
         }
 
+		// GET: api/v1/Feedback/5/Worker - select worker by feedback id
+		[HttpGet("{id}/Worker")]
+		public string GetWorkerByFeedbackId(int id)
+		{
+			JsonWrapper wrapper = new JsonWrapper();
+
+			if (id < 0)
+			{
+				wrapper.appendError("Id is less than 0");
+				HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
+				return wrapper.getJson();
+			}
+
+			Feedback feedback = storage.FeedbackDao.selectEntityById(id);
+
+			if(feedback == null)
+			{
+				wrapper.appendError($"Can not find id {id}");
+				HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
+				return wrapper.getJson();
+			}
+
+			Worker worker = storage.WorkerDao.selectEntityById(feedback.IdWorker);
+
+			if (worker == null)
+			{
+				wrapper.appendError($"Can not find worker id {id}");
+				HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
+				return wrapper.getJson();
+			}
+
+			JObject jObject = new JObject();
+			jObject = jsonConvertor.WorkerConvertor.toJson(worker);
+
+			return wrapper.getJson(jObject);
+		}
+
 		// POST: api/v1/Feedback - insert
 		[HttpPost]
         public string Post([FromBody] JObject value)
