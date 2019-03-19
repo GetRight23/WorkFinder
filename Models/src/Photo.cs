@@ -7,7 +7,7 @@
 
 		public string Link { get; set; }
 
-		public int? IdUser { get; set; }
+		public int IdUser { get; set; }
 
 		public override int getId() { return Id; }
 

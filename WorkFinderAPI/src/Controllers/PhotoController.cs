@@ -12,7 +12,7 @@ using Newtonsoft.Json.Linq;
 
 namespace WorkFinderAPI.src.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class PhotoController : ControllerBase
     {
@@ -50,7 +50,7 @@ namespace WorkFinderAPI.src.Controllers
 				}
 			}
 
-			return jArray.ToString();
+			return wrapper.getJson(jArray);
 		}
 
         // GET: api/Photo/5
@@ -81,8 +81,44 @@ namespace WorkFinderAPI.src.Controllers
 			return jObject.ToString();
 		}
 
-        // POST: api/Photo
-        [HttpPost]
+		[HttpGet("{id}/User")]
+		public string GetUserByPhotoId(int id)
+		{
+			JsonWrapper wrapper = new JsonWrapper();
+
+			if (id < 0)
+			{
+				wrapper.appendError("Id is less than 0");
+				HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
+				return wrapper.getJson();
+			}
+
+			Photo photo= this.storage.PhotoDao.selectEntityById(id);
+
+			if (photo == null)
+			{
+				wrapper.appendError($"Can not find id {id}");
+				HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
+				return wrapper.getJson();
+			}
+
+			User user = storage.UserDao.selectEntityById(photo.IdUser);
+
+			if (user == null)
+			{
+				wrapper.appendError($"Can not find user id {id}");
+				HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
+				return wrapper.getJson();
+			}
+
+			JObject jObject = new JObject();
+			jObject = jsonConvertor.UserConvertor.toJson(user);
+
+			return wrapper.getJson(jObject);
+		}
+
+		// POST: api/Photo
+		[HttpPost]
         public string Post([FromBody] JObject value)
         {
 			JsonWrapper wrapper = new JsonWrapper();

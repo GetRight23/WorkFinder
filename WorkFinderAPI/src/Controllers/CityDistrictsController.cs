@@ -44,7 +44,7 @@ namespace WorkFinderAPI.Controllers
 					jArray.Add(cityDistrict);
 				}				
 			}
-			return jArray.ToString();
+			return wrapper.getJson(jArray);
 		}
 
 		// GET: api/v1/CityDistricts/5
@@ -72,6 +72,44 @@ namespace WorkFinderAPI.Controllers
 
 			return jObject.ToString();
         }
+
+
+		// GET: api/v1/CityDistricts/5/City - select city by district id
+		[HttpGet("{id}/City")]
+		public string GetCityByDistrictId(int id)
+		{
+			JsonWrapper wrapper = new JsonWrapper();
+
+			if (id < 0)
+			{
+				wrapper.appendError("Id is less than 0");
+				HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
+				return wrapper.getJson();
+			}
+
+			CityDistricts district = this.storage.CityDistrictsDao.selectEntityById(id);
+
+			if (district == null)
+			{
+				wrapper.appendError($"Can not find id {id}");
+				HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
+				return wrapper.getJson();
+			}
+
+			City city = storage.CityDao.selectEntityById(district.IdCity);
+
+			if (city == null)
+			{
+				wrapper.appendError($"Can not find city id {id}");
+				HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
+				return wrapper.getJson();
+			}
+
+			JObject jObject = new JObject();
+			jObject = jsonConvertor.CityJsonConvertor.toJson(city);
+
+			return wrapper.getJson(jObject);
+		}
 
 		// POST:api/v1/CityDistricts
 		[HttpPost]

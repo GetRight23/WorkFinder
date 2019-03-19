@@ -11,7 +11,7 @@ namespace Models
 
 		public int Id { get; set; }
 		public string Name { get; set; }
-		public int? IdCity { get; set; }
+		public int IdCity { get; set; }
 
 		public override int getId() { return Id; }
 
