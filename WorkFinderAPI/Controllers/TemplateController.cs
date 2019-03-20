@@ -9,7 +9,7 @@ namespace WorkFinderAPI.Controllers
 		static TemplateController()
 		{
 			routeDictionary = new Dictionary<string, string>();
-			routeDictionary["/"] = "test.js";
+			routeDictionary["/"] = "index.js";
 		}
 
 		[Route("/")]

@@ -29,10 +29,11 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\images\" />
+    <Folder Include="wwwroot\js\" />
   </ItemGroup>
 
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="cd $(SolutionDir)&#xD;&#xA;copy conf.json $(ProjectName)\$(OutDir)&#xD;&#xA;exit 0" />
+    <Exec Command="cd $(SolutionDir)&#xD;&#xA;copy conf.json $(ProjectName)\$(OutDir)&#xD;&#xA;cd $(ProjectDir) &#xD;&#xA;build_frontend.sh&#xD;&#xA;exit 0" />
   </Target>
 
 </Project>

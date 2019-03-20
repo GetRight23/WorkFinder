@@ -1,3 +1,8 @@
 .vs/
 */obj/
 */bin/
+WorkFinderFrontEnd/.idea
+WorkFinderFrontEnd/node_modules
+WorkFinderFrontEnd/public/build
+WorkFinderFrontEnd/*.orig
+

@@ -15,22 +15,22 @@ namespace WorkFinderAPI
 
 		public string getJson(JObject jObject)
 		{
-			json["Value"] = jObject;
-			json["Errors"] = errorArray;
+			json["data"] = jObject;
+			json["errors"] = errorArray;
 			return json.ToString();
 		}
 
 		public string getJson(JArray jArray)
 		{
-			json["Value"] = jArray;
-			json["Errors"] = errorArray;
+			json["data"] = jArray;
+			json["errors"] = errorArray;
 			return json.ToString();
 		}
 
 		public string getJson()
 		{
-			json["Value"] = new JObject();
-			json["Errors"] = errorArray;
+			json["data"] = new JObject();
+			json["errors"] = errorArray;
 			return json.ToString();
 		}
 
