@@ -4,13 +4,11 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <AssemblyName>WorkFinderAPI</AssemblyName>
     <RootNamespace>WorkFinderAPI</RootNamespace>
+    <TypeScriptToolsVersion>3.1</TypeScriptToolsVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="wwwroot\**" />
-    <Content Remove="wwwroot\**" />
-    <EmbeddedResource Remove="wwwroot\**" />
-    <None Remove="wwwroot\**" />
+    <Content Remove="Views\Index.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -27,6 +25,10 @@
     <ProjectReference Include="..\DatabaseDao\DatabaseDao.csproj" />
     <ProjectReference Include="..\JSONConvertor\JsonConvertor.csproj" />
     <ProjectReference Include="..\Models\Models.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\images\" />
   </ItemGroup>
 
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
