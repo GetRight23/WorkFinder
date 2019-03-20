@@ -5,10 +5,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using DatabaseConfiguration;
-using Microsoft.AspNetCore.Routing;
-using WorkFinderAPI.Controllers;
-using System.IO;
-using Microsoft.Extensions.FileProviders;
 
 namespace WorkFinderAPI
 {
