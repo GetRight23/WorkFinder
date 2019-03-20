@@ -25,13 +25,6 @@ namespace WorkFinderAPI
 		{
 			app.UseHsts();
 			app.UseStaticFiles();
-			app.UseStaticFiles(new StaticFileOptions
-			{
-				FileProvider = new PhysicalFileProvider(
-				Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "js")),
-				RequestPath = "/js",
-				DefaultContentType = "text/javascript"
-			});
 			app.UseHttpsRedirection();
 			app.UseMvc();
 		}
