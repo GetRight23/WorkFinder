@@ -5,7 +5,7 @@ set -e;
 pushd ../WorkFinderFrontEnd;
 
 npm install;
-npm run build;
+npm run build-dev;
 
 popd;
 
