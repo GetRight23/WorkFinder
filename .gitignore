@@ -6,4 +6,5 @@ WorkFinderFrontEnd/node_modules
 WorkFinderFrontEnd/public/build
 WorkFinderFrontEnd/*.orig
 WorkFinderFrontEnd/package-lock.json
+WorkFinderAPI/wwwroot/js/*.js
 
