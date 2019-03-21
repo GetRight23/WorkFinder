@@ -7,7 +7,7 @@ namespace DatabaseFiller
 	{
 		static void Main(string[] args)
 		{
-			Storage storage = new PostgreStorage(Configuration.TestConnection);
+			Storage storage = new PostgreStorage(Configuration.DefaultConnection);
 			storage.createTables();
 
 			CityFiller cityFiller = new CityFiller(storage);

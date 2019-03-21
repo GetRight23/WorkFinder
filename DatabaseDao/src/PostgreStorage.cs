@@ -269,7 +269,7 @@ namespace DatabaseDao
 				command.CommandText =
 					"create table if not exists photo (" +
 						"id serial primary key, " +
-						"link character varying(256) not null, " +
+						"data BYTEA, " +
 						"id_user integer references user_table(id) on delete cascade not null" +
 					")";
 				command.ExecuteNonQuery();

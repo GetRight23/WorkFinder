@@ -79,6 +79,12 @@ class IndexApp extends React.Component {
                     maxMenuHeight={215}
                 />
                 </div>
+                <div>
+                    <form asp-action="AddFile" asp-controller="Home" method="post" enctype="multipart/form-data">
+                        <input type="file" name="uploadedFile" /><br/>
+                        <input type="submit" value="Загрузить" />
+                    </form>
+                </div>
             </div>
         );
     }

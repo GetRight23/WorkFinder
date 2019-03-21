@@ -196,10 +196,9 @@ namespace Models
 
 				entity.Property(e => e.IdUser).HasColumnName("id_user");
 
-				entity.Property(e => e.Link)
+				entity.Property(e => e.Data)
 					.IsRequired()
-					.HasColumnName("link")
-					.HasMaxLength(256);
+					.HasColumnName("data");
 			});
 
 			modelBuilder.Entity<ProfessionCategory>(entity =>

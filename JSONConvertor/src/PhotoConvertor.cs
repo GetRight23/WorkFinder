@@ -18,7 +18,7 @@ namespace JsonConvertor
             {
                 Id = Convert.ToInt32(photoJson["Id"]),
                 IdUser = Convert.ToInt32(photoJson["IdUser"]),
-                Link = Convert.ToString(photoJson["Link"])
+                Data = Convert.ToByte(photoJson["Data"])
             };
 
             return photo;
@@ -35,7 +35,7 @@ namespace JsonConvertor
             JObject photoJson = new JObject();
             photoJson["Id"] = photo.Id;
             photoJson["IdUser"] = photo.IdUser;
-            photoJson["Link"] = photo.Link;
+            photoJson["Data"] = photo.Data;
 
             return photoJson;
         }
