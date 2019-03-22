@@ -78,7 +78,7 @@ namespace WorkFinderAPI.src.Controllers
 			JObject jObject = new JObject();
 			jObject = jsonConvertor.PhotoConvertor.toJson(photo);
 
-			return jObject.ToString();
+			return wrapper.getJson(jObject);
 		}
 
 		[HttpGet("{id}/User")]

@@ -10,9 +10,11 @@ namespace WorkFinderAPI.Controllers
 		{
 			routeDictionary = new Dictionary<string, string>();
 			routeDictionary["/"] = "index.js";
+			routeDictionary["/photo"] = "photo.js";
 		}
 
 		[Route("/")]
+		[Route("/photo")]
 		// GET: Template
 		public ActionResult Index()
         {

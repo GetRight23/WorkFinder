@@ -5,7 +5,7 @@
 
 		public int Id { get; set; }
 
-		public byte Data { get; set; }
+		public byte[] Data { get; set; }
 
 		public int IdUser { get; set; }
 
