@@ -199,6 +199,12 @@ namespace Models
 				entity.Property(e => e.Data)
 					.IsRequired()
 					.HasColumnName("data");
+
+				entity.HasOne(d => d.IdUserNavigation)
+					.WithMany(p => p.Photo)
+					.HasForeignKey(d => d.IdUser)
+					.HasConstraintName("photo_id_user_fkey");
+
 			});
 
 			modelBuilder.Entity<ProfessionCategory>(entity =>

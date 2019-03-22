@@ -5,7 +5,8 @@ module.exports = env => {
 
     return {
         entry: {
-            index: './src/applications/index.jsx'
+            index: './src/applications/index.jsx',
+            photo: './src/applications/photo.jsx'
         },
         output: {
             path: __dirname + '/public/build',

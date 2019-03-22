@@ -8,20 +8,7 @@ namespace JsonConvertor
     {
         public override Photo fromJson(JObject photoJson)
         {
-            if (photoJson == null)
-            {
-                Logger.Error("Cannot convert photo from json, value is null");
-				return null;
-			}
-
-            Photo photo = new Photo()
-            {
-                Id = Convert.ToInt32(photoJson["Id"]),
-                IdUser = Convert.ToInt32(photoJson["IdUser"]),
-                Data = Convert.ToByte(photoJson["Data"])
-            };
-
-            return photo;
+			throw new NotImplementedException();
         }
 
         public override JObject toJson(Photo photo)
@@ -35,7 +22,7 @@ namespace JsonConvertor
             JObject photoJson = new JObject();
             photoJson["Id"] = photo.Id;
             photoJson["IdUser"] = photo.IdUser;
-            photoJson["Data"] = photo.Data;
+            photoJson["Data"] =  Convert.ToBase64String(photo.Data);
 
             return photoJson;
         }

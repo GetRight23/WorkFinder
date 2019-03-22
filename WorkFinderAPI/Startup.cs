@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using DatabaseConfiguration;
+using Microsoft.AspNetCore.Hosting.Internal;
 
 namespace WorkFinderAPI
 {
@@ -12,6 +13,7 @@ namespace WorkFinderAPI
 	{
 		public void ConfigureServices(IServiceCollection services)
 		{
+			services.AddSingleton<HostingEnvironment>(new HostingEnvironment());
 			services.AddScoped<Storage>(_ => new PostgreStorage(Configuration.DefaultConnection));
 			services.AddScoped<JsonConvertorEngine>(_ => new JsonConvertorEngine());
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
