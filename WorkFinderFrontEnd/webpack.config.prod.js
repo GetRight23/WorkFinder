@@ -8,7 +8,7 @@ module.exports = env => {
             index: './src/applications/index.jsx'
         },
         output: {
-            path: __dirname + '/public/build',
+            path: __dirname + '/../WorkFinderAPI/wwwroot/js',
             publicPath: "build/",
             filename: '[name].js',
         },
