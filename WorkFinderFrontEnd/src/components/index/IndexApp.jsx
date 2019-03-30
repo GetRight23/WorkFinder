@@ -4,7 +4,7 @@ import ReactSelect from 'react-select';
 
 import Header from "../common/Header.jsx";
 import React from 'react';
-import PageBody from '../common/body.jsx'
+import PageBody from './body.jsx'
 
 class IndexApp extends React.Component {
 
@@ -56,7 +56,7 @@ class IndexApp extends React.Component {
             professionIds: ids
         });
 
-        console.log(this.state.professionIds);
+        //console.log(this.state.professionIds);
     }
 
     render() {

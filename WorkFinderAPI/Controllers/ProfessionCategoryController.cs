@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using DatabaseDao;
 using JsonConvertor;
@@ -78,8 +79,51 @@ namespace WorkFinderAPI.Controllers
 			return jObject.ToString();
 		}
 
-		// POST: api/v1/ProfessionCategory - insert 
-		[HttpPost]
+        // GET: api/v1/ProfessionCategory/5/Professions
+        [HttpGet("{id}/Professions")]
+        public string GetProfessionByProfessionCategoryId(int id)
+        {
+            JsonWrapper wrapper = new JsonWrapper();
+
+            if (id < 0)
+            {
+                wrapper.appendError("Id is less than 0");
+                HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
+                return wrapper.getJson();
+            }
+
+            ProfessionCategory professionCategory = storage.ProfessionCategoryDao.selectEntityById(id);
+
+            if (professionCategory == null)
+            {
+                wrapper.appendError($"Can not find id {id}");
+                HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
+                return wrapper.getJson();
+            }
+
+            List<Profession> professions = storage.ProfessionDao.selectEntities();
+
+            if (professions.Count == 0)
+            {
+                wrapper.appendError($"Can not find professions");
+                HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
+                return wrapper.getJson();
+            }
+
+            JArray jArray = new JArray();
+
+            foreach(var item in professions)
+            {
+                if(id == item.IdProfCategory)
+                {
+                    jArray.Add(jsonConvertor.ProfessionConvertor.toJson(item));
+                }
+            }
+            return wrapper.getJson(jArray);
+        }
+
+        // POST: api/v1/ProfessionCategory - insert 
+        [HttpPost]
         public string Post([FromBody] JObject value)
         {
 			JsonWrapper wrapper = new JsonWrapper();
