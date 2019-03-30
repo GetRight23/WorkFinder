@@ -281,7 +281,6 @@ namespace DatabaseDao
 				logger.Error("Cannot create Photo table");
 			}
 		}
-
 		public override void createProfessionToWorker()
 		{
 			try

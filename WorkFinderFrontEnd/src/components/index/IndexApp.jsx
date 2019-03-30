@@ -2,7 +2,9 @@ import styles from "../../../styles/styles.scss";
 import apiGetRequest from "../../tools/apiGetRequest";
 import ReactSelect from 'react-select';
 
+import Header from "../common/Header.jsx";
 import React from 'react';
+import PageBody from '../common/body.jsx'
 
 class IndexApp extends React.Component {
 
@@ -34,13 +36,13 @@ class IndexApp extends React.Component {
     }
 
     getProfessions() {
-        let professions = [];
+        let tmp = [];
 
         this.state.professions.map((profession) => {
-            professions.push({value: profession.Id, label: profession.Name})
+            tmp.push({value: profession.Id, label: profession.Name})
         });
 
-        return professions;
+        return tmp;
     }
 
     onProfessionsChange(professions) {
@@ -58,34 +60,12 @@ class IndexApp extends React.Component {
     }
 
     render() {
-        const professionOptions = this.getProfessions();
-        
+        const headNames = ['Home', 'About', 'Products', 'Contact'];       
         return(
             <div>
-                <h1>Basic api request example</h1>
-                <div className="select-wrapper">
-                <ReactSelect
-                    options={professionOptions}
-                    isClearable={true}
-                    isSearchable={true}
-                    isDisabled={false}
-                    isMulti={true}
-                    className="multi-select"
-                    classNamePrefix="select"
-                    onChange={this.onProfessionsChange}
-                    placeholder={"Select professions..."}
-                    blurInputOnSelect={false}
-                    closeMenuOnSelect={false}
-                    maxMenuHeight={215}
-                />
-                </div>
-                <div>
-                    <form action="api/File" method="post" enctype="multipart/form-data">
-                        <input type="file" name="uploadedFile" /><br/>
-                        <input type="submit" value="Загрузить" />
-                    </form>
-                </div>
-            </div>
+                 <Header names={headNames} />
+                 <PageBody/>
+            </div>                     
         );
     }
 }

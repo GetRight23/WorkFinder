@@ -1,5 +1,205 @@
-.select-wrapper {
-    display: flex;
-    flex-direction: column;
-    max-width: 15rem;
+/*BODY*/
+body{
+  font-family: ProximaNova,'Helvetica Neue',Helvetica,Arial,sans-serif!important;
+  margin: 0;
+}
+
+/*HEADER*/
+.header{
+    background-color: bisque;
+    height: 2rem;
+    width: 100%;
+    position: fixed;
+    margin-left: 0;
+    align-content: center;
+    
+}
+
+.header-navigation {
+  list-style: none;
+  margin: 0; 
+  align-content: center;
+  
+  background: deepskyblue;
+  
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+    .header-navigation a {
+      text-decoration: none;
+      display: block;
+      padding: 1em;
+      color: white;
+    }
+
+    .header-navigation a:hover {
+      background: darken(deepskyblue, 2%);
+    }
+
+    .header-navigation a { 
+      text-align: center; 
+      padding: 10px;
+      border-top: 1px solid rgba(255,255,255,0.3); 
+      border-bottom: 1px solid rgba(0,0,0,0.1); 
+    }
+
+    
+    .header-navigation li:last-of-type a {
+      border-bottom: none;
+    }
+
+    @media all and (max-width: 800px) {
+      .header-navigation {
+        justify-content: space-around;
+      }
+    }
+
+    @media all and (max-width: 600px) {
+      .header-navigation {
+        -webkit-flex-flow: column wrap;
+        flex-flow: column wrap;
+        padding: 0;
+      }
+    }
+
+ 
+    
+/*SEARCH*/
+.search{
+    background-color: cornsilk;
+    height: 400px;
+}
+
+.search-image{
+  height: 400px;
+  background-size: 100%;
+  background-repeat: no-repeat;
+  padding-top: 190px;
+  padding-bottom: 0px;
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+.search-panel{
+    width: 50%;
+    height: 170px;
+    background-color: white;
+    margin-left: 25%;
+    padding: 10px;
+    padding-left: 55px;
+} 
+
+/*CATALOG*/
+.catalog{
+  background-color:  white;
+  width: 55%;
+  margin: auto;
+  height: 650px;
+}
+
+.catalog-tables{
+  /*text-align: center;*/
+
+}
+  .catalog-tables a:hover{
+    text-decoration: none;
+    color: red;
+  }
+
+.catalog-head-link{
+  display: inline-flex;
+  color: black;
+  font-weight: bold;
+  padding-top: 45px;
+  padding-bottom: 5px;
+  padding-right: 0px;
+  padding-left: 0px;
+  font-size: 23px;
+}
+
+.catalog-body-link{
+  display: inline-flex;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  padding-right: 0px;
+  padding-left: 0px;
+  font-size: 17px;
+}
+
+.catalog-image{
+  height: 200px;
+  width: 60%;
+}
+
+h3{
+  
+  text-align: center;
+  display: block;
+  font-size: 1.5em;
+  margin-block-start: 0.83em;
+  margin-block-end: 0.83em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  font-size: 24px;
+}
+
+.search-title{
+  text-align: left;
+  display: block;
+  font-weight: bold;
+  font-size: 1.5em;
+  margin-block-start: 0.23em;
+  margin-block-end: 0.23em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  font-size: 34px;
 }    
+.medium-title{
+  text-align: center;
+  font-weight: bold;
+  display: block;
+  font-size: 1.5em;
+  margin-block-start: 1.5em;
+  margin-block-end: 0.33em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  font-size: 34px;
+}
+
+input
+{
+    margin: 0px 30px 0px 0px;
+    width: 250px;
+    height: 50px;
+}
+    input[type='text'] 
+    {
+        padding-left: 45px;
+        font-size: 23px;
+        background-size: 30px;
+        background-position: 7px 7px;
+        background-repeat: no-repeat;
+    }
+  
+button
+{
+    font-size: 23px;
+    width: 250px;
+    height: 50px;
+    color: white;
+    background-color: rgb(184, 53, 53);
+    border: transparent;
+}
+
+.border
+{
+  border: 1px solid gray;
+  border-radius: 7px;
+}
+ 

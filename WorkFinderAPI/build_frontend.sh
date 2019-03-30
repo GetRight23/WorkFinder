@@ -7,6 +7,6 @@ pushd ../WorkFinderFrontEnd;
 npm install;
 npm run build-dev;
 
-popd;
+cp ./public/build/*.js ../WorkFinderAPI/wwwroot/js/;
 
-cp ../WorkFinderFrontEnd/public/build/*.js wwwroot/js/;
+popd;
