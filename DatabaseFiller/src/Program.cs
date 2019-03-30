@@ -24,16 +24,16 @@ namespace DatabaseFiller
 			OrdersToServiesFiller ordersToServiesFiller = new OrdersToServiesFiller(storage);
 			ProfessinonsToWorkersFiller professinonsToWorkersFiller = new ProfessinonsToWorkersFiller(storage);
 
-			cityFiller.fillEntities();
-			cityDistrictsFiller.fillEntities();
-			addressFiller.fillEntities();
+			//cityFiller.fillEntities();
+			//cityDistrictsFiller.fillEntities();
+			//addressFiller.fillEntities();
 			userFiller.fillEntities();
 			workerFiller.fillEntities();
-			feedbackFiller.fillEntities();
+			//feedbackFiller.fillEntities();
 			ordersListFiller.fillEntities();
 			ordersFiller.fillEntities();
-			professsionCategoryFiller.fillEntities();
-			professionFiller.fillEntities();
+			//professsionCategoryFiller.fillEntities();
+			//professionFiller.fillEntities();
 			serviceFiller.fillEntities();
 			ordersToServiesFiller.fillEntities();
 			professinonsToWorkersFiller.fillEntities();

@@ -6,7 +6,7 @@ namespace Models
 	{
 		public User()
 		{
-			Photo = new HashSet<Photo>();
+			
 		}
 
 		public int Id { get; set; }
@@ -19,6 +19,6 @@ namespace Models
 		}
 
 		public virtual Worker Worker { get; set; }
-		public virtual ICollection<Photo> Photo { get; set; }
+		public virtual Photo Photo { get; set; }
 	}
 }

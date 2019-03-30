@@ -270,7 +270,7 @@ namespace DatabaseDao
 					"create table if not exists photo (" +
 						"id serial primary key, " +
 						"data BYTEA, " +
-						"id_user integer references user_table(id) on delete cascade not null" +
+                        "id_user integer references user_table(id) on delete cascade not null unique" +
 					")";
 				command.ExecuteNonQuery();
 				logger.Trace("Photo table is created");
