@@ -8,3 +8,4 @@ WorkFinderFrontEnd/*.orig
 WorkFinderFrontEnd/package-lock.json
 WorkFinderAPI/wwwroot/js/*.js
 
+/workfinderui
